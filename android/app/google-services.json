@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "931745201122",
+    "project_id": "ionic-ec0mmerce",
+    "storage_bucket": "ionic-ec0mmerce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931745201122:android:ac2db18e1ce9f75ce5d7bb",
+        "android_client_info": {
+          "package_name": "com.example.slack_cards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "931745201122-mlt91j7ljstsq8l0os57mlb5f47h1gkq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8U7Iq8vt3v2XVA_4kdFFqnOrfKGYizBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "931745201122-mlt91j7ljstsq8l0os57mlb5f47h1gkq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
