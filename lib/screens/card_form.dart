@@ -1,12 +1,17 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:slack_cards/services/storage_methods.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/card_model.dart';
+import '../utils/utils.dart';
 
 class CardForm extends StatelessWidget {
   const CardForm({
     Key? key,
     required this.uid,
+    required String profilePictureURL,
     required TextEditingController fullNameController,
     required TextEditingController jobTitleController,
     required TextEditingController descriptionController,
@@ -14,13 +19,15 @@ class CardForm extends StatelessWidget {
     required this.action,
     required this.db,
     required this.documentSnapshot,
-  })  : _fullNameController = fullNameController,
+  })  : _profilePic = profilePictureURL,
+        _fullNameController = fullNameController,
         _jobTitleController = jobTitleController,
         _descriptionController = descriptionController,
         _phoneNumberController = phoneNumberController,
         super(key: key);
 
   final String uid;
+  final String _profilePic;
   final TextEditingController _fullNameController;
   final TextEditingController _jobTitleController;
   final TextEditingController _descriptionController;
@@ -28,10 +35,33 @@ class CardForm extends StatelessWidget {
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
+
+  Future<String> uploadImage(Uint8List file) async {
+    String res = "Some error ocurred";
+    try {
+      return await StorageMethods()
+          .uploadImageToStorage('profilePics', file, false);
+    } catch (e) {
+      res = e.toString();
+      return "";
+    }
+  }
+
+  Uint8List convertStringToUint8List(String str) {
+    final List<int> codeUnits = str.codeUnits;
+    final Uint8List unit8List = Uint8List.fromList(codeUnits);
+
+    return unit8List;
+  }
+
+  String convertUint8ListToString(Uint8List uint8list) {
+    return String.fromCharCodes(uint8list);
+  }
+
   @override
   Widget build(BuildContext context) {
     UserCard userCard;
-
+    Uint8List? localProfilePic;
     return Padding(
       padding: EdgeInsets.only(
           top: 20,
@@ -43,6 +73,36 @@ class CardForm extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Stack(
+            children: [
+              _profilePic == "" || _profilePic == null
+                  ? CircleAvatar(
+                      radius: 64,
+                      backgroundColor: Colors.transparent,
+                      child: Image.asset('images/profile_pic.png'),
+                    )
+                  : CircleAvatar(
+                      radius: 64,
+                      backgroundImage: NetworkImage(
+                        _profilePic,
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+              Positioned(
+                bottom: -10,
+                left: 80,
+                child: IconButton(
+                  onPressed: () async {
+                    localProfilePic = await pickImage(ImageSource.gallery);
+                    print("localProfilePic " + localProfilePic.toString());
+                  },
+                  icon: const Icon(
+                    Icons.add_a_photo,
+                  ),
+                ),
+              )
+            ],
+          ),
           TextField(
             controller: _fullNameController,
             decoration: const InputDecoration(labelText: 'Nombre completo'),
@@ -72,6 +132,7 @@ class CardForm extends StatelessWidget {
                 jobTitle: _jobTitleController.text,
                 description: _descriptionController.text,
                 phoneNumber: int.parse(_phoneNumberController.text),
+                profilePictureURL: await uploadImage(localProfilePic!),
               );
               if (userCard.fullName != null && userCard.jobTitle != null) {
                 if (action == 'create') {

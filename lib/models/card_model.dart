@@ -6,6 +6,7 @@ class UserCard {
   final String? jobTitle;
   final String? description;
   final int? phoneNumber;
+  final String? profilePictureURL;
 
   UserCard({
     this.id = '',
@@ -13,6 +14,7 @@ class UserCard {
     required this.jobTitle,
     required this.description,
     required this.phoneNumber,
+    required this.profilePictureURL,
   });
 
   factory UserCard.fromFirestore(
@@ -25,6 +27,7 @@ class UserCard {
       jobTitle: snapshot['jobTitle'],
       description: snapshot['description'],
       phoneNumber: snapshot['phoneNumber'],
+      profilePictureURL: snapshot['profilePictureURL'],
     );
   }
 
@@ -35,6 +38,7 @@ class UserCard {
       "jobTitle": jobTitle,
       "description": description,
       "phoneNumber": phoneNumber,
+      "profilePictureURL": profilePictureURL,
     };
   }
 }

@@ -1,4 +1,4 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +7,8 @@ import '../services/firebase_auth_methods.dart';
 import '../widgets/custom_button.dart';
 import 'card_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'card_share.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,8 +27,10 @@ class HomeScreen extends StatelessWidget {
 
     Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
       String action = 'create';
+      String profilePictureURL = "";
       if (documentSnapshot != null) {
         action = 'update';
+        profilePictureURL = documentSnapshot['profilePictureURL'];
         fullNameController.text = documentSnapshot['fullName'];
         jobTitleController.text = documentSnapshot['jobTitle'];
         descriptionController.text = documentSnapshot['description'];
@@ -39,6 +43,7 @@ class HomeScreen extends StatelessWidget {
           builder: (BuildContext ctx) {
             return CardForm(
               uid: user.uid,
+              profilePictureURL: profilePictureURL,
               fullNameController: fullNameController,
               jobTitleController: jobTitleController,
               descriptionController: descriptionController,
@@ -46,6 +51,27 @@ class HomeScreen extends StatelessWidget {
               action: action,
               db: db,
               documentSnapshot: documentSnapshot,
+            );
+          });
+    }
+
+    void _shareProfile([DocumentSnapshot? documentSnapshot]) async {
+      String profilePictureURL = "";
+      String cardDocument = "";
+      if (documentSnapshot != null) {
+        profilePictureURL = documentSnapshot['profilePictureURL'];
+        cardDocument = documentSnapshot.id;
+      }
+      String action = 'create';
+      await showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (BuildContext ctx) {
+            return CardShare(
+              cardDocument: cardDocument,
+              profilePictureURL: profilePictureURL,
+              db: db,
+              // documentSnapshot: documentSnapshot,
             );
           });
     }
@@ -77,6 +103,12 @@ class HomeScreen extends StatelessWidget {
                       // title: Text(documentSnapshot['name']),
                       title: Text(userCard.fullName!),
                       subtitle: Text(userCard.phoneNumber!.toString()),
+                      leading: IconButton(
+                        icon: const Icon(Icons.qr_code),
+                        onPressed: () {
+                          _shareProfile(documentSnapshot);
+                        },
+                      ),
                       trailing: IconButton(
                         icon: const Icon(Icons.edit),
                         onPressed: () {
