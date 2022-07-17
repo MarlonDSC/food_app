@@ -47,7 +47,7 @@ class CardShare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String fullURL = "https://ionic-ec0mmerce.web.app/" + cardDocument;
+    String fullURL = "https://ionic-ec0mmerce.web.app/id=$cardDocument";
     print("cardDocument " + cardDocument);
     return Padding(
       padding: EdgeInsets.only(

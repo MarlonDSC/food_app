@@ -15,7 +15,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        initialRoute: "/",
         debugShowCheckedModeBanner: false,
         title: 'Flutter Firebase Auth Demo',
         theme: ThemeData(
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
           EmailPasswordLogin.routeName: (context) => const EmailPasswordLogin(),
           // PhoneScreen.routeName: (context) => const PhoneScreen(),
         },
+        // onGenerateRoute: ,
       ),
     );
   }

@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:slack_cards/services/storage_methods.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../models/card_model.dart';
+import '../services/storage_methods.dart';
 import '../utils/utils.dart';
 
 class CardForm extends StatelessWidget {
-  const CardForm({
+  CardForm({
     Key? key,
     required this.uid,
     required String profilePictureURL,
@@ -35,6 +35,7 @@ class CardForm extends StatelessWidget {
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
+  late Uint8List localProfilePic = convertStringToUint8List("");
 
   Future<String> uploadImage(Uint8List file) async {
     String res = "Some error ocurred";
@@ -61,7 +62,7 @@ class CardForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserCard userCard;
-    Uint8List? localProfilePic;
+    // Uint8List? localProfilePic;
     return Padding(
       padding: EdgeInsets.only(
           top: 20,
@@ -73,35 +74,37 @@ class CardForm extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            children: [
-              _profilePic == "" || _profilePic == null
-                  ? CircleAvatar(
-                      radius: 64,
-                      backgroundColor: Colors.transparent,
-                      child: Image.asset('images/profile_pic.png'),
-                    )
-                  : CircleAvatar(
-                      radius: 64,
-                      backgroundImage: NetworkImage(
-                        _profilePic,
+          Center(
+            child: Stack(
+              children: [
+                _profilePic == "" || _profilePic == null
+                    ? CircleAvatar(
+                        radius: 64,
+                        backgroundColor: Colors.transparent,
+                        child: Image.asset('images/profile_pic.png'),
+                      )
+                    : CircleAvatar(
+                        radius: 64,
+                        backgroundImage: NetworkImage(
+                          _profilePic,
+                        ),
+                        backgroundColor: Colors.transparent,
                       ),
-                      backgroundColor: Colors.transparent,
+                Positioned(
+                  bottom: -10,
+                  left: 80,
+                  child: IconButton(
+                    onPressed: () async {
+                      localProfilePic = await pickImage(ImageSource.gallery);
+                      print("localProfilePic " + localProfilePic.toString());
+                    },
+                    icon: const Icon(
+                      Icons.add_a_photo,
                     ),
-              Positioned(
-                bottom: -10,
-                left: 80,
-                child: IconButton(
-                  onPressed: () async {
-                    localProfilePic = await pickImage(ImageSource.gallery);
-                    print("localProfilePic " + localProfilePic.toString());
-                  },
-                  icon: const Icon(
-                    Icons.add_a_photo,
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
           TextField(
             controller: _fullNameController,
@@ -126,13 +129,14 @@ class CardForm extends StatelessWidget {
           ElevatedButton(
             child: Text(action == 'create' ? 'Create' : 'Update'),
             onPressed: () async {
+              print("localProfilePic " + localProfilePic.toString());
               userCard = UserCard(
                 id: uid,
                 fullName: _fullNameController.text,
                 jobTitle: _jobTitleController.text,
                 description: _descriptionController.text,
                 phoneNumber: int.parse(_phoneNumberController.text),
-                profilePictureURL: await uploadImage(localProfilePic!),
+                profilePictureURL: await uploadImage(localProfilePic),
               );
               if (userCard.fullName != null && userCard.jobTitle != null) {
                 if (action == 'create') {
