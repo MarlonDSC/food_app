@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/card_model.dart';
 import '../utils/showSnackbar.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth _auth;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuthMethods(this._auth);
 
   User get user => _auth.currentUser!;
@@ -14,6 +16,7 @@ class FirebaseAuthMethods {
   //Email sign up
   Future<void> signUpWithEmail({
     required String email,
+    required String fullName,
     required String password,
     required BuildContext context,
   }) async {
@@ -23,6 +26,18 @@ class FirebaseAuthMethods {
         password: password,
       );
       await sendEmailVerification(context);
+      UserCard user = UserCard(
+        id: _auth.currentUser!.uid,
+        description: '',
+        fullName: fullName,
+        jobTitle: '',
+        phoneNumber: 0,
+        profilePictureURL: '',
+      );
+      await _firestore
+          .collection('cards')
+          .doc(_auth.currentUser!.uid)
+          .set(user.toFirestore());
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message!);
     }

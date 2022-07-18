@@ -22,6 +22,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
   void signUpUser() async {
     context.read<FirebaseAuthMethods>().signUpWithEmail(
           email: emailController.text,
+          fullName: fullNameController.text,
           password: passwordController.text,
           context: context,
         );
