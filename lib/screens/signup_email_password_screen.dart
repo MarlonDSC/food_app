@@ -6,7 +6,7 @@ import '../widgets/custom_textfield.dart';
 import 'login_email_password_screen.dart';
 
 class EmailPasswordSignup extends StatefulWidget {
-  static String routeName = '/signup-email-password';
+  static String routeName = '/signup';
   const EmailPasswordSignup({Key? key}) : super(key: key);
 
   @override

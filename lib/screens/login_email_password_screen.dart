@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 import '../services/firebase_auth_methods.dart';
 import '../widgets/custom_textfield.dart';
 import 'signup_email_password_screen.dart';
+import 'website/read_profile.dart';
+import 'website/screen_arguments.dart';
 
 class EmailPasswordLogin extends StatefulWidget {
-  static String routeName = '/login-email-password';
+  static String routeName = '/login';
   const EmailPasswordLogin({Key? key}) : super(key: key);
 
   @override
@@ -78,6 +80,18 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               );
             },
             child: const Text('¿No tienes cuenta? Crea una'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                ReadProfile.routeName,
+                arguments: ScreenArguments(
+                  'x0GpqH3qHidbqp7dfCzD',
+                ),
+              );
+            },
+            child: const Text('Access to a user'),
           ),
         ],
       ),
