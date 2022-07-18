@@ -88,7 +88,10 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-          stream: db.collection('cards').snapshots(),
+          stream: db
+              .collection('cards')
+              .where('id', isEqualTo: user.uid)
+              .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -119,11 +122,14 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               );
-            } else {
+            } else if (!snapshot.hasData) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: Text('Add a new user'),
               );
             }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
 
             // return Center(
             //   child: Column(

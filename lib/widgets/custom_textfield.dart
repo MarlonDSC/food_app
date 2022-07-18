@@ -3,17 +3,25 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
+  final TextInputType textInputType;
+  final bool obscureText;
+  final Widget suffix;
 
   const CustomTextField({
     Key? key,
     required this.controller,
     required this.hintText,
+    required this.textInputType,
+    required this.obscureText,
+    required this.suffix,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      keyboardType: textInputType,
+      obscureText: obscureText,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -32,6 +40,7 @@ class CustomTextField extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
+        suffixIcon: suffix,
       ),
     );
   }

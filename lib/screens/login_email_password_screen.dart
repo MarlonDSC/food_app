@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/firebase_auth_methods.dart';
@@ -18,13 +19,19 @@ class EmailPasswordLogin extends StatefulWidget {
 class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  bool _isHidden = true;
   void loginUser() {
     context.read<FirebaseAuthMethods>().loginWithEmail(
           email: emailController.text,
           password: passwordController.text,
           context: context,
         );
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
   }
 
   @override
@@ -42,7 +49,10 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomTextField(
               controller: emailController,
-              hintText: 'Enter your email',
+              hintText: 'Ingresa tu correo',
+              textInputType: TextInputType.emailAddress,
+              obscureText: false,
+              suffix: const SizedBox(),
             ),
           ),
           const SizedBox(height: 20),
@@ -50,7 +60,15 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomTextField(
               controller: passwordController,
-              hintText: 'Enter your password',
+              hintText: 'Ingresa tu contraseña',
+              textInputType: TextInputType.visiblePassword,
+              obscureText: !_isHidden,
+              suffix: InkWell(
+                onTap: _togglePasswordView,
+                child: Icon(
+                  _isHidden ? Icons.visibility : Icons.visibility_off,
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 40),
@@ -80,18 +98,6 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               );
             },
             child: const Text('¿No tienes cuenta? Crea una'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                ReadProfile.routeName,
-                arguments: ScreenArguments(
-                  'x0GpqH3qHidbqp7dfCzD',
-                ),
-              );
-            },
-            child: const Text('Access to a user'),
           ),
         ],
       ),

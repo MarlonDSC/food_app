@@ -141,7 +141,10 @@ class CardForm extends StatelessWidget {
               if (userCard.fullName != null && userCard.jobTitle != null) {
                 if (action == 'create') {
                   // Persist a new product to Firestore
-                  await db.collection('cards').add(userCard.toFirestore());
+                  await db
+                      .collection('cards')
+                      .doc(userCard.id)
+                      .set(userCard.toFirestore());
                 }
 
                 if (action == 'update') {

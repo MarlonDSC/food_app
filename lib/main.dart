@@ -14,28 +14,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:html' as html;
 
 void main() async {
-  print(Uri.base);
-  String parameter1 = Uri.base.queryParameters["id"] ?? "";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    MyApp(para1: parameter1),
+    const MyApp(),
   );
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({
+  const MyApp({
     Key? key,
-    required this.para1,
   }) : super(key: key);
-
-  String para1;
 
   @override
   Widget build(BuildContext context) {
-    print("id =" + para1);
     return MultiProvider(
       providers: [
         Provider<FirebaseAuthMethods>(
