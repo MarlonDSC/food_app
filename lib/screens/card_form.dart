@@ -5,12 +5,14 @@ import 'package:image_picker/image_picker.dart';
 
 import '../models/card_model.dart';
 import '../services/storage_methods.dart';
+import '../utils/showSnackbar.dart';
 import '../utils/utils.dart';
+import 'package:provider/provider.dart';
 
-class CardForm extends StatelessWidget {
+class CardForm extends StatefulWidget {
   CardForm({
     Key? key,
-    required this.uid,
+    required this.user,
     required String profilePictureURL,
     required TextEditingController fullNameController,
     required TextEditingController jobTitleController,
@@ -26,7 +28,7 @@ class CardForm extends StatelessWidget {
         _phoneNumberController = phoneNumberController,
         super(key: key);
 
-  final String uid;
+  final dynamic user;
   final String _profilePic;
   final TextEditingController _fullNameController;
   final TextEditingController _jobTitleController;
@@ -35,6 +37,12 @@ class CardForm extends StatelessWidget {
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
+
+  @override
+  State<CardForm> createState() => _CardFormState();
+}
+
+class _CardFormState extends State<CardForm> {
   late Uint8List localProfilePic = convertStringToUint8List("");
 
   Future<String> uploadImage(Uint8List file) async {
@@ -59,9 +67,18 @@ class CardForm extends StatelessWidget {
     return String.fromCharCodes(uint8list);
   }
 
+  Future<String> emptyOrSameImage() async {
+    if (convertUint8ListToString(localProfilePic) == "") {
+      return widget.documentSnapshot!['profilePictureURL'];
+    } else {
+      return await uploadImage(localProfilePic);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     UserCard userCard;
+    print("fullName " + widget.documentSnapshot!['fullName']);
     // Uint8List? localProfilePic;
     return Padding(
       padding: EdgeInsets.only(
@@ -74,96 +91,112 @@ class CardForm extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Stack(
+          Expanded(
+            child: ListView(
               children: [
-                _profilePic == "" || _profilePic == null
-                    ? CircleAvatar(
-                        radius: 64,
-                        backgroundColor: Colors.transparent,
-                        child: Image.asset('images/profile_pic.png'),
-                      )
-                    : CircleAvatar(
-                        radius: 64,
-                        backgroundImage: NetworkImage(
-                          _profilePic,
+                Center(
+                  child: Stack(
+                    children: [
+                      widget._profilePic == ""
+                          ? CircleAvatar(
+                              radius: 64,
+                              backgroundColor: Colors.transparent,
+                              child: Image.asset('images/profile_pic.png'),
+                            )
+                          : convertUint8ListToString(localProfilePic) == ""
+                              ? CircleAvatar(
+                                  radius: 64,
+                                  backgroundImage: NetworkImage(
+                                    widget._profilePic,
+                                  ),
+                                  backgroundColor: Colors.transparent,
+                                )
+                              : CircleAvatar(
+                                  radius: 64,
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: MemoryImage(localProfilePic),
+                                ),
+                      Positioned(
+                        bottom: -10,
+                        left: 80,
+                        child: IconButton(
+                          onPressed: () async {
+                            localProfilePic =
+                                await pickImage(ImageSource.gallery);
+                            print("localProfilePic " +
+                                localProfilePic.toString());
+                            setState(() {});
+                          },
+                          icon: const Icon(
+                            Icons.add_a_photo,
+                          ),
                         ),
-                        backgroundColor: Colors.transparent,
-                      ),
-                Positioned(
-                  bottom: -10,
-                  left: 80,
-                  child: IconButton(
-                    onPressed: () async {
-                      localProfilePic = await pickImage(ImageSource.gallery);
-                      print("localProfilePic " + localProfilePic.toString());
-                    },
-                    icon: const Icon(
-                      Icons.add_a_photo,
-                    ),
+                      )
+                    ],
                   ),
-                )
+                ),
+                TextField(
+                  controller: widget._fullNameController,
+                  decoration:
+                      const InputDecoration(labelText: 'Nombre completo'),
+                ),
+                TextField(
+                  controller: widget._jobTitleController,
+                  decoration:
+                      const InputDecoration(labelText: 'Puesto de trabajo'),
+                ),
+                TextField(
+                  controller: widget._descriptionController,
+                  decoration: const InputDecoration(labelText: 'Descripción'),
+                ),
+                TextField(
+                  keyboardType: const TextInputType.numberWithOptions(),
+                  controller: widget._phoneNumberController,
+                  decoration:
+                      const InputDecoration(labelText: 'Numero de teléfono'),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
               ],
             ),
           ),
-          TextField(
-            controller: _fullNameController,
-            decoration: const InputDecoration(labelText: 'Nombre completo'),
-          ),
-          TextField(
-            controller: _jobTitleController,
-            decoration: const InputDecoration(labelText: 'Puesto de trabajo'),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(labelText: 'Descripción'),
-          ),
-          TextField(
-            keyboardType: const TextInputType.numberWithOptions(),
-            controller: _phoneNumberController,
-            decoration: const InputDecoration(labelText: 'Numero de teléfono'),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-            child: Text(action == 'create' ? 'Create' : 'Update'),
-            onPressed: () async {
-              print("localProfilePic " + localProfilePic.toString());
-              userCard = UserCard(
-                id: uid,
-                fullName: _fullNameController.text,
-                jobTitle: _jobTitleController.text,
-                description: _descriptionController.text,
-                phoneNumber: int.parse(_phoneNumberController.text),
-                profilePictureURL: await uploadImage(localProfilePic),
-              );
-              if (userCard.fullName != null && userCard.jobTitle != null) {
-                if (action == 'create') {
-                  // Persist a new product to Firestore
-                  await db
-                      .collection('cards')
-                      .doc(userCard.id)
-                      .set(userCard.toFirestore());
-                }
+          SizedBox(
+            width: double.infinity,
+            height: 55,
+            child: ElevatedButton(
+              child: Text(widget.action == 'create' ? 'Create' : 'Update'),
+              onPressed: () async {
+                print("localProfilePic " + localProfilePic.toString());
+                userCard = UserCard(
+                  id: widget.user.uid,
+                  fullName: widget._fullNameController.text,
+                  jobTitle: widget._jobTitleController.text,
+                  description: widget._descriptionController.text,
+                  phoneNumber: int.parse(widget._phoneNumberController.text),
+                  profilePictureURL: await emptyOrSameImage(),
+                );
+                if (userCard.fullName != null && userCard.jobTitle != null) {
+                  if (widget.action == 'create') {
+                    // Persist a new product to Firestore
+                    await widget.db
+                        .collection('cards')
+                        .doc(userCard.id)
+                        .set(userCard.toFirestore());
+                  }
 
-                if (action == 'update') {
-                  // Update the product
-                  await db
-                      .collection('cards')
-                      .doc(documentSnapshot!.id)
-                      .update(userCard.toFirestore());
+                  if (widget.action == 'update') {
+                    // Update the product
+                    await widget.db
+                        .collection('cards')
+                        .doc(widget.documentSnapshot!.id)
+                        .update(userCard.toFirestore());
+                    showSnackBar(context, '¡Datos actualizados!');
+                  }
+                  localProfilePic = convertStringToUint8List("");
                 }
-
-                // Clear the text fields
-                _fullNameController.text = '';
-                _jobTitleController.text = '';
-                _descriptionController.text = '';
-                _phoneNumberController.text = '';
-                // Hide the bottom sheet
-                Navigator.of(context).pop();
-              }
-            },
+              },
+            ),
           )
         ],
       ),
