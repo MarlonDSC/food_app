@@ -18,7 +18,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool _isHidden = true;
+  bool _isHidden = false;
   void signUpUser() async {
     context.read<FirebaseAuthMethods>().signUpWithEmail(
           email: emailController.text,

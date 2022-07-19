@@ -1,12 +1,9 @@
 // import 'dart:html';
 
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/card_model.dart';
 import '../services/firebase_auth_methods.dart';
-import '../widgets/custom_button.dart';
 import 'card_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -52,7 +49,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.qr_code),
+          icon: const Icon(Icons.qr_code),
           onPressed: () {
             _shareProfile(documentSnapshot);
           },

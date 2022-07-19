@@ -19,7 +19,7 @@ class EmailPasswordLogin extends StatefulWidget {
 class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool _isHidden = true;
+  bool _isHidden = false;
   void loginUser() {
     context.read<FirebaseAuthMethods>().loginWithEmail(
           email: emailController.text,

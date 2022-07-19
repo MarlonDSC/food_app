@@ -77,7 +77,7 @@ class ReadCard extends StatelessWidget {
           Center(
             child: Stack(
               children: [
-                _profilePic == "" || _profilePic == null
+                _profilePic == ""
                     ? CircleAvatar(
                         radius: 64,
                         backgroundColor: Colors.transparent,

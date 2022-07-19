@@ -1,83 +1,104 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:slack_cards/screens/website/read_card.dart';
-
 import '../../models/card_model.dart';
+import '../card_form.dart';
+import '../card_share.dart';
 import 'screen_arguments.dart';
 
 class ReadProfile extends StatelessWidget {
   ReadProfile({Key? key, this.args}) : super(key: key);
   static String routeName = '/u';
-  //               print(Uri.base.toString()); // http://localhost:8082/game.html?id=15&randomNumber=3.14
-  //             print(Uri.base.query);  // id=15&randomNumber=3.14
-  // print(Uri.base.queryParameters['randomNumber']);
   String? args;
+
   @override
   Widget build(BuildContext context) {
-    // if(args == null){
-    // }
-    String _profilePic = "";
-    String profilePictureURL = "";
     TextEditingController fullNameController = TextEditingController();
-    
     TextEditingController jobTitleController = TextEditingController();
     TextEditingController descriptionController = TextEditingController();
     TextEditingController phoneNumberController = TextEditingController();
-    String action = "";
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    DocumentSnapshot? documentSnapshot;
+    late DocumentSnapshot? documentSnapshot;
+    final db = FirebaseFirestore.instance;
+    String profilePictureURL = "";
     UserCard userCard;
     print("args in build " + args!);
-    return MaterialApp(
-      title: 'Welcome to Slack Cards Clone',
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Slack Cards Clone'),
+
+    void _shareProfile([DocumentSnapshot? documentSnapshot]) async {
+      String profilePictureURL = "";
+      String cardDocument = "";
+      if (documentSnapshot != null) {
+        profilePictureURL = documentSnapshot['profilePictureURL'];
+        cardDocument = documentSnapshot.id;
+      }
+      String action = 'create';
+      await showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (BuildContext ctx) {
+            return CardShare(
+              cardDocument: cardDocument,
+              profilePictureURL: profilePictureURL,
+              db: db,
+              // documentSnapshot: documentSnapshot,
+            );
+          });
+    }
+
+    print("args " + args.toString());
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.qr_code),
+          onPressed: () {
+            _shareProfile(documentSnapshot);
+          },
         ),
-        body: StreamBuilder<DocumentSnapshot>(
-          stream: db
-              .collection('cards')
-              // .where("id", isEqualTo: Uri.base.queryParameters['id'])
-              // .doc(Uri.base.queryParameters['id'])
-              .doc(args!)
-              .snapshots(),
-          builder: (context, snapshot) {
+      ),
+      body: StreamBuilder(
+          stream:
+              db.collection('cards').where('id', isEqualTo: args!).snapshots(),
+          // db
+          //     .collection('cards')
+          //     .where('id', isEqualTo: "HlNWb57QZIWRtyWnbAts4U1ZeAt1")
+          //     .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
-              var documentSnapshot = snapshot.data!;
+              // print(
+              //     'documentSnapshot ' + snapshot.data!.docs.length.toString());
+              documentSnapshot = snapshot.data!.docs[0];
               var map = Map<String, dynamic>.from(
-                  documentSnapshot.data() as Map<dynamic, dynamic>);
+                  documentSnapshot!.data() as Map<dynamic, dynamic>);
               userCard = UserCard.fromFirestore(Map.from(map));
-              action = 'update';
-              profilePictureURL = documentSnapshot['profilePictureURL'];
-              fullNameController.text = documentSnapshot['fullName'];
-              jobTitleController.text = documentSnapshot['jobTitle'];
-              descriptionController.text = documentSnapshot['description'];
-              phoneNumberController.text =
-                  documentSnapshot['phoneNumber'].toString();
-              // return Container();
+
+              if (documentSnapshot != null) {
+                profilePictureURL = documentSnapshot!['profilePictureURL'];
+                fullNameController.text = documentSnapshot!['fullName'];
+                jobTitleController.text = documentSnapshot!['jobTitle'];
+                descriptionController.text = documentSnapshot!['description'];
+                phoneNumberController.text =
+                    documentSnapshot!['phoneNumber'].toString();
+              }
+
               return ReadCard(
-                // uid: Uri.base.queryParameters['id']!,
-                uid: documentSnapshot['id'],
+                uid: args!,
                 profilePictureURL: profilePictureURL,
                 fullNameController: fullNameController,
                 jobTitleController: jobTitleController,
                 descriptionController: descriptionController,
                 phoneNumberController: phoneNumberController,
-                action: action,
+                action: 'update',
                 db: db,
                 documentSnapshot: documentSnapshot,
               );
-            } else {
+            } else if (!snapshot.hasData) {
               return const Center(
-                child:
-                    Text('Ingresa una URL de usuario para ver su información'),
+                child: Text('Add a new user'),
               );
             }
-          },
-        ),
-      ),
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
     );
   }
 }
