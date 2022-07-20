@@ -64,7 +64,9 @@ class ReadCard extends StatelessWidget {
   void saveTextFile(String text, String filename) {
     AnchorElement()
       ..href =
-          '${Uri.dataFromString(text, mimeType: 'text/plain', encoding: utf8)}'
+          // '${Uri.dataFromString(text, mimeType: 'text/plain', encoding: utf8)}'
+          '${Uri.dataFromString(text, mimeType: 'text/x-vcard', encoding: utf8)}'
+      // '${Uri.dataFromString(text, mimeType: 'text/vcard', encoding: utf8)}'
       ..download = filename
       ..style.display = 'none'
       ..click();

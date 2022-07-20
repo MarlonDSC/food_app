@@ -4,6 +4,7 @@ import 'package:slack_cards/screens/website/read_card.dart';
 import '../../models/card_model.dart';
 import '../card_form.dart';
 import '../card_share.dart';
+import '../signup_email_password_screen.dart';
 import 'screen_arguments.dart';
 
 class ReadProfile extends StatelessWidget {
@@ -53,6 +54,23 @@ class ReadProfile extends StatelessWidget {
             _shareProfile(documentSnapshot);
           },
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EmailPasswordSignup(),
+                  ),
+                );
+                // Navigator.of(context).pushReplacement(
+                //   MaterialPageRoute(
+                //     builder: (context) => const EmailPasswordSignup(),
+                //   ),
+                // );
+              },
+              icon: const Icon(Icons.person_add))
+        ],
       ),
       body: StreamBuilder(
           stream:
