@@ -33,7 +33,7 @@ class CardShare extends StatefulWidget {
 
 class _CardShareState extends State<CardShare> {
   late String fullURL =
-      "https://ionic-ec0mmerce.web.app/#/${widget.cardDocument}";
+      "https://build.sanjeronimostudio.com/#/${widget.cardDocument}";
 
   final _renderObjectKey = GlobalKey();
   Future<String> uploadImage(Uint8List file) async {
@@ -58,44 +58,44 @@ class _CardShareState extends State<CardShare> {
     return String.fromCharCodes(uint8list);
   }
 
-  Future<Uint8List> _getWidgetImage() async {
-    try {
-      RenderRepaintBoundary? boundary = _renderObjectKey.currentContext!
-          .findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      var pngBytes = byteData!.buffer.asUint8List();
-      var bs64 = base64Encode(pngBytes);
-      debugPrint(bs64.length.toString());
-      return pngBytes;
-    } catch (exception) {
-      print("exception" + exception.toString());
-      return convertStringToUint8List("");
-    }
-  }
+  // Future<Uint8List> _getWidgetImage() async {
+  //   try {
+  //     RenderRepaintBoundary? boundary = _renderObjectKey.currentContext!
+  //         .findRenderObject() as RenderRepaintBoundary;
+  //     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+  //     ByteData? byteData =
+  //         await image.toByteData(format: ui.ImageByteFormat.png);
+  //     var pngBytes = byteData!.buffer.asUint8List();
+  //     var bs64 = base64Encode(pngBytes);
+  //     debugPrint(bs64.length.toString());
+  //     return pngBytes;
+  //   } catch (exception) {
+  //     print("exception" + exception.toString());
+  //     return convertStringToUint8List("");
+  //   }
+  // }
 
-  Future<void> _getImage() async {
-    RenderRepaintBoundary boundary = _renderObjectKey.currentContext!
-        .findRenderObject() as RenderRepaintBoundary;
-    var image = await boundary.toImage();
+  // Future<void> _getImage() async {
+  //   RenderRepaintBoundary boundary = _renderObjectKey.currentContext!
+  //       .findRenderObject() as RenderRepaintBoundary;
+  //   var image = await boundary.toImage();
 
-    if (kIsWeb) {
-      print('registering as a web device');
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-      final _base64 = base64Encode(pngBytes);
-      final anchor = html.AnchorElement(
-          href: 'data:application/octet-stream;base64,$_base64')
-        ..download = "image.png"
-        ..target = 'blank';
+  //   if (kIsWeb) {
+  //     print('registering as a web device');
+  //     ByteData? byteData =
+  //         await image.toByteData(format: ui.ImageByteFormat.png);
+  //     Uint8List pngBytes = byteData!.buffer.asUint8List();
+  //     final _base64 = base64Encode(pngBytes);
+  //     final anchor = html.AnchorElement(
+  //         href: 'data:application/octet-stream;base64,$_base64')
+  //       ..download = "image.png"
+  //       ..target = 'blank';
 
-      html.document.body!.append(anchor);
-      anchor.click();
-      anchor.remove();
-    }
-  }
+  //     html.document.body!.append(anchor);
+  //     anchor.click();
+  //     anchor.remove();
+  //   }
+  // }
 
   // Future<Uint8List> _getWidgetImage() async {
   Widget QRcode() {
@@ -135,19 +135,19 @@ class _CardShareState extends State<CardShare> {
               child: QRcode(),
             ),
           ),
-          Center(
-            child: Card(
-              child: ListTile(
-                title: const Text('Copia o descarga la imagen'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.download),
-                  onPressed: () {
-                    _getImage();
-                  },
-                ),
-              ),
-            ),
-          ),
+          // Center(
+          //   child: Card(
+          //     child: ListTile(
+          //       title: const Text('Copia o descarga la imagen'),
+          //       trailing: IconButton(
+          //         icon: const Icon(Icons.download),
+          //         onPressed: () {
+          //           _getImage();
+          //         },
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Center(
             child: Card(
               child: ListTile(
