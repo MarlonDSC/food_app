@@ -5,7 +5,7 @@ class UserCard {
   final String? fullName;
   final String? jobTitle;
   final String? description;
-  final int? phoneNumber;
+  final String? phoneNumber;
   final String? profilePictureURL;
 
   UserCard({

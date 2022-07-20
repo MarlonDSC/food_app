@@ -5,6 +5,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextInputType textInputType;
   final bool obscureText;
+  final Widget prefix;
   final Widget suffix;
 
   const CustomTextField({
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     required this.textInputType,
     required this.obscureText,
+    required this.prefix,
     required this.suffix,
   }) : super(key: key);
 
@@ -40,6 +42,7 @@ class CustomTextField extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
+        prefixIcon: prefix,
         suffixIcon: suffix,
       ),
     );

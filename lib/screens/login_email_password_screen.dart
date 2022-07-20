@@ -52,6 +52,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               hintText: 'Ingresa tu correo',
               textInputType: TextInputType.emailAddress,
               obscureText: false,
+              prefix: const Icon(Icons.mail),
               suffix: const SizedBox(),
             ),
           ),
@@ -63,6 +64,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               hintText: 'Ingresa tu contraseña',
               textInputType: TextInputType.visiblePassword,
               obscureText: !_isHidden,
+              prefix: const SizedBox(),
               suffix: InkWell(
                 onTap: _togglePasswordView,
                 child: Icon(

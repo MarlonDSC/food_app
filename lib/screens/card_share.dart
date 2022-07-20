@@ -99,17 +99,30 @@ class _CardShareState extends State<CardShare> {
 
   // Future<Uint8List> _getWidgetImage() async {
   Widget QRcode() {
-    return Container(
-      color: Colors.white,
-      child: PrettyQr(
-        image: NetworkImage(widget.profilePictureURL),
-        size: 300,
-        data: fullURL,
-        errorCorrectLevel: QrErrorCorrectLevel.H,
-        typeNumber: null,
-        roundEdges: true,
-      ),
-    );
+    if (widget.profilePictureURL.isEmpty) {
+      return Container(
+        color: Colors.white,
+        child: PrettyQr(
+          size: 300,
+          data: fullURL,
+          errorCorrectLevel: QrErrorCorrectLevel.H,
+          typeNumber: null,
+          roundEdges: true,
+        ),
+      );
+    } else {
+      return Container(
+        color: Colors.white,
+        child: PrettyQr(
+          image: NetworkImage(widget.profilePictureURL),
+          size: 300,
+          data: fullURL,
+          errorCorrectLevel: QrErrorCorrectLevel.H,
+          typeNumber: null,
+          roundEdges: true,
+        ),
+      );
+    }
   }
 
   @override

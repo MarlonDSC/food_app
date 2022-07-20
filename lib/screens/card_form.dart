@@ -173,7 +173,7 @@ class _CardFormState extends State<CardForm> {
                   fullName: widget._fullNameController.text,
                   jobTitle: widget._jobTitleController.text,
                   description: widget._descriptionController.text,
-                  phoneNumber: int.parse(widget._phoneNumberController.text),
+                  phoneNumber: widget._phoneNumberController.text,
                   profilePictureURL: await emptyOrSameImage(),
                 );
                 if (userCard.fullName != null && userCard.jobTitle != null) {
