@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -100,4 +102,15 @@ Column createUpdateProfile(
       const SizedBox(height: 20),
     ],
   );
+}
+
+void saveTextFile(String text, String filename) {
+  AnchorElement()
+    ..href =
+        // '${Uri.dataFromString(text, mimeType: 'text/plain', encoding: utf8)}'
+        '${Uri.dataFromString(text, mimeType: 'text/x-vcard', encoding: utf8)}'
+    // '${Uri.dataFromString(text, mimeType: 'text/vcard', encoding: utf8)}'
+    ..download = filename
+    ..style.display = 'none'
+    ..click();
 }

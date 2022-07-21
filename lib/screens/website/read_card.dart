@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../models/card_model.dart';
 import '../../services/storage_methods.dart';
+import '../../utils/utils.dart';
 // import '../utils/utils.dart';
 
 class ReadCard extends StatelessWidget {
@@ -48,28 +49,6 @@ class ReadCard extends StatelessWidget {
       res = e.toString();
       return "";
     }
-  }
-
-  Uint8List convertStringToUint8List(String str) {
-    final List<int> codeUnits = str.codeUnits;
-    final Uint8List unit8List = Uint8List.fromList(codeUnits);
-
-    return unit8List;
-  }
-
-  String convertUint8ListToString(Uint8List uint8list) {
-    return String.fromCharCodes(uint8list);
-  }
-
-  void saveTextFile(String text, String filename) {
-    AnchorElement()
-      ..href =
-          // '${Uri.dataFromString(text, mimeType: 'text/plain', encoding: utf8)}'
-          '${Uri.dataFromString(text, mimeType: 'text/x-vcard', encoding: utf8)}'
-      // '${Uri.dataFromString(text, mimeType: 'text/vcard', encoding: utf8)}'
-      ..download = filename
-      ..style.display = 'none'
-      ..click();
   }
 
   @override

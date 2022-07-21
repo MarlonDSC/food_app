@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:slack_cards/screens/signup_email_password_screen.dart';
 import '../models/card_model.dart';
 import '../services/firebase_auth_methods.dart';
 import 'card_form.dart';
@@ -34,12 +35,24 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            onPressed: () {
-              context.read<FirebaseAuthMethods>().signOut(context);
-            },
-            icon: const Icon(Icons.exit_to_app),
-          ),
+          uid == "" || enabled == false
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EmailPasswordSignup(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.person_add),
+                )
+              : IconButton(
+                  onPressed: () {
+                    context.read<FirebaseAuthMethods>().signOut(context);
+                  },
+                  icon: const Icon(Icons.exit_to_app),
+                ),
         ],
       ),
       body: StreamBuilder(
@@ -56,16 +69,13 @@ class HomeScreen extends StatelessWidget {
               var map = Map<String, dynamic>.from(
                   documentSnapshot.data() as Map<dynamic, dynamic>);
               userCard = UserCard.fromFirestore(Map.from(map));
-              print(documentSnapshot['fullName']);
 
-              if (documentSnapshot != null) {
-                profilePictureURL = documentSnapshot['profilePictureURL'];
-                fullNameController.text = documentSnapshot['fullName'];
-                jobTitleController.text = documentSnapshot['jobTitle'];
-                descriptionController.text = documentSnapshot['description'];
-                phoneNumberController.text =
-                    documentSnapshot['phoneNumber'].toString();
-              }
+              profilePictureURL = documentSnapshot['profilePictureURL'];
+              fullNameController.text = documentSnapshot['fullName'];
+              jobTitleController.text = documentSnapshot['jobTitle'];
+              descriptionController.text = documentSnapshot['description'];
+              phoneNumberController.text =
+                  documentSnapshot['phoneNumber'].toString();
 
               return CardForm(
                 uid: uid,
@@ -74,14 +84,10 @@ class HomeScreen extends StatelessWidget {
                 jobTitleController: jobTitleController,
                 descriptionController: descriptionController,
                 phoneNumberController: phoneNumberController,
-                action: 'update',
+                action: 'Actualizar',
                 db: db,
                 documentSnapshot: documentSnapshot,
                 enabled: enabled,
-              );
-            } else if (!snapshot.hasData) {
-              return const Center(
-                child: Text('Add a new user'),
               );
             }
             return const Center(

@@ -24,7 +24,6 @@ class CardForm extends StatefulWidget {
     required this.db,
     required this.documentSnapshot,
     required enabled,
-    // required this.enabled,
   })  : _profilePic = profilePictureURL,
         _fullNameController = fullNameController,
         _jobTitleController = jobTitleController,
@@ -110,22 +109,22 @@ class _CardFormState extends State<CardForm> {
                                   backgroundColor: Colors.transparent,
                                   backgroundImage: MemoryImage(localProfilePic),
                                 ),
-                      Positioned(
-                        bottom: -10,
-                        left: 80,
-                        child: IconButton(
-                          onPressed: () async {
-                            localProfilePic =
-                                await pickImage(ImageSource.gallery);
-                            print("localProfilePic " +
-                                localProfilePic.toString());
-                            setState(() {});
-                          },
-                          icon: const Icon(
-                            Icons.add_a_photo,
-                          ),
-                        ),
-                      )
+                      widget._enabled
+                          ? Positioned(
+                              bottom: -10,
+                              left: 80,
+                              child: IconButton(
+                                onPressed: () async {
+                                  localProfilePic =
+                                      await pickImage(ImageSource.gallery);
+                                  setState(() {});
+                                },
+                                icon: const Icon(
+                                  Icons.add_a_photo,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
                     ],
                   ),
                 ),
@@ -140,8 +139,7 @@ class _CardFormState extends State<CardForm> {
                   cardDocument: widget.uid,
                   profilePictureURL: widget._profilePic,
                   db: widget.db,
-                  enabled: true,
-                  // documentSnapshot: documentSnapshot,
+                  enabled: widget._enabled,
                 ),
               ],
             ),
@@ -152,9 +150,8 @@ class _CardFormState extends State<CardForm> {
                   height: 55,
                   child: ElevatedButton(
                     child:
-                        Text(widget.action == 'create' ? 'Create' : 'Update'),
+                        Text(widget.action == 'Crear' ? 'Crear' : 'Actualizar'),
                     onPressed: () async {
-                      print("localProfilePic " + localProfilePic.toString());
                       userCard = UserCard(
                         id: widget.uid,
                         fullName: widget._fullNameController.text,
@@ -165,7 +162,7 @@ class _CardFormState extends State<CardForm> {
                       );
                       if (userCard.fullName != null &&
                           userCard.jobTitle != null) {
-                        if (widget.action == 'create') {
+                        if (widget.action == 'Crear') {
                           // Persist a new product to Firestore
                           await widget.db
                               .collection('cards')
@@ -173,7 +170,7 @@ class _CardFormState extends State<CardForm> {
                               .set(userCard.toFirestore());
                         }
 
-                        if (widget.action == 'update') {
+                        if (widget.action == 'Actualizar') {
                           // Update the product
                           await widget.db
                               .collection('cards')
@@ -186,7 +183,32 @@ class _CardFormState extends State<CardForm> {
                     },
                   ),
                 )
-              : const SizedBox(),
+              : SizedBox(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                    child: const Text('Descargar contacto'),
+                    onPressed: () {
+                      // TEL;TYPE=work,voice;VALUE=uri:tel:
+                      // TEL;TYPE=home,voice;VALUE=uri:tel:+1-404-555-1212
+                      List<String> name =
+                          widget._fullNameController.text.split(' ');
+                      print(name[2]);
+                      String vCardExample40 = '''BEGIN:VCARD
+VERSION:3.0
+N:${name[1]};${name[0]};;;
+FN:${widget._fullNameController.text}
+ORG:
+COMPANY:
+TITLE:${widget._jobTitleController.text}
+TEL;TYPE=work,pref:${widget._phoneNumberController.text}
+NOTE;CHARSET=UTF-8:${widget._descriptionController.text}
+END:VCARD''';
+                      saveTextFile(vCardExample40,
+                          widget._fullNameController.text + ".vcf");
+                    },
+                  ),
+                ),
         ],
       ),
     );

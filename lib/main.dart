@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
                 //   args: pathComponents.last,
                 // ),
                 builder: (context) => HomeScreen(
-                  argument: "HlNWb57QZIWRtyWnbAts4U1ZeAt1",
+                  argument: pathComponents.last,
                   enabled: false,
                 ),
               );

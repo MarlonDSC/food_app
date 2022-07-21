@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
+import 'package:slack_cards/screens/home_screen.dart';
 import 'package:slack_cards/screens/website/read_profile.dart';
 import 'package:slack_cards/services/storage_methods.dart';
 import 'package:image_picker/image_picker.dart';
@@ -138,17 +139,24 @@ class _CardShareState extends State<CardShare> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const ListTile(
-              leading: Icon(
+            ListTile(
+              leading: const Icon(
                 Icons.qr_code,
                 size: 40,
               ),
-              title: Text(
-                "Comparte tu perfil",
-                style: TextStyle(
-                  fontSize: 40,
-                ),
-              ),
+              title: widget.enabled
+                  ? const Text(
+                      'Comparte tu perfil',
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),
+                    )
+                  : const Text(
+                      'Comparte el perfil',
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),
+                    ),
             ),
             // Center(
             //   child: QRcode(),
@@ -184,22 +192,24 @@ class _CardShareState extends State<CardShare> {
                       },
                     ),
                     const SizedBox(width: 8),
-                    TextButton(
-                      child: Text(
-                        'Visualizar mi perfil'.toUpperCase(),
-                      ),
-                      onPressed: () {
-                        // FlutterClipboard.copy(controller.text);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReadProfile(
-                              args: widget.cardDocument,
+                    widget.enabled
+                        ? TextButton(
+                            child: Text(
+                              'Visualizar mi perfil'.toUpperCase(),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(
+                                    enabled: false,
+                                    argument: widget.cardDocument,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : const SizedBox(),
                   ],
                 ),
                 // Row(

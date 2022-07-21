@@ -99,7 +99,7 @@ class ReadProfile extends StatelessWidget {
                 jobTitleController: jobTitleController,
                 descriptionController: descriptionController,
                 phoneNumberController: phoneNumberController,
-                action: 'update',
+                action: 'Actualizar',
                 db: db,
                 documentSnapshot: documentSnapshot,
               );
