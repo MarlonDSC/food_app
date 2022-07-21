@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../services/storage_methods.dart';
+import '../widgets/custom_textfield.dart';
 
 pickImage(ImageSource source) async {
   final ImagePicker _imagePicker = ImagePicker();
@@ -33,4 +34,70 @@ Uint8List convertStringToUint8List(String str) {
 
 String convertUint8ListToString(Uint8List uint8list) {
   return String.fromCharCodes(uint8list);
+}
+
+Column createUpdateProfile(
+  TextEditingController fullNameController,
+  TextEditingController jobTitleController,
+  TextEditingController descriptionController,
+  TextEditingController phoneNumberController,
+  bool enabled,
+) {
+  return Column(
+    children: [
+      const SizedBox(height: 20),
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        child: CustomTextField(
+          controller: fullNameController,
+          hintText: 'Ingresa tu nombre',
+          textInputType: TextInputType.text,
+          obscureText: false,
+          prefix: const Icon(Icons.person),
+          suffix: const SizedBox(),
+          enabled: enabled,
+        ),
+      ),
+      const SizedBox(height: 20),
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        child: CustomTextField(
+          controller: jobTitleController,
+          hintText: 'Ingresa tu puesto de trabajo',
+          textInputType: TextInputType.text,
+          obscureText: false,
+          prefix: const Icon(Icons.work),
+          suffix: const SizedBox(),
+          enabled: enabled,
+        ),
+      ),
+      const SizedBox(height: 20),
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        child: CustomTextField(
+          controller: descriptionController,
+          hintText: 'Ingresa una descripción',
+          textInputType: TextInputType.text,
+          obscureText: false,
+          prefix: const Icon(Icons.description),
+          suffix: const SizedBox(),
+          enabled: enabled,
+        ),
+      ),
+      const SizedBox(height: 20),
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        child: CustomTextField(
+          controller: phoneNumberController,
+          hintText: 'Ingresa tu número de teléfono',
+          textInputType: TextInputType.phone,
+          obscureText: false,
+          prefix: const Icon(Icons.call),
+          suffix: const SizedBox(),
+          enabled: enabled,
+        ),
+      ),
+      const SizedBox(height: 20),
+    ],
+  );
 }

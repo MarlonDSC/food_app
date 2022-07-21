@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
+import 'package:slack_cards/screens/website/read_profile.dart';
 import 'package:slack_cards/services/storage_methods.dart';
 import 'package:image_picker/image_picker.dart';
 // import 'package:universal_io/io.dart';
@@ -16,17 +17,20 @@ import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 
 class CardShare extends StatefulWidget {
+  static String routeName = '/cardShare';
   CardShare({
     Key? key,
     required this.cardDocument,
     required this.profilePictureURL,
     required this.db,
+    required this.enabled,
     // required this.documentSnapshot,
   }) : super(key: key);
 
   final String cardDocument;
   late String profilePictureURL;
   final FirebaseFirestore db;
+  final bool enabled;
   @override
   State<CardShare> createState() => _CardShareState();
 }
@@ -103,7 +107,7 @@ class _CardShareState extends State<CardShare> {
       return Container(
         color: Colors.white,
         child: PrettyQr(
-          size: 300,
+          size: 400,
           data: fullURL,
           errorCorrectLevel: QrErrorCorrectLevel.H,
           typeNumber: null,
@@ -115,7 +119,7 @@ class _CardShareState extends State<CardShare> {
         color: Colors.white,
         child: PrettyQr(
           image: NetworkImage(widget.profilePictureURL),
-          size: 300,
+          size: 400,
           data: fullURL,
           errorCorrectLevel: QrErrorCorrectLevel.H,
           typeNumber: null,
@@ -127,54 +131,98 @@ class _CardShareState extends State<CardShare> {
 
   @override
   Widget build(BuildContext context) {
-    print("cardDocument " + widget.cardDocument);
     return Padding(
-      padding: EdgeInsets.only(
-          top: 20,
-          left: 20,
-          right: 20,
-          // prevent the soft keyboard from covering text fields
-          bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Center(
-          //   child: QRcode(),
-          // ),
-          Center(
-            child: RepaintBoundary(
-              key: _renderObjectKey,
-              child: QRcode(),
-            ),
-          ),
-          // Center(
-          //   child: Card(
-          //     child: ListTile(
-          //       title: const Text('Copia o descarga la imagen'),
-          //       trailing: IconButton(
-          //         icon: const Icon(Icons.download),
-          //         onPressed: () {
-          //           _getImage();
-          //         },
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          Center(
-            child: Card(
-              child: ListTile(
-                title: const Text('Copia el link'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.copy),
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: fullURL));
-                  },
+      padding: const EdgeInsets.all(10),
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const ListTile(
+              leading: Icon(
+                Icons.qr_code,
+                size: 40,
+              ),
+              title: Text(
+                "Comparte tu perfil",
+                style: TextStyle(
+                  fontSize: 40,
                 ),
               ),
             ),
-          ),
-        ],
+            // Center(
+            //   child: QRcode(),
+            // ),
+            Center(
+              child: RepaintBoundary(
+                key: _renderObjectKey,
+                child: QRcode(),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(width: 8),
+                    TextButton(
+                      child: Text(
+                        'Copiar dirección'.toUpperCase(),
+                      ),
+                      onPressed: () {
+                        // FlutterClipboard.copy(controller.text);
+                        Clipboard.setData(ClipboardData(text: fullURL));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('¡URL copiada al portapapeles! 📃'),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      child: Text(
+                        'Visualizar mi perfil'.toUpperCase(),
+                      ),
+                      onPressed: () {
+                        // FlutterClipboard.copy(controller.text);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReadProfile(
+                              args: widget.cardDocument,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     IconButton(
+                //       onPressed: () {
+
+                //       },
+                //       icon: Icon(
+                //         Icons.contact_mail,
+                //         color: Theme.of(context).primaryColor,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+          ],
+        ),
       ),
     );
   }

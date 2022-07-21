@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final Widget prefix;
   final Widget suffix;
+  final bool enabled;
 
   const CustomTextField({
     Key? key,
@@ -16,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     required this.obscureText,
     required this.prefix,
     required this.suffix,
+    required this.enabled,
   }) : super(key: key);
 
   @override
@@ -24,6 +26,7 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       keyboardType: textInputType,
       obscureText: obscureText,
+      enabled: enabled,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

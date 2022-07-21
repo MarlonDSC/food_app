@@ -67,8 +67,12 @@ class MyApp extends StatelessWidget {
             // break;
             default:
               return MaterialPageRoute(
-                builder: (context) => ReadProfile(
-                  args: pathComponents.last,
+                // builder: (context) => ReadProfile(
+                //   args: pathComponents.last,
+                // ),
+                builder: (context) => HomeScreen(
+                  argument: "HlNWb57QZIWRtyWnbAts4U1ZeAt1",
+                  enabled: false,
                 ),
               );
           }
@@ -111,7 +115,10 @@ class AuthWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return const HomeScreen();
+      return HomeScreen(
+        argument: "",
+        enabled: true,
+      );
     }
     return const EmailPasswordLogin();
   }

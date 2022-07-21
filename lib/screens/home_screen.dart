@@ -10,11 +10,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'card_share.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  HomeScreen({Key? key, this.enabled, this.argument}) : super(key: key);
+  final bool? enabled;
+  final String? argument;
+  late String uid = "";
   @override
   Widget build(BuildContext context) {
-    final user = context.read<FirebaseAuthMethods>().user;
+    try {
+      uid = context.read<FirebaseAuthMethods>().user.uid;
+    } catch (e) {
+      print(e.toString());
+    }
 
     final TextEditingController fullNameController = TextEditingController();
     final TextEditingController jobTitleController = TextEditingController();
@@ -25,35 +31,8 @@ class HomeScreen extends StatelessWidget {
     String profilePictureURL = "";
     UserCard userCard;
 
-    void _shareProfile([DocumentSnapshot? documentSnapshot]) async {
-      String profilePictureURL = "";
-      String cardDocument = "";
-      if (documentSnapshot != null) {
-        profilePictureURL = documentSnapshot['profilePictureURL'];
-        cardDocument = documentSnapshot.id;
-      }
-      String action = 'create';
-      await showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext ctx) {
-            return CardShare(
-              cardDocument: cardDocument,
-              profilePictureURL: profilePictureURL,
-              db: db,
-              // documentSnapshot: documentSnapshot,
-            );
-          });
-    }
-
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.qr_code),
-          onPressed: () {
-            _shareProfile(documentSnapshot);
-          },
-        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -66,7 +45,10 @@ class HomeScreen extends StatelessWidget {
       body: StreamBuilder(
           stream: db
               .collection('cards')
-              .where('id', isEqualTo: user.uid)
+              .where(
+                'id',
+                isEqualTo: uid == "" ? argument : uid,
+              )
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
@@ -86,7 +68,7 @@ class HomeScreen extends StatelessWidget {
               }
 
               return CardForm(
-                user: user,
+                uid: uid,
                 profilePictureURL: profilePictureURL,
                 fullNameController: fullNameController,
                 jobTitleController: jobTitleController,
@@ -95,6 +77,7 @@ class HomeScreen extends StatelessWidget {
                 action: 'update',
                 db: db,
                 documentSnapshot: documentSnapshot,
+                enabled: enabled,
               );
             } else if (!snapshot.hasData) {
               return const Center(

@@ -14,6 +14,8 @@ class FirebaseAuthMethods {
 
   //State persistance
   Stream<User?> get authState => FirebaseAuth.instance.authStateChanges();
+  // Stream<User?> get authState => FirebaseAuth.instance.
+
   //Email sign up
   Future<void> signUpWithEmail({
     required String email,
@@ -58,6 +60,7 @@ class FirebaseAuthMethods {
                 cardDocument: _auth.currentUser!.uid,
                 profilePictureURL: profilePicURL,
                 db: _firestore,
+                enabled: true,
                 // documentSnapshot: documentSnapshot,
               );
             });

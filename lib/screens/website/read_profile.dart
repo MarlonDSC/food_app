@@ -40,6 +40,7 @@ class ReadProfile extends StatelessWidget {
               cardDocument: cardDocument,
               profilePictureURL: profilePictureURL,
               db: db,
+              enabled: true,
               // documentSnapshot: documentSnapshot,
             );
           });
@@ -48,12 +49,6 @@ class ReadProfile extends StatelessWidget {
     print("args " + args.toString());
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.qr_code),
-          onPressed: () {
-            _shareProfile(documentSnapshot);
-          },
-        ),
         actions: [
           IconButton(
               onPressed: () {

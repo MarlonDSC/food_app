@@ -9,10 +9,12 @@ import '../utils/showSnackbar.dart';
 import '../utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import 'card_share.dart';
+
 class CardForm extends StatefulWidget {
-  CardForm({
+  const CardForm({
     Key? key,
-    required this.user,
+    required this.uid,
     required String profilePictureURL,
     required TextEditingController fullNameController,
     required TextEditingController jobTitleController,
@@ -21,14 +23,17 @@ class CardForm extends StatefulWidget {
     required this.action,
     required this.db,
     required this.documentSnapshot,
+    required enabled,
+    // required this.enabled,
   })  : _profilePic = profilePictureURL,
         _fullNameController = fullNameController,
         _jobTitleController = jobTitleController,
         _descriptionController = descriptionController,
         _phoneNumberController = phoneNumberController,
+        _enabled = enabled,
         super(key: key);
 
-  final dynamic user;
+  final String uid;
   final String _profilePic;
   final TextEditingController _fullNameController;
   final TextEditingController _jobTitleController;
@@ -37,6 +42,7 @@ class CardForm extends StatefulWidget {
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
+  final bool _enabled;
 
   @override
   State<CardForm> createState() => _CardFormState();
@@ -56,17 +62,6 @@ class _CardFormState extends State<CardForm> {
     }
   }
 
-  Uint8List convertStringToUint8List(String str) {
-    final List<int> codeUnits = str.codeUnits;
-    final Uint8List unit8List = Uint8List.fromList(codeUnits);
-
-    return unit8List;
-  }
-
-  String convertUint8ListToString(Uint8List uint8list) {
-    return String.fromCharCodes(uint8list);
-  }
-
   Future<String> emptyOrSameImage() async {
     if (convertUint8ListToString(localProfilePic) == "") {
       return widget.documentSnapshot!['profilePictureURL'];
@@ -78,7 +73,6 @@ class _CardFormState extends State<CardForm> {
   @override
   Widget build(BuildContext context) {
     UserCard userCard;
-    print("fullName " + widget.documentSnapshot!['fullName']);
     // Uint8List? localProfilePic;
     return Padding(
       padding: EdgeInsets.only(
@@ -135,69 +129,64 @@ class _CardFormState extends State<CardForm> {
                     ],
                   ),
                 ),
-                TextField(
-                  controller: widget._fullNameController,
-                  decoration:
-                      const InputDecoration(labelText: 'Nombre completo'),
+                createUpdateProfile(
+                  widget._fullNameController,
+                  widget._jobTitleController,
+                  widget._descriptionController,
+                  widget._phoneNumberController,
+                  widget._enabled,
                 ),
-                TextField(
-                  controller: widget._jobTitleController,
-                  decoration:
-                      const InputDecoration(labelText: 'Puesto de trabajo'),
-                ),
-                TextField(
-                  controller: widget._descriptionController,
-                  decoration: const InputDecoration(labelText: 'Descripción'),
-                ),
-                TextField(
-                  keyboardType: const TextInputType.numberWithOptions(),
-                  controller: widget._phoneNumberController,
-                  decoration:
-                      const InputDecoration(labelText: 'Numero de teléfono'),
-                ),
-                const SizedBox(
-                  height: 20,
+                CardShare(
+                  cardDocument: widget.uid,
+                  profilePictureURL: widget._profilePic,
+                  db: widget.db,
+                  enabled: true,
+                  // documentSnapshot: documentSnapshot,
                 ),
               ],
             ),
           ),
-          SizedBox(
-            width: double.infinity,
-            height: 55,
-            child: ElevatedButton(
-              child: Text(widget.action == 'create' ? 'Create' : 'Update'),
-              onPressed: () async {
-                print("localProfilePic " + localProfilePic.toString());
-                userCard = UserCard(
-                  id: widget.user.uid,
-                  fullName: widget._fullNameController.text,
-                  jobTitle: widget._jobTitleController.text,
-                  description: widget._descriptionController.text,
-                  phoneNumber: widget._phoneNumberController.text,
-                  profilePictureURL: await emptyOrSameImage(),
-                );
-                if (userCard.fullName != null && userCard.jobTitle != null) {
-                  if (widget.action == 'create') {
-                    // Persist a new product to Firestore
-                    await widget.db
-                        .collection('cards')
-                        .doc(userCard.id)
-                        .set(userCard.toFirestore());
-                  }
+          widget._enabled
+              ? SizedBox(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                    child:
+                        Text(widget.action == 'create' ? 'Create' : 'Update'),
+                    onPressed: () async {
+                      print("localProfilePic " + localProfilePic.toString());
+                      userCard = UserCard(
+                        id: widget.uid,
+                        fullName: widget._fullNameController.text,
+                        jobTitle: widget._jobTitleController.text,
+                        description: widget._descriptionController.text,
+                        phoneNumber: widget._phoneNumberController.text,
+                        profilePictureURL: await emptyOrSameImage(),
+                      );
+                      if (userCard.fullName != null &&
+                          userCard.jobTitle != null) {
+                        if (widget.action == 'create') {
+                          // Persist a new product to Firestore
+                          await widget.db
+                              .collection('cards')
+                              .doc(userCard.id)
+                              .set(userCard.toFirestore());
+                        }
 
-                  if (widget.action == 'update') {
-                    // Update the product
-                    await widget.db
-                        .collection('cards')
-                        .doc(widget.documentSnapshot!.id)
-                        .update(userCard.toFirestore());
-                    showSnackBar(context, '¡Datos actualizados!');
-                  }
-                  localProfilePic = convertStringToUint8List("");
-                }
-              },
-            ),
-          )
+                        if (widget.action == 'update') {
+                          // Update the product
+                          await widget.db
+                              .collection('cards')
+                              .doc(widget.documentSnapshot!.id)
+                              .update(userCard.toFirestore());
+                          showSnackBar(context, '¡Datos actualizados!');
+                        }
+                        localProfilePic = convertStringToUint8List("");
+                      }
+                    },
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
     );
