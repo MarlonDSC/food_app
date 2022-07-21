@@ -9,20 +9,18 @@ import '../services/storage_methods.dart';
 import '../widgets/custom_textfield.dart';
 
 pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _file = await _imagePicker.pickImage(source: source);
-  if (_file != null) {
-    return await _file.readAsBytes();
+  final ImagePicker imagePicker = ImagePicker();
+  XFile? file = await imagePicker.pickImage(source: source);
+  if (file != null) {
+    return await file.readAsBytes();
   }
 }
 
 Future<String> uploadImage(Uint8List file) async {
-  String res = "Some error ocurred";
   try {
     return await StorageMethods()
         .uploadImageToStorage('profilePics', file, false);
   } catch (e) {
-    res = e.toString();
     return "";
   }
 }

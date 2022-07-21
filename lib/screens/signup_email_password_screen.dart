@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/firebase_auth_methods.dart';
@@ -83,7 +82,6 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
                     child: IconButton(
                       onPressed: () async {
                         localProfilePic = await pickImage(ImageSource.gallery);
-                        print("localProfilePic " + localProfilePic.toString());
                         setState(() {});
                       },
                       icon: const Icon(

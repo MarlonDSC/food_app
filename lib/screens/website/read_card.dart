@@ -1,11 +1,8 @@
-import 'dart:convert';
-import 'dart:html';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:image_picker/image_picker.dart';
 
-import '../../models/card_model.dart';
 import '../../services/storage_methods.dart';
 import '../../utils/utils.dart';
 // import '../utils/utils.dart';
@@ -41,19 +38,16 @@ class ReadCard extends StatelessWidget {
   late Uint8List localProfilePic = convertStringToUint8List("");
 
   Future<String> uploadImage(Uint8List file) async {
-    String res = "Some error ocurred";
     try {
       return await StorageMethods()
           .uploadImageToStorage('profilePics', file, false);
     } catch (e) {
-      res = e.toString();
       return "";
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    UserCard userCard;
     // Uint8List? localProfilePic;
     return Padding(
       padding: EdgeInsets.only(
@@ -131,7 +125,6 @@ class ReadCard extends StatelessWidget {
                 // TEL;TYPE=work,voice;VALUE=uri:tel:
                 // TEL;TYPE=home,voice;VALUE=uri:tel:+1-404-555-1212
                 List<String> name = _fullNameController.text.split(' ');
-                print(name[2]);
                 String vCardExample40 = '''BEGIN:VCARD
 VERSION:3.0
 N:${name[1]};${name[0]};;;
@@ -142,7 +135,7 @@ TITLE:${_jobTitleController.text}
 TEL;TYPE=work,pref:${_phoneNumberController.text}
 NOTE;CHARSET=UTF-8:${_descriptionController.text}
 END:VCARD''';
-                saveTextFile(vCardExample40, _fullNameController.text + ".vcf");
+                saveTextFile(vCardExample40, "${_fullNameController.text}.vcf");
               },
             ),
           ),

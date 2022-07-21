@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/firebase_auth_methods.dart';
 import '../widgets/custom_textfield.dart';
 import 'signup_email_password_screen.dart';
-import 'website/read_profile.dart';
-import 'website/screen_arguments.dart';
 
 class EmailPasswordLogin extends StatefulWidget {
   static String routeName = '/login';

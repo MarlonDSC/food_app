@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:slack_cards/screens/website/read_card.dart';
-import '../../models/card_model.dart';
-import '../card_form.dart';
-import '../card_share.dart';
 import '../signup_email_password_screen.dart';
-import 'screen_arguments.dart';
 
 class ReadProfile extends StatelessWidget {
   ReadProfile({Key? key, this.args}) : super(key: key);
@@ -21,32 +17,6 @@ class ReadProfile extends StatelessWidget {
     late DocumentSnapshot? documentSnapshot;
     final db = FirebaseFirestore.instance;
     String profilePictureURL = "";
-    UserCard userCard;
-    print("args in build " + args!);
-
-    void _shareProfile([DocumentSnapshot? documentSnapshot]) async {
-      String profilePictureURL = "";
-      String cardDocument = "";
-      if (documentSnapshot != null) {
-        profilePictureURL = documentSnapshot['profilePictureURL'];
-        cardDocument = documentSnapshot.id;
-      }
-      String action = 'create';
-      await showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext ctx) {
-            return CardShare(
-              cardDocument: cardDocument,
-              profilePictureURL: profilePictureURL,
-              db: db,
-              enabled: true,
-              // documentSnapshot: documentSnapshot,
-            );
-          });
-    }
-
-    print("args " + args.toString());
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -79,10 +49,6 @@ class ReadProfile extends StatelessWidget {
               // print(
               //     'documentSnapshot ' + snapshot.data!.docs.length.toString());
               documentSnapshot = snapshot.data!.docs[0];
-              var map = Map<String, dynamic>.from(
-                  documentSnapshot!.data() as Map<dynamic, dynamic>);
-              userCard = UserCard.fromFirestore(Map.from(map));
-
               if (documentSnapshot != null) {
                 profilePictureURL = documentSnapshot!['profilePictureURL'];
                 fullNameController.text = documentSnapshot!['fullName'];

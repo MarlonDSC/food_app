@@ -1,21 +1,11 @@
-import 'dart:convert';
-// import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/rendering.dart';
 import 'package:slack_cards/screens/home_screen.dart';
-import 'package:slack_cards/screens/website/read_profile.dart';
 import 'package:slack_cards/services/storage_methods.dart';
-import 'package:image_picker/image_picker.dart';
 // import 'package:universal_io/io.dart';
-import 'dart:html' as html;
-import '../models/card_model.dart';
-import '../utils/utils.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:flutter/services.dart';
-import 'dart:ui' as ui;
 
 class CardShare extends StatefulWidget {
   static String routeName = '/cardShare';
@@ -42,12 +32,10 @@ class _CardShareState extends State<CardShare> {
 
   final _renderObjectKey = GlobalKey();
   Future<String> uploadImage(Uint8List file) async {
-    String res = "Some error ocurred";
     try {
       return await StorageMethods()
           .uploadImageToStorage('profilePics', file, false);
     } catch (e) {
-      res = e.toString();
       return "";
     }
   }
@@ -103,7 +91,7 @@ class _CardShareState extends State<CardShare> {
   // }
 
   // Future<Uint8List> _getWidgetImage() async {
-  Widget QRcode() {
+  Widget generateQRcode() {
     if (widget.profilePictureURL.isEmpty) {
       return Container(
         color: Colors.white,
@@ -164,7 +152,7 @@ class _CardShareState extends State<CardShare> {
             Center(
               child: RepaintBoundary(
                 key: _renderObjectKey,
-                child: QRcode(),
+                child: generateQRcode(),
               ),
             ),
             const SizedBox(

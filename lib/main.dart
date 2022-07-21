@@ -4,10 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'screens/home_screen.dart';
 import 'screens/login_email_password_screen.dart';
-import 'screens/login_screen.dart';
 import 'screens/signup_email_password_screen.dart';
 import 'screens/website/read_profile.dart';
-import 'screens/website/screen_arguments.dart';
 import 'services/firebase_auth_methods.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,7 +56,6 @@ class MyApp extends StatelessWidget {
         },
         onGenerateRoute: (settings) {
           List<String> pathComponents = settings.name!.split('/');
-          print("last " + pathComponents.last);
           switch (settings.name) {
             case '/':
               return MaterialPageRoute(

@@ -5,9 +5,8 @@ import 'package:image_picker/image_picker.dart';
 
 import '../models/card_model.dart';
 import '../services/storage_methods.dart';
-import '../utils/showSnackbar.dart';
+import '../utils/show_snackbar.dart';
 import '../utils/utils.dart';
-import 'package:provider/provider.dart';
 
 import 'card_share.dart';
 
@@ -51,12 +50,10 @@ class _CardFormState extends State<CardForm> {
   late Uint8List localProfilePic = convertStringToUint8List("");
 
   Future<String> uploadImage(Uint8List file) async {
-    String res = "Some error ocurred";
     try {
       return await StorageMethods()
           .uploadImageToStorage('profilePics', file, false);
     } catch (e) {
-      res = e.toString();
       return "";
     }
   }
@@ -193,7 +190,6 @@ class _CardFormState extends State<CardForm> {
                       // TEL;TYPE=home,voice;VALUE=uri:tel:+1-404-555-1212
                       List<String> name =
                           widget._fullNameController.text.split(' ');
-                      print(name[2]);
                       String vCardExample40 = '''BEGIN:VCARD
 VERSION:3.0
 N:${name[1]};${name[0]};;;
@@ -205,7 +201,7 @@ TEL;TYPE=work,pref:${widget._phoneNumberController.text}
 NOTE;CHARSET=UTF-8:${widget._descriptionController.text}
 END:VCARD''';
                       saveTextFile(vCardExample40,
-                          widget._fullNameController.text + ".vcf");
+                          "${widget._fullNameController.text}.vcf");
                     },
                   ),
                 ),

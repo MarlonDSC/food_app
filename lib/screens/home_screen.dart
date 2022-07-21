@@ -3,12 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:slack_cards/screens/signup_email_password_screen.dart';
-import '../models/card_model.dart';
 import '../services/firebase_auth_methods.dart';
 import 'card_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'card_share.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key, this.enabled, this.argument}) : super(key: key);
@@ -20,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     try {
       uid = context.read<FirebaseAuthMethods>().user.uid;
     } catch (e) {
-      print(e.toString());
+      uid = "";
     }
 
     final TextEditingController fullNameController = TextEditingController();
@@ -30,8 +27,6 @@ class HomeScreen extends StatelessWidget {
     late QueryDocumentSnapshot<Object?> documentSnapshot;
     final db = FirebaseFirestore.instance;
     String profilePictureURL = "";
-    UserCard userCard;
-
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -66,9 +61,6 @@ class HomeScreen extends StatelessWidget {
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
               documentSnapshot = snapshot.data!.docs[0];
-              var map = Map<String, dynamic>.from(
-                  documentSnapshot.data() as Map<dynamic, dynamic>);
-              userCard = UserCard.fromFirestore(Map.from(map));
 
               profilePictureURL = documentSnapshot['profilePictureURL'];
               fullNameController.text = documentSnapshot['fullName'];
