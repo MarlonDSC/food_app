@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/card_model.dart';
 import '../screens/card_share.dart';
-import '../utils/showSnackbar.dart';
+import '../utils/show_snackbar.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth _auth;
