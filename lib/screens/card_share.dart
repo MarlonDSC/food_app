@@ -96,7 +96,7 @@ class _CardShareState extends State<CardShare> {
       return Container(
         color: Colors.white,
         child: PrettyQr(
-          size: 400,
+          size: 300,
           data: fullURL,
           errorCorrectLevel: QrErrorCorrectLevel.H,
           typeNumber: null,
