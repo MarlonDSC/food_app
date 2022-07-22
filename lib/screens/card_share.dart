@@ -96,7 +96,7 @@ class _CardShareState extends State<CardShare> {
       return Container(
         color: Colors.white,
         child: PrettyQr(
-          size: 300,
+          size: MediaQuery.of(context).size.width * 0.7,
           data: fullURL,
           errorCorrectLevel: QrErrorCorrectLevel.H,
           typeNumber: null,
@@ -108,7 +108,7 @@ class _CardShareState extends State<CardShare> {
         color: Colors.white,
         child: PrettyQr(
           image: NetworkImage(widget.profilePictureURL),
-          size: 400,
+          size: MediaQuery.of(context).size.width * 0.7,
           data: fullURL,
           errorCorrectLevel: QrErrorCorrectLevel.H,
           typeNumber: null,
