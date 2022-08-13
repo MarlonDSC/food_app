@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:slack_cards/screens/website/read_card.dart';
 import '../signup_email_password_screen.dart';
+import 'read_card.dart';
 
 class ReadProfile extends StatelessWidget {
   ReadProfile({Key? key, this.args}) : super(key: key);
@@ -39,9 +39,9 @@ class ReadProfile extends StatelessWidget {
       ),
       body: StreamBuilder(
           stream:
-              db.collection('cards').where('id', isEqualTo: args!).snapshots(),
+              db.collection('users').where('id', isEqualTo: args!).snapshots(),
           // db
-          //     .collection('cards')
+          //     .collection('users')
           //     .where('id', isEqualTo: "HlNWb57QZIWRtyWnbAts4U1ZeAt1")
           //     .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

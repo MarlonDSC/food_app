@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:931745201122:ios:2dc9cd143337a22ae5d7bb",
-  "FIREBASE_PROJECT_ID": "ionic-ec0mmerce",
-  "GCM_SENDER_ID": "931745201122"
+  "GOOGLE_APP_ID": "1:111118284603:ios:47c1a4556e46dc9519691e",
+  "FIREBASE_PROJECT_ID": "food-app-be2c3",
+  "GCM_SENDER_ID": "111118284603"
 }

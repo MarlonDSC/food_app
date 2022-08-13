@@ -116,29 +116,6 @@ class ReadCard extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          SizedBox(
-            width: double.infinity,
-            height: 55,
-            child: ElevatedButton(
-              child: const Text('Descargar contacto'),
-              onPressed: () {
-                // TEL;TYPE=work,voice;VALUE=uri:tel:
-                // TEL;TYPE=home,voice;VALUE=uri:tel:+1-404-555-1212
-                List<String> name = _fullNameController.text.split(' ');
-                String vCardExample40 = '''BEGIN:VCARD
-VERSION:3.0
-N:${name[1]};${name[0]};;;
-FN:${_fullNameController.text}
-ORG:
-COMPANY:
-TITLE:${_jobTitleController.text}
-TEL;TYPE=work,pref:${_phoneNumberController.text}
-NOTE;CHARSET=UTF-8:${_descriptionController.text}
-END:VCARD''';
-                saveTextFile(vCardExample40, "${_fullNameController.text}.vcf");
-              },
-            ),
-          ),
           // ElevatedButton(
           //   child: Text(action == 'create' ? 'Create' : 'Update'),
           //   onPressed: () async {
@@ -154,13 +131,13 @@ END:VCARD''';
           //     if (userCard.fullName != null && userCard.jobTitle != null) {
           //       if (action == 'create') {
           //         // Persist a new product to Firestore
-          //         await db.collection('cards').add(userCard.toFirestore());
+          //         await db.collection('users').add(userCard.toFirestore());
           //       }
 
           //       if (action == 'update') {
           //         // Update the product
           //         await db
-          //             .collection('cards')
+          //             .collection('users')
           //             .doc(documentSnapshot!.id)
           //             .update(userCard.toFirestore());
           //       }

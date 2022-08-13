@@ -44,40 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD-Qb5bWcWachgttHk1Ty6sahMgIT306O0',
-    appId: '1:931745201122:web:833542e16a2ae2cee5d7bb',
-    messagingSenderId: '931745201122',
-    projectId: 'ionic-ec0mmerce',
-    authDomain: 'ionic-ec0mmerce.firebaseapp.com',
-    storageBucket: 'ionic-ec0mmerce.appspot.com',
-    measurementId: 'G-5EQ6DT19EX',
+    apiKey: 'AIzaSyBC76VInc7eLTJM3XmB-xN5keiRIaiFT-I',
+    appId: '1:111118284603:web:90b3c56c17fb6f1019691e',
+    messagingSenderId: '111118284603',
+    projectId: 'food-app-be2c3',
+    authDomain: 'food-app-be2c3.firebaseapp.com',
+    storageBucket: 'food-app-be2c3.appspot.com',
+    measurementId: 'G-80V0QCPYPP',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA8U7Iq8vt3v2XVA_4kdFFqnOrfKGYizBM',
-    appId: '1:931745201122:android:ac2db18e1ce9f75ce5d7bb',
-    messagingSenderId: '931745201122',
-    projectId: 'ionic-ec0mmerce',
-    storageBucket: 'ionic-ec0mmerce.appspot.com',
+    apiKey: 'AIzaSyC0yUa7A_cBo2yQVzjBWFYVOKATrQ7Y5iQ',
+    appId: '1:111118284603:android:f03a91ecdc1534b719691e',
+    messagingSenderId: '111118284603',
+    projectId: 'food-app-be2c3',
+    storageBucket: 'food-app-be2c3.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAcdUmLs9hMtiQAwi6gEGQABAIm3tz9RYE',
-    appId: '1:931745201122:ios:2dc9cd143337a22ae5d7bb',
-    messagingSenderId: '931745201122',
-    projectId: 'ionic-ec0mmerce',
-    storageBucket: 'ionic-ec0mmerce.appspot.com',
-    iosClientId: '931745201122-k5mmurpmi5ev7fet73jta2c50vvitumc.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBxO7OliNvR2rde4UFKoJR4rimuzddwtzA',
+    appId: '1:111118284603:ios:47c1a4556e46dc9519691e',
+    messagingSenderId: '111118284603',
+    projectId: 'food-app-be2c3',
+    storageBucket: 'food-app-be2c3.appspot.com',
+    iosClientId: '111118284603-pb37ked3afmcu160f2s8ptve01ehv7n3.apps.googleusercontent.com',
     iosBundleId: 'com.example.slackCards',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAcdUmLs9hMtiQAwi6gEGQABAIm3tz9RYE',
-    appId: '1:931745201122:ios:2dc9cd143337a22ae5d7bb',
-    messagingSenderId: '931745201122',
-    projectId: 'ionic-ec0mmerce',
-    storageBucket: 'ionic-ec0mmerce.appspot.com',
-    iosClientId: '931745201122-k5mmurpmi5ev7fet73jta2c50vvitumc.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBxO7OliNvR2rde4UFKoJR4rimuzddwtzA',
+    appId: '1:111118284603:ios:47c1a4556e46dc9519691e',
+    messagingSenderId: '111118284603',
+    projectId: 'food-app-be2c3',
+    storageBucket: 'food-app-be2c3.appspot.com',
+    iosClientId: '111118284603-pb37ked3afmcu160f2s8ptve01ehv7n3.apps.googleusercontent.com',
     iosBundleId: 'com.example.slackCards',
   );
 }

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "931745201122",
-    "project_id": "ionic-ec0mmerce",
-    "storage_bucket": "ionic-ec0mmerce.appspot.com"
+    "project_number": "111118284603",
+    "project_id": "food-app-be2c3",
+    "storage_bucket": "food-app-be2c3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:931745201122:android:ac2db18e1ce9f75ce5d7bb",
+        "mobilesdk_app_id": "1:111118284603:android:f03a91ecdc1534b719691e",
         "android_client_info": {
           "package_name": "com.example.slack_cards"
         }
       },
       "oauth_client": [
         {
-          "client_id": "931745201122-mlt91j7ljstsq8l0os57mlb5f47h1gkq.apps.googleusercontent.com",
+          "client_id": "111118284603-ov7e7ufit0q57r8lbf76ssd5cnfvslp3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA8U7Iq8vt3v2XVA_4kdFFqnOrfKGYizBM"
+          "current_key": "AIzaSyC0yUa7A_cBo2yQVzjBWFYVOKATrQ7Y5iQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "931745201122-mlt91j7ljstsq8l0os57mlb5f47h1gkq.apps.googleusercontent.com",
+              "client_id": "111118284603-ov7e7ufit0q57r8lbf76ssd5cnfvslp3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

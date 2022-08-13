@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/screens/mobile_home.dart';
+import 'package:food_app/screens/mobile_navbar.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -51,7 +53,8 @@ class MyApp extends StatelessWidget {
           EmailPasswordSignup.routeName: (context) =>
               const EmailPasswordSignup(),
           EmailPasswordLogin.routeName: (context) => const EmailPasswordLogin(),
-          ReadProfile.routeName: (context) => ReadProfile(),
+          // ReadProfile.routeName: (context) => ReadProfile(),
+          MobileHome.routeName: (context) => const MobileHome(),
           // PhoneScreen.routeName: (context) => const PhoneScreen(),
         },
         onGenerateRoute: (settings) {
@@ -74,31 +77,6 @@ class MyApp extends StatelessWidget {
               );
           }
         },
-        // onGenerateRoute: (settings) {
-        //   // print("settings" + settings.name!);
-        //   final info = settings.arguments as ScreenArguments?;
-        //   settings = settings.copyWith(
-        //       name: settings.name! + "?id=" + info!.id, arguments: info);
-        //   print("settings " + settings.name! + "\n" + info.id);
-        //   return MaterialPageRoute(builder: (_) {
-        //     return ReadProfile(
-        //       args: info.id,
-        //     );
-        //   });
-        // if (settings.name!.contains(ReadProfile.routeName)) {
-        //   final args = settings.arguments as ScreenArguments;
-        //   print("args on Main" + args.id);
-        //   print("Param " + Uri.base.queryParameters['id']!);
-        //   print("Param " + para1);
-        //   return MaterialPageRoute(builder: (context) {
-        //     return ReadProfile(
-        //       // args: args.id,
-        //       args: "x0GpqH3qHidbqp7dfCzD",
-        //     );
-        //   });
-        // }
-        // if(settings.name == PassArgui)
-        // },
       ),
     );
   }
@@ -112,10 +90,7 @@ class AuthWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return HomeScreen(
-        argument: "",
-        enabled: true,
-      );
+      return const MobileNavBar();
     }
     return const EmailPasswordLogin();
   }

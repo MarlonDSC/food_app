@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/card_model.dart';
-import '../screens/card_share.dart';
 import '../utils/show_snackbar.dart';
 
 class FirebaseAuthMethods {
@@ -46,24 +45,9 @@ class FirebaseAuthMethods {
           profilePictureURL: profilePicURL,
         );
         await _firestore
-            .collection('cards')
+            .collection('users')
             .doc(_auth.currentUser!.uid)
             .set(user.toFirestore());
-        await Future.delayed(
-          const Duration(milliseconds: 500),
-        );
-        await showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (BuildContext ctx) {
-              return CardShare(
-                cardDocument: _auth.currentUser!.uid,
-                profilePictureURL: profilePicURL,
-                db: _firestore,
-                enabled: true,
-                // documentSnapshot: documentSnapshot,
-              );
-            });
       } else {
         showSnackBar(
           context,
@@ -85,7 +69,7 @@ class FirebaseAuthMethods {
   }) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      // if (!_auth.currentUser!.emailVerified) {
+      // if (!_auth.currentUser!.emailVerified) {f
       //   await sendEmailVerification(context);
       // }
     } on FirebaseAuthException catch (e) {

@@ -8,8 +8,6 @@ import '../services/storage_methods.dart';
 import '../utils/show_snackbar.dart';
 import '../utils/utils.dart';
 
-import 'card_share.dart';
-
 class CardForm extends StatefulWidget {
   const CardForm({
     Key? key,
@@ -132,12 +130,6 @@ class _CardFormState extends State<CardForm> {
                   widget._phoneNumberController,
                   widget._enabled,
                 ),
-                CardShare(
-                  cardDocument: widget.uid,
-                  profilePictureURL: widget._profilePic,
-                  db: widget.db,
-                  enabled: widget._enabled,
-                ),
               ],
             ),
           ),
@@ -162,7 +154,7 @@ class _CardFormState extends State<CardForm> {
                         if (widget.action == 'Crear') {
                           // Persist a new product to Firestore
                           await widget.db
-                              .collection('cards')
+                              .collection('users')
                               .doc(userCard.id)
                               .set(userCard.toFirestore());
                         }
@@ -170,7 +162,7 @@ class _CardFormState extends State<CardForm> {
                         if (widget.action == 'Actualizar') {
                           // Update the product
                           await widget.db
-                              .collection('cards')
+                              .collection('users')
                               .doc(widget.documentSnapshot!.id)
                               .update(userCard.toFirestore());
                           showSnackBar(context, '¡Datos actualizados!');
@@ -180,30 +172,9 @@ class _CardFormState extends State<CardForm> {
                     },
                   ),
                 )
-              : SizedBox(
+              : const SizedBox(
                   width: double.infinity,
                   height: 55,
-                  child: ElevatedButton(
-                    child: const Text('Descargar contacto'),
-                    onPressed: () {
-                      // TEL;TYPE=work,voice;VALUE=uri:tel:
-                      // TEL;TYPE=home,voice;VALUE=uri:tel:+1-404-555-1212
-                      List<String> name =
-                          widget._fullNameController.text.split(' ');
-                      String vCardExample40 = '''BEGIN:VCARD
-VERSION:3.0
-N:${name[1]};${name[0]};;;
-FN:${widget._fullNameController.text}
-ORG:
-COMPANY:
-TITLE:${widget._jobTitleController.text}
-TEL;TYPE=work,pref:${widget._phoneNumberController.text}
-NOTE;CHARSET=UTF-8:${widget._descriptionController.text}
-END:VCARD''';
-                      saveTextFile(vCardExample40,
-                          "${widget._fullNameController.text}.vcf");
-                    },
-                  ),
                 ),
         ],
       ),

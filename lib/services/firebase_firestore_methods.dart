@@ -13,7 +13,7 @@
 //       profilePictureURL: '',
 //     );
 //     await _firestore
-//         .collection('cards')
+//         .collection('users')
 //         .doc(_auth.currentUser!.uid)
 //         .set(user.toFirestore());
 //   }
