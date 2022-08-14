@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/models/card_model.dart';
+import 'package:food_app/models/user_provider.dart';
 import 'package:food_app/screens/mobile_home.dart';
 import 'package:food_app/screens/mobile_navbar.dart';
 import 'firebase_options.dart';
@@ -34,6 +36,18 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<FirebaseAuthMethods>(
           create: (_) => FirebaseAuthMethods(FirebaseAuth.instance),
+        ),
+        ListenableProvider<UserProvider>(
+          create: (_) => UserProvider(
+            userCard: UserCard(
+              fullName: "",
+              jobTitle: "",
+              description: "",
+              phoneNumber: "",
+              profilePictureURL: "",
+              liked: [],
+            ),
+          ),
         ),
         StreamProvider(
           create: (context) => context.read<FirebaseAuthMethods>().authState,

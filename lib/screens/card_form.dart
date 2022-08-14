@@ -17,6 +17,7 @@ class CardForm extends StatefulWidget {
     required TextEditingController jobTitleController,
     required TextEditingController descriptionController,
     required TextEditingController phoneNumberController,
+    required List liked,
     required this.action,
     required this.db,
     required this.documentSnapshot,
@@ -26,6 +27,7 @@ class CardForm extends StatefulWidget {
         _jobTitleController = jobTitleController,
         _descriptionController = descriptionController,
         _phoneNumberController = phoneNumberController,
+        _liked = liked,
         _enabled = enabled,
         super(key: key);
 
@@ -35,6 +37,7 @@ class CardForm extends StatefulWidget {
   final TextEditingController _jobTitleController;
   final TextEditingController _descriptionController;
   final TextEditingController _phoneNumberController;
+  final List _liked;
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
@@ -148,6 +151,7 @@ class _CardFormState extends State<CardForm> {
                         description: widget._descriptionController.text,
                         phoneNumber: widget._phoneNumberController.text,
                         profilePictureURL: await emptyOrSameImage(),
+                        liked: widget._liked,
                       );
                       if (userCard.fullName != null &&
                           userCard.jobTitle != null) {

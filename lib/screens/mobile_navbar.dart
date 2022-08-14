@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/screens/home_screen.dart';
-import 'package:food_app/screens/website/read_profile.dart';
 import 'package:provider/provider.dart';
 
 import '../services/firebase_auth_methods.dart';
@@ -80,7 +79,7 @@ class TabNavigationItem {
         ),
         TabNavigationItem(
           // page: MobileCourses(),
-          page: HomeScreen(
+          page: const HomeScreen(
             enabled: true,
           ),
           icon: const Icon(

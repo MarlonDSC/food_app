@@ -1,35 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/services/firebase_firestore_methods.dart';
+import 'package:food_app/widgets/modal_food.dart';
+import 'package:provider/provider.dart';
 
-class FoodCard extends StatelessWidget {
-  const FoodCard({Key? key}) : super(key: key);
+import '../models/dish_model.dart';
+import '../models/user_provider.dart';
+
+class FoodCard extends StatefulWidget {
+  final DishModel dishModel;
+  // final UserCard userCard;
+  const FoodCard({
+    Key? key,
+    required this.dishModel,
+  }) : super(key: key);
 
   @override
+  State<FoodCard> createState() => _FoodCardState();
+}
+
+class _FoodCardState extends State<FoodCard> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 150,
-      child: Card(
-        color: Colors.orange,
-        child: Row(
+    UserProvider userProvider = context.read<UserProvider>();
+    bool liked = false;
+    if (userProvider.userCard.liked.contains(widget.dishModel.id)) {
+      liked = true;
+    } else {
+      liked = false;
+    }
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: TextButton(
+        onPressed: () async {
+          await showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (context) => ModalFood(),
+          );
+        },
+        child: Column(
           children: [
-            Expanded(
-              flex: 33,
-              child: Image.network(
-                'https://picsum.photos/250?image=9',
+            ListTile(
+              leading: Image(
+                image: NetworkImage(widget.dishModel.picture!),
+              ),
+              // isThreeLine: true,
+              title: Text(widget.dishModel.name!),
+              subtitle: Text(
+                "\$${widget.dishModel.price!}",
+                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+              ),
+              trailing: IconButton(
+                onPressed: () {
+                  FireStoreMethods().likeFood(
+                    widget.dishModel.id,
+                    userProvider.userCard.id,
+                    userProvider.userCard.liked,
+                  );
+                  setState(() {});
+                },
+                icon: Icon(
+                  Icons.favorite,
+                  color: liked ? Colors.red : Colors.grey,
+                ),
               ),
             ),
-            Expanded(
-              flex: 66,
-              child: Column(
-                children: const [
-                  Expanded(
-                    flex: 50,
-                    child: Center(child: Text('abc')),
-                  ),
-                  Expanded(flex: 25, child: Text('def')),
-                  Expanded(flex: 25, child: Text('ghi')),
-                ],
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                widget.dishModel.description!,
+                style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -5,6 +5,7 @@ class UserCard {
   final String? description;
   final String? phoneNumber;
   final String? profilePictureURL;
+  final List liked;
 
   UserCard({
     this.id = '',
@@ -13,6 +14,7 @@ class UserCard {
     required this.description,
     required this.phoneNumber,
     required this.profilePictureURL,
+    required this.liked,
   });
 
   factory UserCard.fromFirestore(
@@ -26,6 +28,7 @@ class UserCard {
       description: snapshot['description'],
       phoneNumber: snapshot['phoneNumber'],
       profilePictureURL: snapshot['profilePictureURL'],
+      liked: snapshot['liked'],
     );
   }
 
@@ -37,6 +40,7 @@ class UserCard {
       "description": description,
       "phoneNumber": phoneNumber,
       "profilePictureURL": profilePictureURL,
+      "liked": liked,
     };
   }
 }

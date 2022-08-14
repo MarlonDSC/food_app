@@ -43,6 +43,7 @@ class FirebaseAuthMethods {
           jobTitle: jobTitle,
           phoneNumber: phoneNumber,
           profilePictureURL: profilePicURL,
+          liked: [],
         );
         await _firestore
             .collection('users')

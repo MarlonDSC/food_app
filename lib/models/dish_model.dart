@@ -2,9 +2,10 @@ class DishModel {
   String id;
   final String? name;
   final String? price;
-  final int? description;
+  final String? description;
   final String? picture;
   final String? type;
+  final String? country;
 
   DishModel({
     this.id = '',
@@ -13,6 +14,7 @@ class DishModel {
     required this.description,
     required this.picture,
     required this.type,
+    required this.country,
   });
 
   factory DishModel.fromFirestore(
@@ -26,6 +28,7 @@ class DishModel {
       description: snapshot['description'],
       picture: snapshot['picture'],
       type: snapshot['type'],
+      country: snapshot['country'],
     );
   }
 
@@ -37,6 +40,7 @@ class DishModel {
       "description": description,
       "picture": picture,
       "type": type,
+      "country": country,
     };
   }
 }
