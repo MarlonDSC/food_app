@@ -16,11 +16,11 @@ class MobileHome extends StatefulWidget {
 class _MobileHomeState extends State<MobileHome> {
   PageController pageController = PageController(viewportFraction: 0.9);
   final List<FilterType> _chipsList = [
-    FilterType("Todos", false),
-    FilterType("Recomendado", false),
+    FilterType("All", false),
+    FilterType("Recommended", false),
     FilterType("Pasta", false),
     FilterType("Pizza", false),
-    FilterType("Hamburgesa", false),
+    FilterType("Burger", false),
   ];
   bool selected = false;
   int choiceIndex = 0;
@@ -50,16 +50,15 @@ class _MobileHomeState extends State<MobileHome> {
           child: ChoiceChip(
             label: Text(_chipsList[index].label!),
             selected: choiceIndex == index,
-            selectedColor: Colors.red,
+            selectedColor: Colors.blue,
             onSelected: (bool selected) {
               setState(() {
                 choiceIndex = selected ? index : 0;
                 selectedChip = _chipsList[index].label!;
-                print(selectedChip);
               });
             },
-            backgroundColor: Colors.green,
-            labelStyle: TextStyle(color: Colors.white),
+            backgroundColor: Colors.blueGrey,
+            labelStyle: const TextStyle(color: Colors.white),
           ),
         );
       },
@@ -77,13 +76,12 @@ class _MobileHomeState extends State<MobileHome> {
             color: Colors.white,
           ),
           backgroundColor: Colors.blue,
-          selected: choiceIndex == _chipsList[i].isSelected!,
+          selected: _chipsList[i].isSelected!,
           onSelected: (bool value) {
             setState(() {
               choiceIndex = _chipsList[i].isSelected! ? i : 0;
               _chipsList[i].isSelected = value;
               selectedChip = _chipsList[i].label!;
-              print(selectedChip);
             });
           },
         ),
@@ -95,57 +93,53 @@ class _MobileHomeState extends State<MobileHome> {
 
   @override
   Widget build(BuildContext context) {
+    // UserProvider userProvider = context.read<UserProvider>();
     return Column(
       children: <Widget>[
         SizedBox(
           // Horizontal ListView
           height: 100,
           child: _buildChoiceChips(),
-          // child: ListView.builder(
-          //   itemCount: 1,
-          //   scrollDirection: Axis.horizontal,
-          //   itemBuilder: (context, index) {
-          //     return Row(
-          //       children: filterChips(),
-          //     );
-          //   },
-          // ),
         ),
-        // SizedBox(
-        //   // Horizontal ListView
-        //   height: 100,
-        //   child: ListView.builder(
-        //     itemCount: 20,
-        //     scrollDirection: Axis.horizontal,
-        //     itemBuilder: (context, index) {
-        //       return Container(
-        //         width: 100,
-        //         alignment: Alignment.center,
-        //         color: Colors.blue[(index % 9) * 100],
-        //         child: Text(index.toString()),
-        //       );
-        //     },
-        //   ),
-        // ),
-        // const SizedBox(
-        //   height: 50,
-        // ),
         StreamBuilder<QuerySnapshot>(
-            stream: selectedChip == "Todos"
+            stream: selectedChip == _chipsList[0].label
                 ? dishesCollection.snapshots()
                 : dishesCollection
                     .where("type", isEqualTo: selectedChip)
                     .snapshots(),
             builder: (context, snapshot) {
-              return Expanded(
-                // Vertical ListView
-                child: ListView.builder(
-                  itemCount: 20,
-                  itemBuilder: (context, index) {
-                    return FoodCard();
-                  },
-                ),
-              );
+              if (snapshot.hasData) {
+                // snapshot
+                return Expanded(
+                  // Vertical ListView
+                  child: ListView(
+                    children:
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
+                      Map<String, dynamic> data =
+                          document.data()! as Map<String, dynamic>;
+                      DishModel dishModel = DishModel.fromFirestore(data);
+                      return FoodCard(
+                        dishModel: dishModel,
+                      );
+                    }).toList(),
+                  ),
+                );
+                // return FoodCard();
+              } else if (!snapshot.hasData) {
+                return const Center(
+                  child: Text('No encontramos resultados'),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return const Center(
+                  child: Text(
+                    'Ocurrió un error, vuelve a intentarlo',
+                  ),
+                );
+              }
             }),
       ],
     );
