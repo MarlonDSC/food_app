@@ -1,3 +1,5 @@
+import 'package:food_app/models/dish_ingredients.dart';
+
 class DishModel {
   String id;
   final String? name;
@@ -6,6 +8,7 @@ class DishModel {
   final String? picture;
   final String? type;
   final String? country;
+  final List<DishIngredientsModel>? ingredients;
 
   DishModel({
     this.id = '',
@@ -15,6 +18,7 @@ class DishModel {
     required this.picture,
     required this.type,
     required this.country,
+    required this.ingredients,
   });
 
   factory DishModel.fromFirestore(
@@ -22,6 +26,7 @@ class DishModel {
     // SnapshotOptions? options,
   ) {
     return DishModel(
+      // ingredientes: snapshot['ingredients'],
       id: snapshot['id'],
       name: snapshot['name'],
       price: snapshot['price'],
@@ -29,6 +34,13 @@ class DishModel {
       picture: snapshot['picture'],
       type: snapshot['type'],
       country: snapshot['country'],
+      ingredients: snapshot['ingredients'] == null
+          ? null
+          : List<DishIngredientsModel>.from(
+              snapshot['ingredients'].map(
+                (x) => DishIngredientsModel.fromFirestore(x),
+              ),
+            ),
     );
   }
 

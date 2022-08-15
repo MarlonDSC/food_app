@@ -13,7 +13,6 @@ import 'screens/website/read_profile.dart';
 import 'services/firebase_auth_methods.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'dart:html' as html;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

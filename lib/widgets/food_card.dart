@@ -22,6 +22,7 @@ class _FoodCardState extends State<FoodCard> {
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = context.read<UserProvider>();
+    NetworkImage networkImage = NetworkImage(widget.dishModel.picture!);
     bool liked = false;
     if (userProvider.userCard.liked.contains(widget.dishModel.id)) {
       liked = true;
@@ -32,17 +33,30 @@ class _FoodCardState extends State<FoodCard> {
       clipBehavior: Clip.antiAlias,
       child: TextButton(
         onPressed: () async {
-          await showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (context) => ModalFood(),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ModalFood(
+                image: networkImage,
+                dishModel: widget.dishModel,
+              ),
+            ),
           );
+          // await showModalBottomSheet(
+          //   enableDrag: true,
+          //   isScrollControlled: true,
+          //   context: context,
+          //   builder: (context) => ModalFood(
+          //     image: networkImage,
+          //     dishModel: widget.dishModel,
+          //   ),
+          // );
         },
         child: Column(
           children: [
             ListTile(
               leading: Image(
-                image: NetworkImage(widget.dishModel.picture!),
+                image: networkImage,
               ),
               // isThreeLine: true,
               title: Text(widget.dishModel.name!),
