@@ -32,13 +32,11 @@ class _ModalFoodState extends State<ModalFood> {
   int amount = 1;
   int price = 0;
   List<DishIngredientsModel> addedToppings = [];
-  late List<DishIngredientsModel> addedIngredients = addedToppings;
-  List<DishIngredientsModel> removedIngredients = [];
   void calculatePrice(int amount) {
     this.price = 0;
     int extraIngredientsPrice = 0;
     for (int i = 0; i < addedToppings.length; i++) {
-      if (addedToppings[i].added) {
+      if (addedToppings[i].addedExtra) {
         extraIngredientsPrice = extraIngredientsPrice + addedToppings[i].price!;
       }
     }
@@ -94,11 +92,11 @@ class _ModalFoodState extends State<ModalFood> {
                 fit: FlexFit.loose,
                 child: ExpansionPanelList(
                   expansionCallback: (int index, bool isExpanded) {
-                    setState(() {
-                      addedIngredients[index].isExpanded = !isExpanded;
-                    });
+                    setState(() {});
+                    addedToppings[index].isExpanded = !isExpanded;
                   },
-                  children: addedIngredients
+                  children: addedToppings
+                      .where((element) => element.added == true)
                       .map<ExpansionPanel>((DishIngredientsModel item) {
                     return ExpansionPanel(
                       headerBuilder: (BuildContext context, bool isExpanded) {
@@ -106,18 +104,14 @@ class _ModalFoodState extends State<ModalFood> {
                           leading: IconButton(
                             icon: const Icon(Icons.remove),
                             onPressed: () {
-                              removedIngredients.add(item);
-                              addedIngredients.removeWhere(
-                                (DishIngredientsModel currentItem) =>
-                                    item == currentItem,
-                              );
-                              setState(() {
-                                // for (int i = 0; i < addedToppings.length; i++) {
-                                //   if (addedToppings[i].name == item.name) {
-                                //     addedToppings[i].added = false;
-                                //   }
-                                // }
-                              });
+                              for (int i = 0; i < addedToppings.length; i++) {
+                                if (addedToppings[i].name == item.name) {
+                                  addedToppings[i].added = false;
+                                  addedToppings[i].addedExtra = false;
+                                  addedToppings[i].isExpanded = false;
+                                }
+                              }
+                              setState(() {});
                             },
                           ),
                           title: Text(item.emoji! + " " + item.name!),
@@ -125,21 +119,17 @@ class _ModalFoodState extends State<ModalFood> {
                       },
                       body: CheckboxListTile(
                         title: Text('Add extra ${item.name}'),
+                        subtitle: Text('\$${item.price}'),
                         onChanged: (bool? value) {
-                          item.added = value!;
+                          item.addedExtra = value!;
                           for (int i = 0; i < addedToppings.length; i++) {
                             if (addedToppings[i].name == item.name) {
-                              addedToppings[i].added = value;
+                              addedToppings[i].addedExtra = value;
                             }
                           }
-                          // addedToppings
-                          //     .where((DishIngredientsModel item) {
-                          //       addedToppings
-                          //     });
-                          // addedToppings[1].added = value;
                           setState(() {});
                         },
-                        value: item.added,
+                        value: item.addedExtra,
                       ),
                       isExpanded: item.isExpanded,
                     );
@@ -153,12 +143,9 @@ class _ModalFoodState extends State<ModalFood> {
               Flexible(
                 fit: FlexFit.loose,
                 child: ExpansionPanelList(
-                  expansionCallback: (int index, bool isExpanded) {
-                    setState(() {
-                      removedIngredients[index].isExpanded = !isExpanded;
-                    });
-                  },
-                  children: removedIngredients
+                  expansionCallback: (int index, bool isExpanded) {},
+                  children: addedToppings
+                      .where((element) => element.added == false)
                       .map<ExpansionPanel>((DishIngredientsModel item) {
                     return ExpansionPanel(
                       headerBuilder: (BuildContext context, bool isExpanded) {
@@ -167,10 +154,11 @@ class _ModalFoodState extends State<ModalFood> {
                             icon: const Icon(Icons.add),
                             onPressed: () {
                               setState(() {
-                                addedIngredients.add(item);
-                                removedIngredients.removeWhere(
-                                    (DishIngredientsModel currentItem) =>
-                                        item == currentItem);
+                                for (int i = 0; i < addedToppings.length; i++) {
+                                  if (addedToppings[i].name == item.name) {
+                                    addedToppings[i].added = true;
+                                  }
+                                }
                               });
                             },
                           ),
@@ -184,7 +172,8 @@ class _ModalFoodState extends State<ModalFood> {
                           ),
                         ),
                       ),
-                      isExpanded: item.isExpanded,
+                      // isExpanded: item.isExpanded,
+                      isExpanded: false,
                     );
                   }).toList(),
                 ),

@@ -4,6 +4,7 @@ class DishIngredientsModel {
   final String? name;
   final int? price;
   bool added;
+  bool addedExtra;
   bool isExpanded;
 
   DishIngredientsModel({
@@ -12,6 +13,7 @@ class DishIngredientsModel {
     required this.name,
     required this.price,
     this.added = false,
+    this.addedExtra = false,
     this.isExpanded = false,
   });
   factory DishIngredientsModel.fromFirestore(
