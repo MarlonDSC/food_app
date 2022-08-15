@@ -53,6 +53,7 @@ class DishModel {
       "picture": picture,
       "type": type,
       "country": country,
+      "ingredients": ingredients,
     };
   }
 }

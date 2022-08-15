@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:food_app/models/avoid_ingredient.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../models/card_model.dart';
+import '../models/user_model.dart';
 import '../services/storage_methods.dart';
 import '../utils/show_snackbar.dart';
 import '../utils/utils.dart';
@@ -18,6 +19,7 @@ class CardForm extends StatefulWidget {
     required TextEditingController descriptionController,
     required TextEditingController phoneNumberController,
     required List liked,
+    required List<AvoidIngredientModel> ingredientsToAvoid,
     required this.action,
     required this.db,
     required this.documentSnapshot,
@@ -28,6 +30,7 @@ class CardForm extends StatefulWidget {
         _descriptionController = descriptionController,
         _phoneNumberController = phoneNumberController,
         _liked = liked,
+        _ingredientsToAvoid = ingredientsToAvoid,
         _enabled = enabled,
         super(key: key);
 
@@ -38,6 +41,7 @@ class CardForm extends StatefulWidget {
   final TextEditingController _descriptionController;
   final TextEditingController _phoneNumberController;
   final List _liked;
+  final List<AvoidIngredientModel> _ingredientsToAvoid;
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
@@ -69,7 +73,7 @@ class _CardFormState extends State<CardForm> {
 
   @override
   Widget build(BuildContext context) {
-    UserCard userCard;
+    UserModel userCard;
     // Uint8List? localProfilePic;
     return Padding(
       padding: EdgeInsets.only(
@@ -144,7 +148,7 @@ class _CardFormState extends State<CardForm> {
                     child:
                         Text(widget.action == 'Crear' ? 'Crear' : 'Actualizar'),
                     onPressed: () async {
-                      userCard = UserCard(
+                      userCard = UserModel(
                         id: widget.uid,
                         fullName: widget._fullNameController.text,
                         jobTitle: widget._jobTitleController.text,
@@ -152,6 +156,7 @@ class _CardFormState extends State<CardForm> {
                         phoneNumber: widget._phoneNumberController.text,
                         profilePictureURL: await emptyOrSameImage(),
                         liked: widget._liked,
+                        ingredientsToAvoid: widget._ingredientsToAvoid,
                       );
                       if (userCard.fullName != null &&
                           userCard.jobTitle != null) {

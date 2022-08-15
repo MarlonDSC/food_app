@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/models/card_model.dart';
+import 'package:food_app/models/user_model.dart';
 import 'package:food_app/models/user_provider.dart';
 import 'package:food_app/screens/mobile_home.dart';
 import 'package:food_app/screens/mobile_navbar.dart';
@@ -38,13 +38,14 @@ class MyApp extends StatelessWidget {
         ),
         ListenableProvider<UserProvider>(
           create: (_) => UserProvider(
-            userCard: UserCard(
+            userCard: UserModel(
               fullName: "",
               jobTitle: "",
               description: "",
               phoneNumber: "",
               profilePictureURL: "",
               liked: [],
+              ingredientsToAvoid: [],
             ),
           ),
         ),

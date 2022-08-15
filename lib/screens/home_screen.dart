@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/models/user_provider.dart';
 import 'package:provider/provider.dart';
-import '../models/card_model.dart';
+import '../models/avoid_ingredient.dart';
+import '../models/user_model.dart';
 import '../services/firebase_auth_methods.dart';
 import 'card_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,19 +29,14 @@ class HomeScreen extends StatelessWidget {
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController phoneNumberController = TextEditingController();
     List liked;
+    List<AvoidIngredientModel> ingredientsToAvoid;
     late DocumentSnapshot documentSnapshot;
     final db = FirebaseFirestore.instance;
     String profilePictureURL = "";
 
-    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        stream: db
-            .collection('users')
-            .doc(uid == "" ? argument : uid)
-            // .where(
-            //   'id',
-            //   isEqualTo: uid == "" ? argument : uid,
-            // )
-            .snapshots(),
+    return StreamBuilder<DocumentSnapshot>(
+        stream:
+            db.collection('users').doc(uid == "" ? argument : uid).snapshots(),
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasData) {
             documentSnapshot = snapshot.data!;
@@ -51,8 +47,14 @@ class HomeScreen extends StatelessWidget {
             phoneNumberController.text =
                 documentSnapshot['phoneNumber'].toString();
             liked = documentSnapshot['liked'];
+            // ingredientsToAvoid = documentSnapshot['ingredientsToAvoid'];
+            ingredientsToAvoid = List<AvoidIngredientModel>.from(
+              documentSnapshot['ingredientsToAvoid']?.map(
+                (p) => AvoidIngredientModel.fromFirestore(p),
+              ),
+            );
             Provider.of<UserProvider>(context, listen: false).readFromFirestore(
-              UserCard(
+              UserModel(
                 id: documentSnapshot['id'],
                 fullName: fullNameController.text,
                 jobTitle: jobTitleController.text,
@@ -60,6 +62,7 @@ class HomeScreen extends StatelessWidget {
                 phoneNumber: phoneNumberController.text,
                 profilePictureURL: profilePictureURL,
                 liked: liked,
+                ingredientsToAvoid: ingredientsToAvoid,
               ),
             );
             return CardForm(
@@ -70,6 +73,7 @@ class HomeScreen extends StatelessWidget {
               descriptionController: descriptionController,
               phoneNumberController: phoneNumberController,
               liked: liked,
+              ingredientsToAvoid: ingredientsToAvoid,
               action: 'Actualizar',
               db: db,
               documentSnapshot: documentSnapshot,

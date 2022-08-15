@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
-import 'package:food_app/models/card_model.dart';
+import 'package:food_app/models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
-  UserCard userCard = UserCard(
+  UserModel userCard = UserModel(
     fullName: "",
     jobTitle: "",
     description: "",
     phoneNumber: "",
     profilePictureURL: "",
     liked: [],
+    ingredientsToAvoid: [],
   );
   UserProvider({required this.userCard});
-  void readFromFirestore(UserCard xuserCard) {
+  void readFromFirestore(UserModel xuserCard) {
     userCard = xuserCard;
     // notifyListeners();
   }

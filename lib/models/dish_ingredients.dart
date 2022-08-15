@@ -1,8 +1,14 @@
+import 'package:food_app/models/avoid_ingredient.dart';
+
 class DishIngredientsModel {
   final int? amount;
   final String? emoji;
   final String? name;
   final int? price;
+  final bool? primary;
+  final bool? topping;
+  int percentage;
+  bool ingredientToAvoid;
   bool added;
   bool addedExtra;
   bool isExpanded;
@@ -12,7 +18,11 @@ class DishIngredientsModel {
     required this.emoji,
     required this.name,
     required this.price,
-    this.added = false,
+    required this.primary,
+    this.percentage = 0,
+    this.ingredientToAvoid = false,
+    this.topping = false,
+    this.added = true,
     this.addedExtra = false,
     this.isExpanded = false,
   });
@@ -25,6 +35,8 @@ class DishIngredientsModel {
       emoji: snapshot['emoji'],
       name: snapshot['name'],
       price: snapshot['price'],
+      primary: snapshot['primary'] ?? false,
+      topping: snapshot['topping'] ?? false,
     );
   }
 
@@ -34,6 +46,8 @@ class DishIngredientsModel {
       "emoji": emoji,
       "name": name,
       "price": price,
+      "primary": primary,
+      "topping": topping,
     };
   }
 }

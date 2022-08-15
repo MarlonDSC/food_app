@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/models/dish_ingredients.dart';
+import 'package:provider/provider.dart';
 
 import '../models/dish_model.dart';
-
-class Item {
-  Item({
-    required this.expandedValue,
-    required this.headerValue,
-    this.isExpanded = false,
-  });
-
-  String expandedValue;
-  String headerValue;
-  bool isExpanded;
-}
+import '../models/user_provider.dart';
 
 class ModalFood extends StatefulWidget {
   final NetworkImage image;
@@ -47,19 +37,27 @@ class _ModalFoodState extends State<ModalFood> {
         (int.parse(widget.dishModel.price!) + extraIngredientsPrice) * amount;
   }
 
-  List<Item> generateItems(int numberOfItems) {
-    return List<Item>.generate(numberOfItems, (int index) {
-      return Item(
-        headerValue: 'Panel $index',
-        expandedValue: 'This is item number $index',
-      );
-    });
+  void filterIngredientsToAvoid(UserProvider userProvider) {
+    for (int i = 0; i < addedToppings.length; i++) {
+      for (int j = 0;
+          j < userProvider.userCard.ingredientsToAvoid!.length;
+          j++) {
+        if (addedToppings[i].name ==
+            userProvider.userCard.ingredientsToAvoid![j].name) {
+          addedToppings[i].percentage =
+              userProvider.userCard.ingredientsToAvoid![j].percentage!;
+          print("found");
+        }
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = context.read<UserProvider>();
     addedToppings = widget.dishModel.ingredients!;
     calculatePrice(amount);
+    filterIngredientsToAvoid(userProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -84,6 +82,9 @@ class _ModalFoodState extends State<ModalFood> {
               Text(
                 widget.dishModel.description!,
               ),
+              const SizedBox(
+                height: 20,
+              ),
               const Text(
                 'Added',
                 style: TextStyle(fontSize: 30),
@@ -98,22 +99,32 @@ class _ModalFoodState extends State<ModalFood> {
                   children: addedToppings
                       .where((element) => element.added == true)
                       .map<ExpansionPanel>((DishIngredientsModel item) {
+                    print("data " + (item.percentage * 10).toString());
+                    int colourCode = item.percentage * 10;
                     return ExpansionPanel(
+                      backgroundColor: item.percentage == 0
+                          ? Colors.red[colourCode]
+                          : Colors.primaries.first,
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          leading: IconButton(
-                            icon: const Icon(Icons.remove),
-                            onPressed: () {
-                              for (int i = 0; i < addedToppings.length; i++) {
-                                if (addedToppings[i].name == item.name) {
-                                  addedToppings[i].added = false;
-                                  addedToppings[i].addedExtra = false;
-                                  addedToppings[i].isExpanded = false;
-                                }
-                              }
-                              setState(() {});
-                            },
-                          ),
+                          // tileColor:
+                          leading: item.primary!
+                              ? const SizedBox()
+                              : IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () {
+                                    for (int i = 0;
+                                        i < addedToppings.length;
+                                        i++) {
+                                      if (addedToppings[i].name == item.name) {
+                                        addedToppings[i].added = false;
+                                        addedToppings[i].addedExtra = false;
+                                        addedToppings[i].isExpanded = false;
+                                      }
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
                           title: Text(item.emoji! + " " + item.name!),
                         );
                       },
@@ -136,6 +147,9 @@ class _ModalFoodState extends State<ModalFood> {
                   }).toList(),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
               const Text(
                 'Removed',
                 style: TextStyle(fontSize: 30),
@@ -146,6 +160,53 @@ class _ModalFoodState extends State<ModalFood> {
                   expansionCallback: (int index, bool isExpanded) {},
                   children: addedToppings
                       .where((element) => element.added == false)
+                      .where((element) => element.topping == false)
+                      .map<ExpansionPanel>((DishIngredientsModel item) {
+                    return ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return ListTile(
+                          leading: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {
+                              setState(() {
+                                for (int i = 0; i < addedToppings.length; i++) {
+                                  if (addedToppings[i].name == item.name) {
+                                    addedToppings[i].added = true;
+                                  }
+                                }
+                              });
+                            },
+                          ),
+                          title: Text(item.emoji! + " " + item.name!),
+                        );
+                      },
+                      body: const ListTile(
+                        title: Center(
+                          child: Text(
+                            'This item has been removed',
+                          ),
+                        ),
+                      ),
+                      // isExpanded: item.isExpanded,
+                      isExpanded: false,
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Toppings',
+                style: TextStyle(fontSize: 30),
+              ),
+              Flexible(
+                fit: FlexFit.loose,
+                child: ExpansionPanelList(
+                  expansionCallback: (int index, bool isExpanded) {},
+                  children: addedToppings
+                      .where((element) => element.added == false)
+                      .where((element) => element.topping == true)
                       .map<ExpansionPanel>((DishIngredientsModel item) {
                     return ExpansionPanel(
                       headerBuilder: (BuildContext context, bool isExpanded) {

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/card_model.dart';
+import '../models/user_model.dart';
 import '../utils/show_snackbar.dart';
 
 class FirebaseAuthMethods {
@@ -36,7 +36,7 @@ class FirebaseAuthMethods {
           email: email,
           password: password,
         );
-        UserCard user = UserCard(
+        UserModel user = UserModel(
           id: _auth.currentUser!.uid,
           description: description,
           fullName: fullName,
@@ -44,6 +44,7 @@ class FirebaseAuthMethods {
           phoneNumber: phoneNumber,
           profilePictureURL: profilePicURL,
           liked: [],
+          ingredientsToAvoid: [],
         );
         await _firestore
             .collection('users')

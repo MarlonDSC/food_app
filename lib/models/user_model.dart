@@ -1,4 +1,6 @@
-class UserCard {
+import 'package:food_app/models/avoid_ingredient.dart';
+
+class UserModel {
   String id;
   final String? fullName;
   final String? jobTitle;
@@ -6,8 +8,9 @@ class UserCard {
   final String? phoneNumber;
   final String? profilePictureURL;
   final List liked;
+  final List<AvoidIngredientModel>? ingredientsToAvoid;
 
-  UserCard({
+  UserModel({
     this.id = '',
     required this.fullName,
     required this.jobTitle,
@@ -15,13 +18,14 @@ class UserCard {
     required this.phoneNumber,
     required this.profilePictureURL,
     required this.liked,
+    required this.ingredientsToAvoid,
   });
 
-  factory UserCard.fromFirestore(
+  factory UserModel.fromFirestore(
     Map<String, dynamic> snapshot,
     // SnapshotOptions? options,
   ) {
-    return UserCard(
+    return UserModel(
       id: snapshot['id'],
       fullName: snapshot['fullName'],
       jobTitle: snapshot['jobTitle'],
@@ -29,6 +33,13 @@ class UserCard {
       phoneNumber: snapshot['phoneNumber'],
       profilePictureURL: snapshot['profilePictureURL'],
       liked: snapshot['liked'],
+      ingredientsToAvoid: snapshot['ingredientsToAvoid'] == null
+          ? null
+          : List<AvoidIngredientModel>.from(
+              snapshot['ingredientsToAvoid'].map(
+                (x) => AvoidIngredientModel.fromFirestore(x),
+              ),
+            ),
     );
   }
 
@@ -41,6 +52,7 @@ class UserCard {
       "phoneNumber": phoneNumber,
       "profilePictureURL": profilePictureURL,
       "liked": liked,
+      "ingredientsToAvoid": ingredientsToAvoid,
     };
   }
 }
