@@ -1,5 +1,3 @@
-import 'package:food_app/models/avoid_ingredient.dart';
-
 class DishIngredientsModel {
   final int? amount;
   final String? emoji;
@@ -7,9 +5,12 @@ class DishIngredientsModel {
   final int? price;
   final bool? primary;
   final bool? topping;
+  //If the ingredient adds extra
+  final bool? extra;
   int percentage;
   bool ingredientToAvoid;
   bool added;
+  //if user selected extra from this ingredient
   bool addedExtra;
   bool isExpanded;
 
@@ -19,6 +20,7 @@ class DishIngredientsModel {
     required this.name,
     required this.price,
     required this.primary,
+    required this.extra,
     this.percentage = 0,
     this.ingredientToAvoid = false,
     this.topping = false,
@@ -37,6 +39,7 @@ class DishIngredientsModel {
       price: snapshot['price'],
       primary: snapshot['primary'] ?? false,
       topping: snapshot['topping'] ?? false,
+      extra: snapshot['extra'] ?? true,
     );
   }
 

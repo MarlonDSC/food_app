@@ -8,10 +8,12 @@ import '../models/user_provider.dart';
 class ModalFood extends StatefulWidget {
   final NetworkImage image;
   final DishModel dishModel;
+  final UserProvider userProvider;
   const ModalFood({
     Key? key,
     required this.image,
     required this.dishModel,
+    required this.userProvider,
   }) : super(key: key);
 
   @override
@@ -22,6 +24,14 @@ class _ModalFoodState extends State<ModalFood> {
   int amount = 1;
   int price = 0;
   List<DishIngredientsModel> addedToppings = [];
+
+  @override
+  void initState() {
+    super.initState();
+    addedToppings = widget.dishModel.ingredients!;
+    filterIngredientsToAvoid(widget.userProvider);
+  }
+
   void calculatePrice(int amount) {
     this.price = 0;
     int extraIngredientsPrice = 0;
@@ -30,7 +40,7 @@ class _ModalFoodState extends State<ModalFood> {
         extraIngredientsPrice = extraIngredientsPrice + addedToppings[i].price!;
       }
     }
-    print("total price for extra ${extraIngredientsPrice}");
+    // print("total price for extra ${extraIngredientsPrice}");
     // print(
     //     "price for ${widget.dishModel.ingredients![0].name} \n ${widget.dishModel.ingredients![0].price}");
     this.price =
@@ -46,18 +56,28 @@ class _ModalFoodState extends State<ModalFood> {
             userProvider.userCard.ingredientsToAvoid![j].name) {
           addedToppings[i].percentage =
               userProvider.userCard.ingredientsToAvoid![j].percentage!;
-          print("found");
+          if (!addedToppings[i].primary!) {
+            addedToppings[i].added = false;
+          }
         }
       }
     }
   }
 
+  // Widget filterIngredientType(DishIngredientsModel item) {
+  //   if (item.extra!) {
+  //     return const Center(
+  //       child: Text("Cannot add extra ingredients"),
+  //     );
+  //   }
+  //   // else if(item.)
+  // }
+
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = context.read<UserProvider>();
-    addedToppings = widget.dishModel.ingredients!;
+    // UserProvider userProvider = context.read<UserProvider>();
+    // addedToppings = widget.dishModel.ingredients!;
     calculatePrice(amount);
-    filterIngredientsToAvoid(userProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -93,13 +113,27 @@ class _ModalFoodState extends State<ModalFood> {
                 fit: FlexFit.loose,
                 child: ExpansionPanelList(
                   expansionCallback: (int index, bool isExpanded) {
+                    print(
+                        "length ${addedToppings.where((element) => element.added == true).length}");
+                    // addedToppings[index].isExpanded = !isExpanded;
+                    List<DishIngredientsModel> addedToppingsTemp = addedToppings
+                        .where(((element) => element.added == true))
+                        .toList();
+                    for (int i = 0; i < addedToppings.length; i++) {
+                      if (addedToppings[i].name ==
+                          addedToppingsTemp[index].name) {
+                        print(
+                            "${i} ${addedToppings[i].name} || ${index} ${addedToppingsTemp[index].name}");
+                        addedToppings[i].isExpanded = !isExpanded;
+                      }
+                    }
                     setState(() {});
-                    addedToppings[index].isExpanded = !isExpanded;
                   },
                   children: addedToppings
                       .where((element) => element.added == true)
                       .map<ExpansionPanel>((DishIngredientsModel item) {
-                    print("data " + (item.percentage * 10).toString());
+                    //TODO: Fix color intensity
+                    // print("data " + (item.percentage * 10).toString());
                     int colourCode = item.percentage * 10;
                     return ExpansionPanel(
                       backgroundColor: item.percentage == 0
@@ -128,20 +162,27 @@ class _ModalFoodState extends State<ModalFood> {
                           title: Text(item.emoji! + " " + item.name!),
                         );
                       },
-                      body: CheckboxListTile(
-                        title: Text('Add extra ${item.name}'),
-                        subtitle: Text('\$${item.price}'),
-                        onChanged: (bool? value) {
-                          item.addedExtra = value!;
-                          for (int i = 0; i < addedToppings.length; i++) {
-                            if (addedToppings[i].name == item.name) {
-                              addedToppings[i].addedExtra = value;
-                            }
-                          }
-                          setState(() {});
-                        },
-                        value: item.addedExtra,
-                      ),
+                      //TODO:
+                      body: item.extra!
+                          ? CheckboxListTile(
+                              title: Text('Add extra ${item.name}'),
+                              subtitle: Text('\$${item.price}'),
+                              onChanged: (bool? value) {
+                                item.addedExtra = value!;
+                                for (int i = 0; i < addedToppings.length; i++) {
+                                  if (addedToppings[i].name == item.name) {
+                                    addedToppings[i].addedExtra = value;
+                                  }
+                                }
+                                setState(() {});
+                              },
+                              value: item.addedExtra,
+                            )
+                          : const ListTile(
+                              title: Text(
+                                'Cannot add more ingredients',
+                              ),
+                            ),
                       isExpanded: item.isExpanded,
                     );
                   }).toList(),
@@ -168,13 +209,12 @@ class _ModalFoodState extends State<ModalFood> {
                           leading: IconButton(
                             icon: const Icon(Icons.add),
                             onPressed: () {
-                              setState(() {
-                                for (int i = 0; i < addedToppings.length; i++) {
-                                  if (addedToppings[i].name == item.name) {
-                                    addedToppings[i].added = true;
-                                  }
+                              for (int i = 0; i < addedToppings.length; i++) {
+                                if (addedToppings[i].name == item.name) {
+                                  addedToppings[i].added = true;
                                 }
-                              });
+                              }
+                              setState(() {});
                             },
                           ),
                           title: Text(item.emoji! + " " + item.name!),
@@ -238,6 +278,9 @@ class _ModalFoodState extends State<ModalFood> {
                     );
                   }).toList(),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
               ),
             ],
           ),

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/widgets/food_card.dart';
+import 'package:provider/provider.dart';
 
 import '../models/filter_type.dart';
 import '../models/dish_model.dart';
+import '../models/user_provider.dart';
 
 class MobileHome extends StatefulWidget {
   static const routeName = 'MobileHome';
@@ -18,15 +20,17 @@ class _MobileHomeState extends State<MobileHome> {
   final List<FilterType> _chipsList = [
     FilterType("All", false),
     FilterType("Recommended", false),
+    FilterType("Liked", false),
     FilterType("Pasta", false),
     FilterType("Pizza", false),
     FilterType("Burger", false),
   ];
   bool selected = false;
   int choiceIndex = 0;
-  String selectedChip = 'Todos';
+  String selectedChip = 'All';
   final CollectionReference dishesCollection =
       FirebaseFirestore.instance.collection('dishes');
+  late Stream<QuerySnapshot> stream;
   // String selectedChip = _chipsList[choiceIndex].label!;
 
   @override
@@ -91,9 +95,24 @@ class _MobileHomeState extends State<MobileHome> {
     return chips;
   }
 
+  Stream<QuerySnapshot> selectStream(UserProvider userProvider) {
+    if (selectedChip == _chipsList[0].label) {
+      return dishesCollection.snapshots();
+    } else if (selectedChip == _chipsList[2].label &&
+        userProvider.userCard.liked.isNotEmpty) {
+      return dishesCollection
+          .where(FieldPath.documentId, whereIn: userProvider.userCard.liked)
+          .snapshots();
+    } else {
+      return dishesCollection
+          .where("type", isEqualTo: selectedChip)
+          .snapshots();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // UserProvider userProvider = context.read<UserProvider>();
+    UserProvider userProvider = context.read<UserProvider>();
     return Column(
       children: <Widget>[
         SizedBox(
@@ -102,11 +121,7 @@ class _MobileHomeState extends State<MobileHome> {
           child: _buildChoiceChips(),
         ),
         StreamBuilder<QuerySnapshot>(
-            stream: selectedChip == _chipsList[0].label
-                ? dishesCollection.snapshots()
-                : dishesCollection
-                    .where("type", isEqualTo: selectedChip)
-                    .snapshots(),
+            stream: selectStream(userProvider),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // snapshot

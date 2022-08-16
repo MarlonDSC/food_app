@@ -39,6 +39,7 @@ class _FoodCardState extends State<FoodCard> {
               builder: (context) => ModalFood(
                 image: networkImage,
                 dishModel: widget.dishModel,
+                userProvider: userProvider,
               ),
             ),
           );
