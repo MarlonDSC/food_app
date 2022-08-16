@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/filter_type.dart';
 import '../utils/constants.dart';
-import '../widgets/big_text.dart';
-import '../widgets/choice_chip_builder.dart';
 import '../widgets/medium_text.dart';
 
 class FoodPreferences extends StatefulWidget {
@@ -101,7 +99,6 @@ class _FoodPreferencesState extends State<FoodPreferences> {
 
   @override
   Widget build(BuildContext context) {
-    print('selected chip was: ${specialNutrition.current}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nutrition Preferences'),
@@ -112,34 +109,12 @@ class _FoodPreferencesState extends State<FoodPreferences> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // const BigText('Special nutrition'),
+            const MediumText('Special nutrition'),
             SizedBox(
-              // Horizontal ListView
               height: 100,
               child: buildWrapChoiceChips(specialNutrition),
-              // child: ChoiceChipBuilder(
-              //   filterTypes: specialNutrition,
-              //   callback: (val) => {
-              //     setState(() {
-              //       specialNutrition.current = val;
-              //     })
-              //   },
-              // ),
-              // child: buildChoiceChips(
-              //   chipsList,
-              //   choiceIndex,
-              //   selectedChip,
-              // ),
             ),
             Text(specialNutrition.current!),
-            // Text()
-            MediumText('Special nutrition'),
-            // ChoiceChip(
-            //   label: Row(
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: <Widget>[Text('🍺'), Text('alcohol')],
-            //   ),
-            //   selected: true,
-            // ),
           ],
         ),
       ),

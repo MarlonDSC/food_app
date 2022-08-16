@@ -1,6 +1,6 @@
 import '../models/filter_type.dart';
 
-final List<FilterType> chipsList = [
+List<FilterType> chipsList = [
   FilterType('🌐', "All", false),
   FilterType('🪄', "Recommended", false),
   FilterType('❤️', "Liked", false),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/screens/food_preferences.dart';
 import 'package:food_app/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 

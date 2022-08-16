@@ -7,8 +7,8 @@ import '../../services/storage_methods.dart';
 import '../../utils/utils.dart';
 // import '../utils/utils.dart';
 
-class ReadCard extends StatelessWidget {
-  ReadCard({
+class ReadCard extends StatefulWidget {
+  const ReadCard({
     Key? key,
     required this.uid,
     required String profilePictureURL,
@@ -35,6 +35,12 @@ class ReadCard extends StatelessWidget {
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
+
+  @override
+  State<ReadCard> createState() => _ReadCardState();
+}
+
+class _ReadCardState extends State<ReadCard> {
   late Uint8List localProfilePic = convertStringToUint8List("");
 
   Future<String> uploadImage(Uint8List file) async {
@@ -63,7 +69,7 @@ class ReadCard extends StatelessWidget {
           Center(
             child: Stack(
               children: [
-                _profilePic == ""
+                widget._profilePic == ""
                     ? CircleAvatar(
                         radius: 64,
                         backgroundColor: Colors.transparent,
@@ -72,7 +78,7 @@ class ReadCard extends StatelessWidget {
                     : CircleAvatar(
                         radius: 64,
                         backgroundImage: NetworkImage(
-                          _profilePic,
+                          widget._profilePic,
                         ),
                         backgroundColor: Colors.transparent,
                       ),
@@ -94,23 +100,23 @@ class ReadCard extends StatelessWidget {
           ),
           TextField(
             readOnly: true,
-            controller: _fullNameController,
+            controller: widget._fullNameController,
             decoration: const InputDecoration(labelText: 'Nombre completo'),
           ),
           TextField(
             readOnly: true,
-            controller: _jobTitleController,
+            controller: widget._jobTitleController,
             decoration: const InputDecoration(labelText: 'Puesto de trabajo'),
           ),
           TextField(
             readOnly: true,
-            controller: _descriptionController,
+            controller: widget._descriptionController,
             decoration: const InputDecoration(labelText: 'Descripción'),
           ),
           TextField(
             readOnly: true,
             keyboardType: const TextInputType.numberWithOptions(),
-            controller: _phoneNumberController,
+            controller: widget._phoneNumberController,
             decoration: const InputDecoration(labelText: 'Numero de teléfono'),
           ),
           const SizedBox(

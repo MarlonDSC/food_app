@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/models/dish_ingredients.dart';
-import 'package:provider/provider.dart';
 
 import '../models/dish_model.dart';
 import '../models/user_provider.dart';
@@ -33,7 +32,7 @@ class _ModalFoodState extends State<ModalFood> {
   }
 
   void calculatePrice(int amount) {
-    this.price = 0;
+    price = 0;
     int extraIngredientsPrice = 0;
     for (int i = 0; i < addedToppings.length; i++) {
       if (addedToppings[i].addedExtra) {
@@ -43,7 +42,7 @@ class _ModalFoodState extends State<ModalFood> {
     // print("total price for extra ${extraIngredientsPrice}");
     // print(
     //     "price for ${widget.dishModel.ingredients![0].name} \n ${widget.dishModel.ingredients![0].price}");
-    this.price =
+    price =
         (int.parse(widget.dishModel.price!) + extraIngredientsPrice) * amount;
   }
 
@@ -113,8 +112,6 @@ class _ModalFoodState extends State<ModalFood> {
                 fit: FlexFit.loose,
                 child: ExpansionPanelList(
                   expansionCallback: (int index, bool isExpanded) {
-                    print(
-                        "length ${addedToppings.where((element) => element.added == true).length}");
                     // addedToppings[index].isExpanded = !isExpanded;
                     List<DishIngredientsModel> addedToppingsTemp = addedToppings
                         .where(((element) => element.added == true))
@@ -122,8 +119,6 @@ class _ModalFoodState extends State<ModalFood> {
                     for (int i = 0; i < addedToppings.length; i++) {
                       if (addedToppings[i].name ==
                           addedToppingsTemp[index].name) {
-                        print(
-                            "${i} ${addedToppings[i].name} || ${index} ${addedToppingsTemp[index].name}");
                         addedToppings[i].isExpanded = !isExpanded;
                       }
                     }
@@ -159,10 +154,9 @@ class _ModalFoodState extends State<ModalFood> {
                                     setState(() {});
                                   },
                                 ),
-                          title: Text(item.emoji! + " " + item.name!),
+                          title: Text("${item.emoji!} ${item.name!}"),
                         );
                       },
-                      //TODO:
                       body: item.extra!
                           ? CheckboxListTile(
                               title: Text('Add extra ${item.name}'),
@@ -217,7 +211,7 @@ class _ModalFoodState extends State<ModalFood> {
                               setState(() {});
                             },
                           ),
-                          title: Text(item.emoji! + " " + item.name!),
+                          title: Text("${item.emoji!} ${item.name!}"),
                         );
                       },
                       body: const ListTile(
@@ -263,7 +257,7 @@ class _ModalFoodState extends State<ModalFood> {
                               });
                             },
                           ),
-                          title: Text(item.emoji! + " " + item.name!),
+                          title: Text("${item.emoji!} ${item.name!}"),
                         );
                       },
                       body: const ListTile(
