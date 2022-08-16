@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/models/user_model.dart';
 import 'package:food_app/widgets/food_card.dart';
 import 'package:provider/provider.dart';
 
 import '../models/filter_type.dart';
 import '../models/dish_model.dart';
 import '../models/user_provider.dart';
+import '../services/firebase_auth_methods.dart';
 import '../utils/constants.dart';
 
 class MobileHome extends StatefulWidget {
@@ -30,6 +32,20 @@ class _MobileHomeState extends State<MobileHome> {
   @override
   void initState() {
     super.initState();
+    String uid = context.read<FirebaseAuthMethods>().user.uid;
+    print('uid ${uid}');
+    final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+    docRef.get().then(
+      (DocumentSnapshot doc) {
+        final data = doc.data()! as Map<String, dynamic>;
+        UserModel userModel = UserModel.fromFirestore(data);
+        print('initState ${userModel.liked}');
+        Provider.of<UserProvider>(context, listen: false)
+            .readFromFirestore(userModel);
+        // ...
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
   }
 
   @override
@@ -96,7 +112,8 @@ class _MobileHomeState extends State<MobileHome> {
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = context.read<UserProvider>();
-    print('userProvider ${userProvider.userModel.liked.length}');
+    print(
+        'userProvider ingredientsToAvoid ${userProvider.userModel.ingredientsToAvoid}');
     return Column(
       children: <Widget>[
         SizedBox(

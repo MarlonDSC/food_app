@@ -97,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                 phoneNumberController: phoneNumberController,
                 liked: liked,
                 ingredientsToAvoid: ingredientsToAvoid,
-                action: 'Actualizar',
+                action: 'Update',
                 db: db,
                 documentSnapshot: documentSnapshot,
                 enabled: enabled,
