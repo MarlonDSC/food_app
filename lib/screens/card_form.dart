@@ -73,7 +73,7 @@ class _CardFormState extends State<CardForm> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel userCard;
+    UserModel userModel;
     // Uint8List? localProfilePic;
     return Padding(
       padding: EdgeInsets.only(
@@ -148,7 +148,7 @@ class _CardFormState extends State<CardForm> {
                     child:
                         Text(widget.action == 'Crear' ? 'Crear' : 'Actualizar'),
                     onPressed: () async {
-                      userCard = UserModel(
+                      userModel = UserModel(
                         id: widget.uid,
                         fullName: widget._fullNameController.text,
                         jobTitle: widget._jobTitleController.text,
@@ -158,14 +158,14 @@ class _CardFormState extends State<CardForm> {
                         liked: widget._liked,
                         ingredientsToAvoid: widget._ingredientsToAvoid,
                       );
-                      if (userCard.fullName != null &&
-                          userCard.jobTitle != null) {
+                      if (userModel.fullName != null &&
+                          userModel.jobTitle != null) {
                         if (widget.action == 'Crear') {
                           // Persist a new product to Firestore
                           await widget.db
                               .collection('users')
-                              .doc(userCard.id)
-                              .set(userCard.toFirestore());
+                              .doc(userModel.id)
+                              .set(userModel.toFirestore());
                         }
 
                         if (widget.action == 'Actualizar') {
@@ -173,7 +173,7 @@ class _CardFormState extends State<CardForm> {
                           await widget.db
                               .collection('users')
                               .doc(widget.documentSnapshot!.id)
-                              .update(userCard.toFirestore());
+                              .update(userModel.toFirestore());
                           showSnackBar(context, '¡Datos actualizados!');
                         }
                         localProfilePic = convertStringToUint8List("");

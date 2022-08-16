@@ -82,9 +82,9 @@ class _MobileHomeState extends State<MobileHome> {
     if (filterTypes.current == filterTypes.filterType![0].label) {
       return dishesCollection.snapshots();
     } else if (filterTypes.current == filterTypes.filterType![2].label &&
-        userProvider.userCard.liked.isNotEmpty) {
+        userProvider.userModel.liked.isNotEmpty) {
       return dishesCollection
-          .where(FieldPath.documentId, whereIn: userProvider.userCard.liked)
+          .where(FieldPath.documentId, whereIn: userProvider.userModel.liked)
           .snapshots();
     } else {
       return dishesCollection
@@ -96,6 +96,7 @@ class _MobileHomeState extends State<MobileHome> {
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = context.read<UserProvider>();
+    print('userProvider ${userProvider.userModel.liked.length}');
     return Column(
       children: <Widget>[
         SizedBox(

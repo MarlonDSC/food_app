@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         ),
         ListenableProvider<UserProvider>(
           create: (_) => UserProvider(
-            userCard: UserModel(
+            userModel: UserModel(
               fullName: "",
               jobTitle: "",
               description: "",

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:food_app/models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
-  UserModel userCard = UserModel(
+  UserModel userModel = UserModel(
     fullName: "",
     jobTitle: "",
     description: "",
@@ -11,9 +11,9 @@ class UserProvider extends ChangeNotifier {
     liked: [],
     ingredientsToAvoid: [],
   );
-  UserProvider({required this.userCard});
-  void readFromFirestore(UserModel xuserCard) {
-    userCard = xuserCard;
+  UserProvider({required this.userModel});
+  void readFromFirestore(UserModel userModel) {
+    this.userModel = userModel;
     // notifyListeners();
   }
 

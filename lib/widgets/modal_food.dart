@@ -49,12 +49,12 @@ class _ModalFoodState extends State<ModalFood> {
   void filterIngredientsToAvoid(UserProvider userProvider) {
     for (int i = 0; i < addedToppings.length; i++) {
       for (int j = 0;
-          j < userProvider.userCard.ingredientsToAvoid!.length;
+          j < userProvider.userModel.ingredientsToAvoid!.length;
           j++) {
         if (addedToppings[i].name ==
-            userProvider.userCard.ingredientsToAvoid![j].name) {
+            userProvider.userModel.ingredientsToAvoid![j].name) {
           addedToppings[i].percentage =
-              userProvider.userCard.ingredientsToAvoid![j].percentage!;
+              userProvider.userModel.ingredientsToAvoid![j].percentage!;
           if (!addedToppings[i].primary!) {
             addedToppings[i].added = false;
           }

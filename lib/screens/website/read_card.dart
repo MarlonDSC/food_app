@@ -126,7 +126,7 @@ class _ReadCardState extends State<ReadCard> {
           //   child: Text(action == 'create' ? 'Create' : 'Update'),
           //   onPressed: () async {
           //     print("localProfilePic " + localProfilePic.toString());
-          //     userCard = UserCard(
+          //     userModel = userModel(
           //       id: uid,
           //       fullName: _fullNameController.text,
           //       jobTitle: _jobTitleController.text,
@@ -134,10 +134,10 @@ class _ReadCardState extends State<ReadCard> {
           //       phoneNumber: int.parse(_phoneNumberController.text),
           //       profilePictureURL: await uploadImage(localProfilePic),
           //     );
-          //     if (userCard.fullName != null && userCard.jobTitle != null) {
+          //     if (userModel.fullName != null && userModel.jobTitle != null) {
           //       if (action == 'create') {
           //         // Persist a new product to Firestore
-          //         await db.collection('users').add(userCard.toFirestore());
+          //         await db.collection('users').add(userModel.toFirestore());
           //       }
 
           //       if (action == 'update') {
@@ -145,7 +145,7 @@ class _ReadCardState extends State<ReadCard> {
           //         await db
           //             .collection('users')
           //             .doc(documentSnapshot!.id)
-          //             .update(userCard.toFirestore());
+          //             .update(userModel.toFirestore());
           //       }
 
           //       // Clear the text fields

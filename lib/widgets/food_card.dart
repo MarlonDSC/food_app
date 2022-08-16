@@ -8,7 +8,7 @@ import '../models/user_provider.dart';
 
 class FoodCard extends StatefulWidget {
   final DishModel dishModel;
-  // final UserCard userCard;
+  // final UserModel userModel;
   const FoodCard({
     Key? key,
     required this.dishModel,
@@ -24,7 +24,7 @@ class _FoodCardState extends State<FoodCard> {
     UserProvider userProvider = context.read<UserProvider>();
     NetworkImage networkImage = NetworkImage(widget.dishModel.picture!);
     bool liked = false;
-    if (userProvider.userCard.liked.contains(widget.dishModel.id)) {
+    if (userProvider.userModel.liked.contains(widget.dishModel.id)) {
       liked = true;
     } else {
       liked = false;
@@ -69,8 +69,8 @@ class _FoodCardState extends State<FoodCard> {
                 onPressed: () {
                   FireStoreMethods().likeFood(
                     widget.dishModel.id,
-                    userProvider.userCard.id,
-                    userProvider.userCard.liked,
+                    userProvider.userModel.id,
+                    userProvider.userModel.liked,
                   );
                   setState(() {});
                 },
