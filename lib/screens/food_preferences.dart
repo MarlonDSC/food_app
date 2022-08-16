@@ -12,9 +12,24 @@ class FoodPreferences extends StatefulWidget {
 
 class _FoodPreferencesState extends State<FoodPreferences> {
   late FilterTypes specialNutrition = FilterTypes(
-    chipsList,
+    specialNutritionChipList,
     0,
-    chipsList[0].label,
+    specialNutritionChipList[0].label,
+  );
+  late FilterTypes religious = FilterTypes(
+    religiousChipList,
+    0,
+    religiousChipList[0].label,
+  );
+  late FilterTypes diet = FilterTypes(
+    dietChipList,
+    0,
+    dietChipList[0].label,
+  );
+  late FilterTypes cuisine = FilterTypes(
+    cuisineChipList,
+    0,
+    cuisineChipList[0].label,
   );
   @override
   void initState() {
@@ -75,10 +90,49 @@ class _FoodPreferencesState extends State<FoodPreferences> {
               Text(
                 filterTypes.filterType![index].label!,
                 style: TextStyle(
-                    color: filterTypes.filterType![index].label! ==
-                            filterTypes.current
-                        ? Colors.white
-                        : Colors.black),
+                  color: filterTypes.filterType![index].label! ==
+                          filterTypes.current
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
+            ],
+          ),
+          selected: filterTypes.index == index,
+          selectedColor: Colors.blue,
+          onSelected: (bool selected) {
+            setState(() {
+              filterTypes.index = selected ? index : 0;
+              filterTypes.current = filterTypes.filterType![index].label!;
+            });
+          },
+          backgroundColor: Colors.blue[100],
+          labelStyle: const TextStyle(color: Colors.white),
+        );
+      }),
+    );
+  }
+
+  Widget buildWrapFilterChips(FilterTypes filterTypes) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 5.0,
+      children:
+          List<FilterChip>.generate(filterTypes.filterType!.length, (index) {
+        return FilterChip(
+          label: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(filterTypes.filterType![index].emoji!),
+              const Text(' '),
+              Text(
+                filterTypes.filterType![index].label!,
+                style: TextStyle(
+                  color: filterTypes.filterType![index].label! ==
+                          filterTypes.current
+                      ? Colors.white
+                      : Colors.black,
+                ),
               ),
             ],
           ),
@@ -113,6 +167,21 @@ class _FoodPreferencesState extends State<FoodPreferences> {
             SizedBox(
               height: 100,
               child: buildWrapChoiceChips(specialNutrition),
+            ),
+            const MediumText('Religious restrictions'),
+            SizedBox(
+              height: 100,
+              child: buildWrapChoiceChips(religious),
+            ),
+            const MediumText('Diet restrictions'),
+            SizedBox(
+              height: 100,
+              child: buildWrapChoiceChips(diet),
+            ),
+            const MediumText('Favourite cuisine'),
+            SizedBox(
+              height: 100,
+              child: buildWrapFilterChips(cuisine),
             ),
             Text(specialNutrition.current!),
           ],

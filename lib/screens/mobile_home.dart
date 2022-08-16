@@ -18,15 +18,14 @@ class MobileHome extends StatefulWidget {
 
 class _MobileHomeState extends State<MobileHome> {
   PageController pageController = PageController(viewportFraction: 0.9);
-  late FilterTypes specialNutrition = FilterTypes(
-    chipsList,
+  late FilterTypes filterType = FilterTypes(
+    filterTypeChipList,
     0,
-    chipsList[0].label,
+    filterTypeChipList[0].label,
   );
   final CollectionReference dishesCollection =
       FirebaseFirestore.instance.collection('dishes');
   late Stream<QuerySnapshot> stream;
-  // String filterTypes.current = _filterTypes.filterType![choiceIndex].label!;
 
   @override
   void initState() {
@@ -102,10 +101,10 @@ class _MobileHomeState extends State<MobileHome> {
         SizedBox(
           // Horizontal ListView
           height: 100,
-          child: buildListChoiceChips(specialNutrition),
+          child: buildListChoiceChips(filterType),
         ),
         StreamBuilder<QuerySnapshot>(
-            stream: selectStream(userProvider, specialNutrition),
+            stream: selectStream(userProvider, filterType),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // snapshot
