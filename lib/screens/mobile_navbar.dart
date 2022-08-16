@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/screens/home_screen.dart';
+import 'package:food_app/screens/food_preferences.dart';
+import 'package:food_app/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../services/firebase_auth_methods.dart';
 import 'mobile_home.dart';
+import 'orders.dart';
 
 class MobileNavBar extends StatefulWidget {
   const MobileNavBar({Key? key}) : super(key: key);
@@ -33,6 +35,23 @@ class _MobileNavBarState extends State<MobileNavBar> {
         title: const Text(
           'Food App',
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(
+                    enabled: true,
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.person,
+            ),
+          ),
+        ],
       ),
       body: IndexedStack(
         index: _currentIndex,
@@ -78,15 +97,22 @@ class TabNavigationItem {
           title: "Home",
         ),
         TabNavigationItem(
-          // page: MobileCourses(),
-          page: const HomeScreen(
-            enabled: true,
-          ),
+          page: const Orders(),
+          title: "My orders",
           icon: const Icon(
-            Icons.person,
+            Icons.receipt,
           ),
-          title: "Mi perfil",
         ),
+        // TabNavigationItem(
+        //   // page: MobileCourses(),
+        //   page: const HomeScreen(
+        //     enabled: true,
+        //   ),
+        //   icon: const Icon(
+        //     Icons.person,
+        //   ),
+        //   title: "My profile",
+        // ),
         // TabNavigationItem(
         //   page: const Donate(key: null),
         //   icon: const Icon(

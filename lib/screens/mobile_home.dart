@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/filter_type.dart';
 import '../models/dish_model.dart';
 import '../models/user_provider.dart';
+import '../utils/constants.dart';
 
 class MobileHome extends StatefulWidget {
   static const routeName = 'MobileHome';
@@ -17,21 +18,15 @@ class MobileHome extends StatefulWidget {
 
 class _MobileHomeState extends State<MobileHome> {
   PageController pageController = PageController(viewportFraction: 0.9);
-  final List<FilterType> _chipsList = [
-    FilterType("All", false),
-    FilterType("Recommended", false),
-    FilterType("Liked", false),
-    FilterType("Pasta", false),
-    FilterType("Pizza", false),
-    FilterType("Burger", false),
-  ];
-  bool selected = false;
-  int choiceIndex = 0;
-  String selectedChip = 'All';
+  late FilterTypes specialNutrition = FilterTypes(
+    chipsList,
+    0,
+    chipsList[0].label,
+  );
   final CollectionReference dishesCollection =
       FirebaseFirestore.instance.collection('dishes');
   late Stream<QuerySnapshot> stream;
-  // String selectedChip = _chipsList[choiceIndex].label!;
+  // String filterTypes.current = _filterTypes.filterType![choiceIndex].label!;
 
   @override
   void initState() {
@@ -44,24 +39,38 @@ class _MobileHomeState extends State<MobileHome> {
     pageController.dispose();
   }
 
-  Widget _buildChoiceChips() {
+  Widget buildListChoiceChips(FilterTypes filterTypes) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: _chipsList.length,
+      itemCount: filterTypes.filterType!.length,
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.only(left: 10, right: 5),
           child: ChoiceChip(
-            label: Text(_chipsList[index].label!),
-            selected: choiceIndex == index,
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(filterTypes.filterType![index].emoji!),
+                const Text(' '),
+                Text(
+                  filterTypes.filterType![index].label!,
+                  style: TextStyle(
+                      color: filterTypes.filterType![index].label! ==
+                              filterTypes.current
+                          ? Colors.white
+                          : Colors.black),
+                ),
+              ],
+            ),
+            selected: filterTypes.index == index,
             selectedColor: Colors.blue,
             onSelected: (bool selected) {
               setState(() {
-                choiceIndex = selected ? index : 0;
-                selectedChip = _chipsList[index].label!;
+                filterTypes.index = selected ? index : 0;
+                filterTypes.current = filterTypes.filterType![index].label!;
               });
             },
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Colors.blue[100],
             labelStyle: const TextStyle(color: Colors.white),
           ),
         );
@@ -69,43 +78,18 @@ class _MobileHomeState extends State<MobileHome> {
     );
   }
 
-  List<Widget> filterChips() {
-    List<Widget> chips = [];
-    for (int i = 0; i < _chipsList.length; i++) {
-      Widget item = Padding(
-        padding: const EdgeInsets.only(left: 10, right: 5),
-        child: ChoiceChip(
-          label: Text(_chipsList[i].label!),
-          labelStyle: const TextStyle(
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.blue,
-          selected: _chipsList[i].isSelected!,
-          onSelected: (bool value) {
-            setState(() {
-              choiceIndex = _chipsList[i].isSelected! ? i : 0;
-              _chipsList[i].isSelected = value;
-              selectedChip = _chipsList[i].label!;
-            });
-          },
-        ),
-      );
-      chips.add(item);
-    }
-    return chips;
-  }
-
-  Stream<QuerySnapshot> selectStream(UserProvider userProvider) {
-    if (selectedChip == _chipsList[0].label) {
+  Stream<QuerySnapshot> selectStream(
+      UserProvider userProvider, FilterTypes filterTypes) {
+    if (filterTypes.current == filterTypes.filterType![0].label) {
       return dishesCollection.snapshots();
-    } else if (selectedChip == _chipsList[2].label &&
+    } else if (filterTypes.current == filterTypes.filterType![2].label &&
         userProvider.userCard.liked.isNotEmpty) {
       return dishesCollection
           .where(FieldPath.documentId, whereIn: userProvider.userCard.liked)
           .snapshots();
     } else {
       return dishesCollection
-          .where("type", isEqualTo: selectedChip)
+          .where("type", isEqualTo: filterTypes.current)
           .snapshots();
     }
   }
@@ -118,10 +102,10 @@ class _MobileHomeState extends State<MobileHome> {
         SizedBox(
           // Horizontal ListView
           height: 100,
-          child: _buildChoiceChips(),
+          child: buildListChoiceChips(specialNutrition),
         ),
         StreamBuilder<QuerySnapshot>(
-            stream: selectStream(userProvider),
+            stream: selectStream(userProvider, specialNutrition),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // snapshot

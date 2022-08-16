@@ -6,7 +6,7 @@ import 'package:food_app/screens/mobile_navbar.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'screens/home_screen.dart';
+import 'screens/profile_screen.dart';
 import 'screens/login_email_password_screen.dart';
 import 'screens/signup_email_password_screen.dart';
 import 'screens/website/read_profile.dart';
@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
                 // builder: (context) => ReadProfile(
                 //   args: pathComponents.last,
                 // ),
-                builder: (context) => HomeScreen(
+                builder: (context) => ProfileScreen(
                   argument: pathComponents.last,
                   enabled: false,
                 ),
