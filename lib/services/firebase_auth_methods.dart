@@ -44,7 +44,7 @@ class FirebaseAuthMethods {
           phoneNumber: phoneNumber,
           profilePictureURL: profilePicURL,
           liked: [],
-          ingredientsToAvoid: [],
+          userIngredient: [],
         );
         await _firestore
             .collection('users')

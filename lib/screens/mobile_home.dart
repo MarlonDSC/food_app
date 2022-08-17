@@ -33,19 +33,20 @@ class _MobileHomeState extends State<MobileHome> {
   void initState() {
     super.initState();
     String uid = context.read<FirebaseAuthMethods>().user.uid;
-    print('uid ${uid}');
     final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
-    docRef.get().then(
-      (DocumentSnapshot doc) {
-        final data = doc.data()! as Map<String, dynamic>;
-        UserModel userModel = UserModel.fromFirestore(data);
-        print('initState ${userModel.liked}');
-        Provider.of<UserProvider>(context, listen: false)
-            .readFromFirestore(userModel);
-        // ...
-      },
-      onError: (e) => print("Error getting document: $e"),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await docRef.get().then(
+        (DocumentSnapshot doc) {
+          final data = doc.data()! as Map<String, dynamic>;
+          UserModel userModel = UserModel.fromFirestore(data);
+          Provider.of<UserProvider>(context, listen: false)
+              .readFromFirestore(userModel);
+          // ...
+        },
+        onError: (e) => print("Error getting document: $e"),
+      );
+      setState(() {});
+    });
   }
 
   @override
@@ -112,8 +113,6 @@ class _MobileHomeState extends State<MobileHome> {
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = context.read<UserProvider>();
-    print(
-        'userProvider ingredientsToAvoid ${userProvider.userModel.ingredientsToAvoid}');
     return Column(
       children: <Widget>[
         SizedBox(

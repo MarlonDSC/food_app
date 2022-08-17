@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               phoneNumber: "",
               profilePictureURL: "",
               liked: [],
-              ingredientsToAvoid: [],
+              userIngredient: [],
             ),
           ),
         ),

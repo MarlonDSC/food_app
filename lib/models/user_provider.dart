@@ -9,7 +9,7 @@ class UserProvider extends ChangeNotifier {
     phoneNumber: "",
     profilePictureURL: "",
     liked: [],
-    ingredientsToAvoid: [],
+    userIngredient: [],
   );
   UserProvider({required this.userModel});
   void readFromFirestore(UserModel userModel) {

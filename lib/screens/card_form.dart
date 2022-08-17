@@ -19,7 +19,7 @@ class CardForm extends StatefulWidget {
     required TextEditingController descriptionController,
     required TextEditingController phoneNumberController,
     required List liked,
-    required List<AvoidIngredientModel> ingredientsToAvoid,
+    required List<UserIngredientModel> userIngredient,
     required this.action,
     required this.db,
     required this.documentSnapshot,
@@ -30,7 +30,7 @@ class CardForm extends StatefulWidget {
         _descriptionController = descriptionController,
         _phoneNumberController = phoneNumberController,
         _liked = liked,
-        _ingredientsToAvoid = ingredientsToAvoid,
+        _ingredientsToAvoid = userIngredient,
         _enabled = enabled,
         super(key: key);
 
@@ -41,7 +41,7 @@ class CardForm extends StatefulWidget {
   final TextEditingController _descriptionController;
   final TextEditingController _phoneNumberController;
   final List _liked;
-  final List<AvoidIngredientModel> _ingredientsToAvoid;
+  final List<UserIngredientModel> _ingredientsToAvoid;
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
@@ -156,7 +156,7 @@ class _CardFormState extends State<CardForm> {
                         phoneNumber: widget._phoneNumberController.text,
                         profilePictureURL: await emptyOrSameImage(),
                         liked: widget._liked,
-                        ingredientsToAvoid: widget._ingredientsToAvoid,
+                        userIngredient: widget._ingredientsToAvoid,
                       );
                       if (userModel.fullName != null &&
                           userModel.jobTitle != null) {

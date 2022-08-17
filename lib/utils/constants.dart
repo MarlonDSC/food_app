@@ -10,9 +10,9 @@ List<FilterType> filterTypeChipList = [
 ];
 
 List<FilterType> specialNutritionChipList = [
-  FilterType('🍺', "alcohol", false),
-  FilterType('🌾', "gluten", false),
-  FilterType('🥛', "lactose", false),
+  FilterType('🍺', "alcohol free", false),
+  FilterType('🌾', "gluten free", false),
+  FilterType('🥛', "lactose free", false),
 ];
 
 List<FilterType> religiousChipList = [
@@ -24,7 +24,7 @@ List<FilterType> religiousChipList = [
 
 List<FilterType> dietChipList = [
   FilterType('🍃', "Vegan", false),
-  FilterType('🍯', "Vegetarian", false),
+  FilterType('🥛', "Vegetarian", false),
   FilterType('🐟', "Pescatarian", false),
   FilterType('🍎', "Fruitarian", false),
 ];

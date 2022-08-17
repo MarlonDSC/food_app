@@ -30,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController phoneNumberController = TextEditingController();
     List liked;
-    List<AvoidIngredientModel> ingredientsToAvoid;
+    List<UserIngredientModel> userIngredient;
     late DocumentSnapshot documentSnapshot;
     final db = FirebaseFirestore.instance;
     String profilePictureURL = "";
@@ -69,10 +69,10 @@ class ProfileScreen extends StatelessWidget {
               phoneNumberController.text =
                   documentSnapshot['phoneNumber'].toString();
               liked = documentSnapshot['liked'];
-              // ingredientsToAvoid = documentSnapshot['ingredientsToAvoid'];
-              ingredientsToAvoid = List<AvoidIngredientModel>.from(
-                documentSnapshot['ingredientsToAvoid']?.map(
-                  (p) => AvoidIngredientModel.fromFirestore(p),
+              // userIngredient = documentSnapshot['userIngredient'];
+              userIngredient = List<UserIngredientModel>.from(
+                documentSnapshot['userIngredient']?.map(
+                  (p) => UserIngredientModel.fromFirestore(p),
                 ),
               );
               Provider.of<UserProvider>(context, listen: false)
@@ -85,7 +85,7 @@ class ProfileScreen extends StatelessWidget {
                   phoneNumber: phoneNumberController.text,
                   profilePictureURL: profilePictureURL,
                   liked: liked,
-                  ingredientsToAvoid: ingredientsToAvoid,
+                  userIngredient: userIngredient,
                 ),
               );
               return CardForm(
@@ -96,7 +96,7 @@ class ProfileScreen extends StatelessWidget {
                 descriptionController: descriptionController,
                 phoneNumberController: phoneNumberController,
                 liked: liked,
-                ingredientsToAvoid: ingredientsToAvoid,
+                userIngredient: userIngredient,
                 action: 'Update',
                 db: db,
                 documentSnapshot: documentSnapshot,

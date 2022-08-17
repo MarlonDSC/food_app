@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/services/firebase_firestore_methods.dart';
-import 'package:food_app/widgets/modal_food.dart';
+import 'package:food_app/screens/food_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../models/dish_model.dart';
@@ -36,7 +36,7 @@ class _FoodCardState extends State<FoodCard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ModalFood(
+              builder: (context) => FoodDetailScreen(
                 image: networkImage,
                 dishModel: widget.dishModel,
                 userProvider: userProvider,

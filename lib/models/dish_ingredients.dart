@@ -8,7 +8,7 @@ class DishIngredientsModel {
   //If the ingredient adds extra
   final bool? extra;
   int percentage;
-  bool ingredientToAvoid;
+  bool avoid;
   bool added;
   //if user selected extra from this ingredient
   bool addedExtra;
@@ -22,7 +22,7 @@ class DishIngredientsModel {
     required this.primary,
     required this.extra,
     this.percentage = 0,
-    this.ingredientToAvoid = false,
+    this.avoid = false,
     this.topping = false,
     this.added = true,
     this.addedExtra = false,

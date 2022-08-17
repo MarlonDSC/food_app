@@ -4,11 +4,11 @@ import 'package:food_app/models/dish_ingredients.dart';
 import '../models/dish_model.dart';
 import '../models/user_provider.dart';
 
-class ModalFood extends StatefulWidget {
+class FoodDetailScreen extends StatefulWidget {
   final NetworkImage image;
   final DishModel dishModel;
   final UserProvider userProvider;
-  const ModalFood({
+  const FoodDetailScreen({
     Key? key,
     required this.image,
     required this.dishModel,
@@ -16,10 +16,10 @@ class ModalFood extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ModalFood> createState() => _ModalFoodState();
+  State<FoodDetailScreen> createState() => _ModalFoodState();
 }
 
-class _ModalFoodState extends State<ModalFood> {
+class _ModalFoodState extends State<FoodDetailScreen> {
   int amount = 1;
   int price = 0;
   List<DishIngredientsModel> addedToppings = [];
@@ -48,13 +48,13 @@ class _ModalFoodState extends State<ModalFood> {
 
   void filterIngredientsToAvoid(UserProvider userProvider) {
     for (int i = 0; i < addedToppings.length; i++) {
-      for (int j = 0;
-          j < userProvider.userModel.ingredientsToAvoid!.length;
-          j++) {
+      for (int j = 0; j < userProvider.userModel.userIngredient!.length; j++) {
         if (addedToppings[i].name ==
-            userProvider.userModel.ingredientsToAvoid![j].name) {
+            userProvider.userModel.userIngredient![j].name) {
           addedToppings[i].percentage =
-              userProvider.userModel.ingredientsToAvoid![j].percentage!;
+              userProvider.userModel.userIngredient![j].percentage!;
+          addedToppings[i].avoid =
+              userProvider.userModel.userIngredient![i].avoid!;
           if (!addedToppings[i].primary!) {
             addedToppings[i].added = false;
           }
@@ -131,9 +131,9 @@ class _ModalFoodState extends State<ModalFood> {
                     // print("data " + (item.percentage * 10).toString());
                     int colourCode = item.percentage * 10;
                     return ExpansionPanel(
-                      backgroundColor: item.percentage == 0
-                          ? Colors.red[colourCode]
-                          : Colors.primaries.first,
+                      backgroundColor: item.avoid
+                          ? Colors.primaries.first
+                          : Colors.red[colourCode],
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
                           // tileColor:
@@ -154,7 +154,14 @@ class _ModalFoodState extends State<ModalFood> {
                                     setState(() {});
                                   },
                                 ),
-                          title: Text("${item.emoji!} ${item.name!}"),
+                          title: Text(
+                            "${item.emoji!} ${item.name!}",
+                            style: TextStyle(
+                              color: item.percentage > 70
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
                         );
                       },
                       body: item.extra!

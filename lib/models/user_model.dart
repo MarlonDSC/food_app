@@ -8,7 +8,7 @@ class UserModel {
   final String? phoneNumber;
   final String? profilePictureURL;
   final List liked;
-  final List<AvoidIngredientModel>? ingredientsToAvoid;
+  final List<UserIngredientModel>? userIngredient;
 
   UserModel({
     this.id = '',
@@ -18,7 +18,7 @@ class UserModel {
     required this.phoneNumber,
     required this.profilePictureURL,
     required this.liked,
-    required this.ingredientsToAvoid,
+    required this.userIngredient,
   });
 
   factory UserModel.fromFirestore(
@@ -33,11 +33,11 @@ class UserModel {
       phoneNumber: snapshot['phoneNumber'],
       profilePictureURL: snapshot['profilePictureURL'],
       liked: snapshot['liked'],
-      ingredientsToAvoid: snapshot['ingredientsToAvoid'] == null
+      userIngredient: snapshot['userIngredient'] == null
           ? null
-          : List<AvoidIngredientModel>.from(
-              snapshot['ingredientsToAvoid'].map(
-                (x) => AvoidIngredientModel.fromFirestore(x),
+          : List<UserIngredientModel>.from(
+              snapshot['userIngredient'].map(
+                (x) => UserIngredientModel.fromFirestore(x),
               ),
             ),
     );
@@ -52,7 +52,7 @@ class UserModel {
       "phoneNumber": phoneNumber,
       "profilePictureURL": profilePictureURL,
       "liked": liked,
-      "ingredientsToAvoid": ingredientsToAvoid,
+      "userIngredient": userIngredient,
     };
   }
 }

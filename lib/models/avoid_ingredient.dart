@@ -1,18 +1,21 @@
-class AvoidIngredientModel {
+class UserIngredientModel {
   final String? name;
   final int? percentage;
+  final bool? avoid;
 
-  AvoidIngredientModel({
+  UserIngredientModel({
     required this.name,
     required this.percentage,
+    required this.avoid,
   });
 
-  factory AvoidIngredientModel.fromFirestore(
+  factory UserIngredientModel.fromFirestore(
     Map<String, dynamic> snapshot,
   ) {
-    return AvoidIngredientModel(
+    return UserIngredientModel(
       name: snapshot['name'],
       percentage: snapshot['percentage'],
+      avoid: snapshot['avoid'] ?? false,
     );
   }
 
@@ -20,6 +23,7 @@ class AvoidIngredientModel {
     return {
       "name": name,
       "percentage": percentage,
+      "avoid": avoid,
     };
   }
 }
