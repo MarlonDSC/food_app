@@ -1,4 +1,4 @@
-import 'package:food_app/models/avoid_ingredient.dart';
+import 'package:food_app/models/user_ingredient_model.dart';
 
 class UserModel {
   String id;

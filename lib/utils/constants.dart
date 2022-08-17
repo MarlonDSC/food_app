@@ -1,3 +1,5 @@
+import 'package:food_app/models/user_ingredient_model.dart';
+
 import '../models/filter_type.dart';
 
 List<FilterType> filterTypeChipList = [
@@ -10,7 +12,13 @@ List<FilterType> filterTypeChipList = [
 ];
 
 List<FilterType> specialNutritionChipList = [
-  FilterType('🍺', "alcohol free", false),
+  FilterType('🍺', "alcohol free", false, userIngredient: [
+    UserIngredientModel(
+      name: 'alcohol',
+      percentage: 100,
+      avoid: true,
+    ),
+  ]),
   FilterType('🌾', "gluten free", false),
   FilterType('🥛', "lactose free", false),
 ];

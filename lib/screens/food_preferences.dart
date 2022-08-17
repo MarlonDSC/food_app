@@ -104,6 +104,14 @@ class _FoodPreferencesState extends State<FoodPreferences> {
             setState(() {
               filterTypes.index = selected ? index : 0;
               filterTypes.current = filterTypes.filterType![index].label!;
+              print(
+                  "xd ${filterTypes.filterType![index].userIngredient!.length}");
+              for (int i = 0;
+                  i < filterTypes.filterType![index].userIngredient!.length;
+                  i++) {
+                print(
+                    'selected ingredients ${filterTypes.filterType![index].userIngredient![i].name}');
+              }
             });
           },
           backgroundColor: Colors.blue[100],

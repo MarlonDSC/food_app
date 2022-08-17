@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:food_app/models/user_provider.dart';
 import 'package:food_app/screens/food_preferences.dart';
 import 'package:provider/provider.dart';
-import '../models/avoid_ingredient.dart';
+import '../models/user_ingredient_model.dart';
 import '../models/user_model.dart';
 import '../services/firebase_auth_methods.dart';
 import 'card_form.dart';
