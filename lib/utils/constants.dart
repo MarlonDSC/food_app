@@ -493,14 +493,216 @@ List<FilterType> dietChipList = [
 ];
 
 List<FilterType> cuisineChipList = [
-  FilterType('🇺🇸', "American", false, 'cuisine'),
-  FilterType('🇲🇽', "Mexican", false, 'cuisine'),
-  FilterType('🇹🇭', "Thailand", false, 'cuisine'),
-  FilterType('🇬🇷', "Greek", false, 'cuisine'),
-  FilterType('🇮🇳', "Indian", false, 'cuisine'),
-  FilterType('🇯🇵', "Japanese", false, 'cuisine'),
-  FilterType('🇪🇸', "Spanish", false, 'cuisine'),
-  FilterType('🇫🇷', "French", false, 'cuisine'),
-  FilterType('🇨🇳', "Chinese", false, 'cuisine'),
-  FilterType('🇮🇹', "Italy", false, 'cuisine'),
+  FilterType('🇺🇸', "American", false, 'cuisine', userIngredient: [
+    UserIngredientModel(
+      name: 'beef',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'turkey',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'crab',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'clam',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'tomato',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'corn',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'pumpkin',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'grit',
+      percentage: 75,
+      avoid: false,
+    ),
+  ]),
+  FilterType('🇲🇽', "Mexican", false, 'cuisine', userIngredient: [
+    UserIngredientModel(
+      name: 'beans',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'rice',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'avocado',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'tortilla',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'cilantro',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'cheese',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'tomato',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'corn',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'corn',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'chilli',
+      percentage: 75,
+      avoid: false,
+    ),
+  ]),
+  // FilterType('🇹🇭', "Thailand", false, 'cuisine', userIngredient: [
+  //   UserIngredientModel(
+  //     name: 'cilantro',
+  //     percentage: 75,
+  //     avoid: false,
+  //   ),
+  // ]),
+  // FilterType('🇬🇷', "Greek", false, 'cuisine', userIngredient: [
+  //   UserIngredientModel(
+  //     name: 'olive oil',
+  //     percentage: 75,
+  //     avoid: false,
+  //   ),
+  // ]),
+  // FilterType('🇮🇳', "Indian", false, 'cuisine', userIngredient: [
+  //   UserIngredientModel(
+  //     name: 'lentil',
+  //     percentage: 75,
+  //     avoid: false,
+  //   ),
+  // ]),
+  FilterType('🇯🇵', "Japanese", false, 'cuisine', userIngredient: [
+    UserIngredientModel(
+      name: 'dashi',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'shoyu',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'rice',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'nori',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'wakame',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'wasabi',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'konbu',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'katsuobushi',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'noodles',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'tofu',
+      percentage: 75,
+      avoid: false,
+    ),
+  ]),
+  // FilterType('🇪🇸', "Spanish", false, 'cuisine', userIngredient: []),
+  // FilterType('🇫🇷', "French", false, 'cuisine', userIngredient: []),
+  // FilterType('🇨🇳', "Chinese", false, 'cuisine'),
+  FilterType('🇮🇹', "Italy", false, 'cuisine', userIngredient: [
+    UserIngredientModel(
+      name: 'garlic',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'pasta sauce',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'oregano',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'capers',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'basil',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'cheese',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'wine',
+      percentage: 75,
+      avoid: false,
+    ),
+    UserIngredientModel(
+      name: 'mushrooms',
+      percentage: 75,
+      avoid: false,
+    ),
+  ]),
 ];

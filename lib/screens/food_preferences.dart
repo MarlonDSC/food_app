@@ -153,34 +153,55 @@ class _FoodPreferencesState extends State<FoodPreferences> {
           onSelected: (bool selected) {
             setState(() {
               // filterTypes.index = selected ? index : 0;
-              for (int i = 0;
-                  i < filterTypes.filterType![index].userIngredient!.length;
-                  i++) {
-                // print(
-                //     'selected ingredients ${filterTypes.filterType![index].userIngredient![i].name}');
-                UserIngredientModel ingredientModel =
-                    filterTypes.filterType![index].userIngredient![i];
-                userProvider.userModel.userIngredient!.remove(ingredientModel);
-              }
+              // for (int i = 0;
+              //     i < filterTypes.filterType![index].userIngredient!.length;
+              //     i++) {
+              //   // print(
+              //   //     'selected ingredients ${filterTypes.filterType![index].userIngredient![i].name}');
+              //   UserIngredientModel ingredientModel =
+              //       filterTypes.filterType![index].userIngredient![i];
+              //   // if()
+              //   userProvider.userModel.userIngredient!.remove(ingredientModel);
+              // }
               filterTypes.filterType![index].isSelected = selected;
               filterTypes.current = filterTypes.filterType![index].label!;
-              print(
-                  "xd ${filterTypes.filterType![index].userIngredient!.length}");
-              for (int i = 0;
-                  i < filterTypes.filterType![index].userIngredient!.length;
-                  i++) {
-                // print(
-                //     'selected ingredients ${filterTypes.filterType![index].userIngredient![i].name}');
-                UserIngredientModel ingredientModel =
-                    filterTypes.filterType![index].userIngredient![i];
-                userProvider.userModel.userIngredient!.add(ingredientModel);
+
+              for (int i = 0; i < filterTypes.filterType!.length; i++) {
+                for (int j = 0;
+                    j < filterTypes.filterType![i].userIngredient!.length;
+                    j++) {
+                  for (int k = 0;
+                      k < userProvider.userModel.userIngredient!.length;
+                      k++) {
+                    userProvider.userModel.userIngredient!
+                        .remove(filterTypes.filterType![i].userIngredient![j]);
+                    if (filterTypes.filterType![i].isSelected! &&
+                        !userProvider.userModel.userIngredient!.contains(
+                            filterTypes.filterType![i].userIngredient![j])) {
+                      userProvider.userModel.userIngredient!
+                          .add(filterTypes.filterType![i].userIngredient![j]);
+                    }
+                  }
+                }
+                // if(filterTypes.filterType![i].isSelected)
               }
 
-              for (int i = 0;
-                  i < userProvider.userModel.userIngredient!.length;
-                  i++) {
-                print(userProvider.userModel.userIngredient![i].name);
-              }
+              // print(
+              //     "xd ${filterTypes.filterType![index].userIngredient!.length}");
+              // for (int i = 0;
+              //     i < filterTypes.filterType![index].userIngredient!.length;
+              //     i++) {
+              //       if(filterTypes.filterType![index].userIngredient.is)
+              //   UserIngredientModel ingredientModel =
+              //       filterTypes.filterType![index].userIngredient![i];
+              //   userProvider.userModel.userIngredient!.add(ingredientModel);
+              // }
+
+              // for (int i = 0;
+              //     i < userProvider.userModel.userIngredient!.length;
+              //     i++) {
+              //   print(userProvider.userModel.userIngredient![i].name);
+              // }
             });
           },
           backgroundColor: Colors.blue[100],
@@ -222,6 +243,7 @@ class _FoodPreferencesState extends State<FoodPreferences> {
               height: 200,
               child: buildWrapFilterChips(cuisine, userProvider),
             ),
+            Text('${userProvider.userModel.userIngredient!.length}'),
             // Text(specialNutrition.current!),
           ],
         ),
