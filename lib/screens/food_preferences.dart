@@ -108,15 +108,41 @@ class _FoodPreferencesState extends State<FoodPreferences> {
           selectedColor: Colors.blue,
           onSelected: (bool selected) {
             setState(() {
+              // filterTypes.index = selected ? index : 0;
+              // filterTypes.current = filterTypes.filterType![index].label!;
+              // print(
+              //     "xd ${filterTypes.filterType![index].userIngredient!.length}");
+              // for (int i = 0;
+              //     i < filterTypes.filterType![index].userIngredient!.length;
+              //     i++) {
+              //   print(
+              //       'selected ingredients ${filterTypes.filterType![index].userIngredient![i].name}');
+              // }
+
               filterTypes.index = selected ? index : 0;
               filterTypes.current = filterTypes.filterType![index].label!;
-              print(
-                  "xd ${filterTypes.filterType![index].userIngredient!.length}");
-              for (int i = 0;
-                  i < filterTypes.filterType![index].userIngredient!.length;
-                  i++) {
-                print(
-                    'selected ingredients ${filterTypes.filterType![index].userIngredient![i].name}');
+
+              for (int i = 0; i < filterTypes.filterType!.length; i++) {
+                for (int j = 0;
+                    j < filterTypes.filterType![i].userIngredient!.length;
+                    j++) {
+                  for (int k = 0;
+                      k < userProvider.userModel.userIngredient!.length;
+                      k++) {
+                    userProvider.userModel.userIngredient!
+                        .remove(filterTypes.filterType![i].userIngredient![j]);
+                    if (filterTypes.current ==
+                            filterTypes.filterType![i].label! &&
+                        !userProvider.userModel.userIngredient!.contains(
+                          filterTypes.filterType![i].userIngredient![j],
+                        ) &&
+                        filterTypes.filterType![i].userIngredient![j].name !=
+                            '') {
+                      userProvider.userModel.userIngredient!
+                          .add(filterTypes.filterType![i].userIngredient![j]);
+                    }
+                  }
+                }
               }
             });
           },
@@ -154,17 +180,6 @@ class _FoodPreferencesState extends State<FoodPreferences> {
           selectedColor: Colors.blue,
           onSelected: (bool selected) {
             setState(() {
-              // filterTypes.index = selected ? index : 0;
-              // for (int i = 0;
-              //     i < filterTypes.filterType![index].userIngredient!.length;
-              //     i++) {
-              //   // print(
-              //   //     'selected ingredients ${filterTypes.filterType![index].userIngredient![i].name}');
-              //   UserIngredientModel ingredientModel =
-              //       filterTypes.filterType![index].userIngredient![i];
-              //   // if()
-              //   userProvider.userModel.userIngredient!.remove(ingredientModel);
-              // }
               filterTypes.filterType![index].isSelected = selected;
               filterTypes.current = filterTypes.filterType![index].label!;
 
@@ -185,25 +200,7 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                     }
                   }
                 }
-                // if(filterTypes.filterType![i].isSelected)
               }
-
-              // print(
-              //     "xd ${filterTypes.filterType![index].userIngredient!.length}");
-              // for (int i = 0;
-              //     i < filterTypes.filterType![index].userIngredient!.length;
-              //     i++) {
-              //       if(filterTypes.filterType![index].userIngredient.is)
-              //   UserIngredientModel ingredientModel =
-              //       filterTypes.filterType![index].userIngredient![i];
-              //   userProvider.userModel.userIngredient!.add(ingredientModel);
-              // }
-
-              // for (int i = 0;
-              //     i < userProvider.userModel.userIngredient!.length;
-              //     i++) {
-              //   print(userProvider.userModel.userIngredient![i].name);
-              // }
             });
           },
           backgroundColor: Colors.blue[100],
@@ -228,152 +225,170 @@ class _FoodPreferencesState extends State<FoodPreferences> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const MediumText('Special nutrition'),
-              SizedBox(
-                height: 50,
-                child: buildWrapFilterChips(specialNutrition, userProvider),
-              ),
-              const MediumText('Religious restrictions'),
-              SizedBox(
-                height: 100,
-                child: buildWrapChoiceChips(religious, userProvider),
-              ),
-              const MediumText('Diet restrictions'),
-              SizedBox(
-                height: 100,
-                child: buildWrapChoiceChips(diet, userProvider),
-              ),
-              const MediumText('Favourite cuisine'),
-              SizedBox(
-                height: 200,
-                child: buildWrapFilterChips(cuisine, userProvider),
-              ),
-              Text('${userProvider.userModel.userIngredient!.length}'),
-              const Text(
-                'Liked',
-                style: TextStyle(fontSize: 30),
-              ),
               Flexible(
                 fit: FlexFit.loose,
-                child: ExpansionPanelList(
-                  expansionCallback: (int index, bool isExpanded) {
-                    List<UserIngredientModel> userIngredientTemp = userProvider
-                        .userModel.userIngredient!
-                        .where(((element) => element.avoid == false))
-                        .toList();
-                    print(
-                        'size of userIngredientModel ${userIngredientTemp.length}');
-                    for (int i = 0; i < userIngredientTemp.length; i++) {
-                      if (userIngredientTemp[i].name ==
-                          userIngredientTemp[index].name) {
-                        userIngredientTemp[i].isExpanded = !isExpanded;
-                      }
-                    }
-                    setState(() {});
-                  },
-                  children: userProvider.userModel.userIngredient!
-                      .where((element) => element.avoid == false)
-                      .map<ExpansionPanel>((UserIngredientModel item) {
-                    return ExpansionPanel(
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return ListTile(
-                          leading: IconButton(
-                            icon: const Icon(Icons.remove),
-                            onPressed: () {
-                              for (int i = 0;
-                                  i <
-                                      userProvider
-                                          .userModel.userIngredient!.length;
-                                  i++) {
-                                if (userProvider
-                                        .userModel.userIngredient![i].name ==
-                                    item.name) {
-                                  userProvider.userModel.userIngredient![i]
-                                      .avoid = true;
-                                }
-                              }
-                              setState(() {});
+                child: ListView(
+                  children: [
+                    const MediumText('Special nutrition'),
+                    SizedBox(
+                      height: 50,
+                      child:
+                          buildWrapFilterChips(specialNutrition, userProvider),
+                    ),
+                    const MediumText('Religious restrictions'),
+                    SizedBox(
+                      height: 100,
+                      child: buildWrapChoiceChips(religious, userProvider),
+                    ),
+                    const MediumText('Diet restrictions'),
+                    SizedBox(
+                      height: 100,
+                      child: buildWrapChoiceChips(diet, userProvider),
+                    ),
+                    const MediumText('Favourite cuisine'),
+                    SizedBox(
+                      height: 200,
+                      child: buildWrapFilterChips(cuisine, userProvider),
+                    ),
+                    Text('${userProvider.userModel.userIngredient!.length}'),
+                    const Text(
+                      'Liked',
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: ExpansionPanelList(
+                        expansionCallback: (int index, bool isExpanded) {
+                          List<UserIngredientModel> userIngredientTemp =
+                              userProvider.userModel.userIngredient!
+                                  .where(((element) => element.avoid == false))
+                                  .toList();
+                          print(
+                              'size of userIngredientModel ${userIngredientTemp.length}');
+                          for (int i = 0; i < userIngredientTemp.length; i++) {
+                            if (userIngredientTemp[i].name ==
+                                userIngredientTemp[index].name) {
+                              userIngredientTemp[i].isExpanded = !isExpanded;
+                            }
+                          }
+                          setState(() {});
+                        },
+                        children: userProvider.userModel.userIngredient!
+                            .where((element) => element.avoid == false)
+                            .map<ExpansionPanel>((UserIngredientModel item) {
+                          return ExpansionPanel(
+                            headerBuilder:
+                                (BuildContext context, bool isExpanded) {
+                              return ListTile(
+                                leading: IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () {
+                                    for (int i = 0;
+                                        i <
+                                            userProvider.userModel
+                                                .userIngredient!.length;
+                                        i++) {
+                                      if (userProvider.userModel
+                                              .userIngredient![i].name ==
+                                          item.name) {
+                                        userProvider.userModel
+                                            .userIngredient![i].avoid = true;
+                                      }
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                                title: Text("${item.name!}"),
+                              );
                             },
-                          ),
-                          title: Text("${item.name!}"),
-                        );
-                      },
-                      body: const ListTile(
-                        title: Center(
-                          child: Text(
-                            'This item has been removed',
-                          ),
-                        ),
+                            body: const ListTile(
+                              title: Center(
+                                child: Text(
+                                  'This item has been removed',
+                                ),
+                              ),
+                            ),
+                            // isExpanded: item.isExpanded,
+                            isExpanded: item.isExpanded,
+                          );
+                        }).toList(),
                       ),
-                      // isExpanded: item.isExpanded,
-                      isExpanded: item.isExpanded,
-                    );
-                  }).toList(),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Not Liked',
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: ExpansionPanelList(
+                        expansionCallback: (int index, bool isExpanded) {
+                          List<UserIngredientModel> userIngredientTemp =
+                              userProvider.userModel.userIngredient!
+                                  .where(((element) => element.avoid == true))
+                                  .toList();
+                          print(
+                              'size of userIngredientModel ${userIngredientTemp.length}');
+                          for (int i = 0; i < userIngredientTemp.length; i++) {
+                            if (userIngredientTemp[i].name ==
+                                userIngredientTemp[index].name) {
+                              userIngredientTemp[i].isExpanded = !isExpanded;
+                            }
+                          }
+                          setState(() {});
+                        },
+                        children: userProvider.userModel.userIngredient!
+                            .where((element) => element.avoid == true)
+                            .map<ExpansionPanel>((UserIngredientModel item) {
+                          return ExpansionPanel(
+                            headerBuilder:
+                                (BuildContext context, bool isExpanded) {
+                              return ListTile(
+                                leading: IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () {
+                                    for (int i = 0;
+                                        i <
+                                            userProvider.userModel
+                                                .userIngredient!.length;
+                                        i++) {
+                                      if (userProvider.userModel
+                                              .userIngredient![i].name ==
+                                          item.name) {
+                                        userProvider.userModel
+                                            .userIngredient![i].avoid = false;
+                                      }
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                                title: Text("${item.name!}"),
+                              );
+                            },
+                            body: const ListTile(
+                              title: Center(
+                                child: Text(
+                                  'This item has been removed',
+                                ),
+                              ),
+                            ),
+                            // isExpanded: item.isExpanded,
+                            isExpanded: item.isExpanded,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Not Liked',
-                style: TextStyle(fontSize: 30),
-              ),
-              Flexible(
-                fit: FlexFit.loose,
-                child: ExpansionPanelList(
-                  expansionCallback: (int index, bool isExpanded) {
-                    List<UserIngredientModel> userIngredientTemp = userProvider
-                        .userModel.userIngredient!
-                        .where(((element) => element.avoid == true))
-                        .toList();
-                    print(
-                        'size of userIngredientModel ${userIngredientTemp.length}');
-                    for (int i = 0; i < userIngredientTemp.length; i++) {
-                      if (userIngredientTemp[i].name ==
-                          userIngredientTemp[index].name) {
-                        userIngredientTemp[i].isExpanded = !isExpanded;
-                      }
-                    }
-                    setState(() {});
-                  },
-                  children: userProvider.userModel.userIngredient!
-                      .where((element) => element.avoid == true)
-                      .map<ExpansionPanel>((UserIngredientModel item) {
-                    return ExpansionPanel(
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return ListTile(
-                          leading: IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: () {
-                              for (int i = 0;
-                                  i <
-                                      userProvider
-                                          .userModel.userIngredient!.length;
-                                  i++) {
-                                if (userProvider
-                                        .userModel.userIngredient![i].name ==
-                                    item.name) {
-                                  userProvider.userModel.userIngredient![i]
-                                      .avoid = false;
-                                }
-                              }
-                              setState(() {});
-                            },
-                          ),
-                          title: Text("${item.name!}"),
-                        );
-                      },
-                      body: const ListTile(
-                        title: Center(
-                          child: Text(
-                            'This item has been removed',
-                          ),
-                        ),
-                      ),
-                      // isExpanded: item.isExpanded,
-                      isExpanded: item.isExpanded,
-                    );
-                  }).toList(),
+              SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: ElevatedButton(
+                  child: Text('Actualizar'),
+                  onPressed: () async {},
                 ),
               ),
             ],
