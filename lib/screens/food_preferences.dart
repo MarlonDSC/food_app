@@ -3,6 +3,7 @@ import 'package:food_app/models/user_ingredient_model.dart';
 import 'package:provider/provider.dart';
 import '../models/filter_type.dart';
 import '../models/user_provider.dart';
+import '../services/firebase_firestore_methods.dart';
 import '../utils/constants.dart';
 import '../widgets/medium_text.dart';
 
@@ -218,6 +219,21 @@ class _FoodPreferencesState extends State<FoodPreferences> {
       appBar: AppBar(
         title: const Text('Nutrition Preferences'),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Provider.of<UserProvider>(context, listen: false)
+          //     .updateUserIngredients(
+          //   userProvider.userModel.userIngredient!,
+          // );
+          FireStoreMethods().likeUserIngredient(
+            userProvider.userModel.userIngredient!,
+            userProvider.userModel.id,
+          );
+        },
+        icon: const Icon(Icons.save),
+        label: const Text('Save'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
@@ -225,171 +241,168 @@ class _FoodPreferencesState extends State<FoodPreferences> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              const MediumText('Special nutrition'),
+              SizedBox(
+                height: 50,
+                child: buildWrapFilterChips(specialNutrition, userProvider),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const MediumText('Religious restrictions'),
+              SizedBox(
+                height: 100,
+                child: buildWrapChoiceChips(religious, userProvider),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const MediumText('Diet restrictions'),
+              SizedBox(
+                height: 100,
+                child: buildWrapChoiceChips(diet, userProvider),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const MediumText('Favourite cuisine'),
+              SizedBox(
+                height: 100,
+                child: buildWrapFilterChips(cuisine, userProvider),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              // Text('${userProvider.userModel.userIngredient!.length}'),
+              const Text(
+                'Liked',
+                style: TextStyle(fontSize: 30),
+              ),
               Flexible(
                 fit: FlexFit.loose,
-                child: ListView(
-                  children: [
-                    const MediumText('Special nutrition'),
-                    SizedBox(
-                      height: 50,
-                      child:
-                          buildWrapFilterChips(specialNutrition, userProvider),
-                    ),
-                    const MediumText('Religious restrictions'),
-                    SizedBox(
-                      height: 100,
-                      child: buildWrapChoiceChips(religious, userProvider),
-                    ),
-                    const MediumText('Diet restrictions'),
-                    SizedBox(
-                      height: 100,
-                      child: buildWrapChoiceChips(diet, userProvider),
-                    ),
-                    const MediumText('Favourite cuisine'),
-                    SizedBox(
-                      height: 200,
-                      child: buildWrapFilterChips(cuisine, userProvider),
-                    ),
-                    Text('${userProvider.userModel.userIngredient!.length}'),
-                    const Text(
-                      'Liked',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: ExpansionPanelList(
-                        expansionCallback: (int index, bool isExpanded) {
-                          List<UserIngredientModel> userIngredientTemp =
-                              userProvider.userModel.userIngredient!
-                                  .where(((element) => element.avoid == false))
-                                  .toList();
-                          print(
-                              'size of userIngredientModel ${userIngredientTemp.length}');
-                          for (int i = 0; i < userIngredientTemp.length; i++) {
-                            if (userIngredientTemp[i].name ==
-                                userIngredientTemp[index].name) {
-                              userIngredientTemp[i].isExpanded = !isExpanded;
-                            }
-                          }
-                          setState(() {});
-                        },
-                        children: userProvider.userModel.userIngredient!
-                            .where((element) => element.avoid == false)
-                            .map<ExpansionPanel>((UserIngredientModel item) {
-                          return ExpansionPanel(
-                            headerBuilder:
-                                (BuildContext context, bool isExpanded) {
-                              return ListTile(
-                                leading: IconButton(
-                                  icon: const Icon(Icons.remove),
-                                  onPressed: () {
-                                    for (int i = 0;
-                                        i <
-                                            userProvider.userModel
-                                                .userIngredient!.length;
-                                        i++) {
-                                      if (userProvider.userModel
-                                              .userIngredient![i].name ==
-                                          item.name) {
-                                        userProvider.userModel
-                                            .userIngredient![i].avoid = true;
-                                      }
-                                    }
-                                    setState(() {});
-                                  },
-                                ),
-                                title: Text("${item.name!}"),
-                              );
+                child: ExpansionPanelList(
+                  expansionCallback: (int index, bool isExpanded) {
+                    List<UserIngredientModel> userIngredientTemp = userProvider
+                        .userModel.userIngredient!
+                        .where(((element) => element.avoid == false))
+                        .toList();
+                    print(
+                        'size of userIngredientModel ${userIngredientTemp.length}');
+                    for (int i = 0; i < userIngredientTemp.length; i++) {
+                      if (userIngredientTemp[i].name ==
+                          userIngredientTemp[index].name) {
+                        userIngredientTemp[i].isExpanded = !isExpanded;
+                      }
+                    }
+                    setState(() {});
+                  },
+                  children: userProvider.userModel.userIngredient!
+                      .where((element) => element.avoid == false)
+                      .map<ExpansionPanel>((UserIngredientModel item) {
+                    return ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return ListTile(
+                          leading: IconButton(
+                            icon: const Icon(Icons.remove),
+                            onPressed: () {
+                              for (int i = 0;
+                                  i <
+                                      userProvider
+                                          .userModel.userIngredient!.length;
+                                  i++) {
+                                if (userProvider
+                                        .userModel.userIngredient![i].name ==
+                                    item.name) {
+                                  userProvider.userModel.userIngredient![i]
+                                      .avoid = true;
+                                }
+                              }
+                              setState(() {});
                             },
-                            body: const ListTile(
-                              title: Center(
-                                child: Text(
-                                  'This item has been removed',
-                                ),
-                              ),
-                            ),
-                            // isExpanded: item.isExpanded,
-                            isExpanded: item.isExpanded,
-                          );
-                        }).toList(),
+                          ),
+                          title: Text("${item.name!}"),
+                        );
+                      },
+                      body: const ListTile(
+                        title: Center(
+                          child: Text(
+                            'This item has been removed',
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Text(
-                      'Not Liked',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: ExpansionPanelList(
-                        expansionCallback: (int index, bool isExpanded) {
-                          List<UserIngredientModel> userIngredientTemp =
-                              userProvider.userModel.userIngredient!
-                                  .where(((element) => element.avoid == true))
-                                  .toList();
-                          print(
-                              'size of userIngredientModel ${userIngredientTemp.length}');
-                          for (int i = 0; i < userIngredientTemp.length; i++) {
-                            if (userIngredientTemp[i].name ==
-                                userIngredientTemp[index].name) {
-                              userIngredientTemp[i].isExpanded = !isExpanded;
-                            }
-                          }
-                          setState(() {});
-                        },
-                        children: userProvider.userModel.userIngredient!
-                            .where((element) => element.avoid == true)
-                            .map<ExpansionPanel>((UserIngredientModel item) {
-                          return ExpansionPanel(
-                            headerBuilder:
-                                (BuildContext context, bool isExpanded) {
-                              return ListTile(
-                                leading: IconButton(
-                                  icon: const Icon(Icons.add),
-                                  onPressed: () {
-                                    for (int i = 0;
-                                        i <
-                                            userProvider.userModel
-                                                .userIngredient!.length;
-                                        i++) {
-                                      if (userProvider.userModel
-                                              .userIngredient![i].name ==
-                                          item.name) {
-                                        userProvider.userModel
-                                            .userIngredient![i].avoid = false;
-                                      }
-                                    }
-                                    setState(() {});
-                                  },
-                                ),
-                                title: Text("${item.name!}"),
-                              );
-                            },
-                            body: const ListTile(
-                              title: Center(
-                                child: Text(
-                                  'This item has been removed',
-                                ),
-                              ),
-                            ),
-                            // isExpanded: item.isExpanded,
-                            isExpanded: item.isExpanded,
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
+                      // isExpanded: item.isExpanded,
+                      isExpanded: item.isExpanded,
+                    );
+                  }).toList(),
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  child: Text('Actualizar'),
-                  onPressed: () async {},
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Not Liked',
+                style: TextStyle(fontSize: 30),
+              ),
+              Flexible(
+                fit: FlexFit.loose,
+                child: ExpansionPanelList(
+                  expansionCallback: (int index, bool isExpanded) {
+                    List<UserIngredientModel> userIngredientTemp = userProvider
+                        .userModel.userIngredient!
+                        .where(((element) => element.avoid == true))
+                        .toList();
+                    print(
+                        'size of userIngredientModel ${userIngredientTemp.length}');
+                    for (int i = 0; i < userIngredientTemp.length; i++) {
+                      if (userIngredientTemp[i].name ==
+                          userIngredientTemp[index].name) {
+                        userIngredientTemp[i].isExpanded = !isExpanded;
+                      }
+                    }
+                    setState(() {});
+                  },
+                  children: userProvider.userModel.userIngredient!
+                      .where((element) => element.avoid == true)
+                      .map<ExpansionPanel>((UserIngredientModel item) {
+                    return ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return ListTile(
+                          leading: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {
+                              for (int i = 0;
+                                  i <
+                                      userProvider
+                                          .userModel.userIngredient!.length;
+                                  i++) {
+                                if (userProvider
+                                        .userModel.userIngredient![i].name ==
+                                    item.name) {
+                                  userProvider.userModel.userIngredient![i]
+                                      .avoid = false;
+                                }
+                              }
+                              setState(() {});
+                            },
+                          ),
+                          title: Text("${item.name!}"),
+                        );
+                      },
+                      body: const ListTile(
+                        title: Center(
+                          child: Text(
+                            'This item has been removed',
+                          ),
+                        ),
+                      ),
+                      // isExpanded: item.isExpanded,
+                      isExpanded: item.isExpanded,
+                    );
+                  }).toList(),
                 ),
+              ),
+              const SizedBox(
+                height: 100,
               ),
             ],
           ),

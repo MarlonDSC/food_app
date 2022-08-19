@@ -7,8 +7,8 @@ class UserModel {
   final String? description;
   final String? phoneNumber;
   final String? profilePictureURL;
-  final List liked;
-  final List<UserIngredientModel>? userIngredient;
+  List liked;
+  List<UserIngredientModel>? userIngredient;
 
   UserModel({
     this.id = '',

@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/user_ingredient_model.dart';
+
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<String> likeFood(String foodId, String uid, List liked) async {
+  Future<String> likeFood(
+    String foodId,
+    String uid,
+    List liked,
+  ) async {
     String res = "Some error occurred";
     try {
       if (liked.contains(foodId)) {
@@ -27,9 +33,39 @@ class FireStoreMethods {
     return res;
   }
 
+  Future<String> likeUserIngredient(
+    List<UserIngredientModel> userIngredient,
+    String uid,
+  ) async {
+    String res = "Some error ocurred";
+    try {
+      _firestore.collection('users').doc(uid).update({
+        'userIngredient': FieldValue.delete(),
+      });
+      _firestore.collection('users').doc(uid).update({
+        'userIngredient': FieldValue.arrayUnion(
+          userIngredient
+              .map(
+                (e) => e.toFirestore(),
+              )
+              .toList(),
+        )
+      });
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
   // Post comment
-  Future<String> postComment(String postId, String text, String uid,
-      String name, String profilePic) async {
+  Future<String> postComment(
+    String postId,
+    String text,
+    String uid,
+    String name,
+    String profilePic,
+  ) async {
     String res = "Some error occurred";
     try {
       if (text.isNotEmpty) {

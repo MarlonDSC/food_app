@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:food_app/models/user_ingredient_model.dart';
 import 'package:food_app/models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -15,6 +16,13 @@ class UserProvider extends ChangeNotifier {
   void readFromFirestore(UserModel userModel) {
     this.userModel = userModel;
     // notifyListeners();
+  }
+
+  void updateUserIngredients(
+    List<UserIngredientModel> userIngredientModel,
+  ) {
+    userModel.userIngredient = userIngredientModel;
+    notifyListeners();
   }
 
   void updateLikedFood(String foodId, String uid, List liked) {
