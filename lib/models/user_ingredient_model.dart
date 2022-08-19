@@ -1,12 +1,14 @@
 class UserIngredientModel {
   final String? name;
   final int? percentage;
-  final bool? avoid;
+  bool? avoid;
+  bool isExpanded;
 
   UserIngredientModel({
     required this.name,
     required this.percentage,
     required this.avoid,
+    this.isExpanded = false,
   });
 
   factory UserIngredientModel.fromFirestore(

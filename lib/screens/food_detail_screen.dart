@@ -39,6 +39,9 @@ class _ModalFoodState extends State<FoodDetailScreen> {
         extraIngredientsPrice = extraIngredientsPrice + addedToppings[i].price!;
       }
     }
+    // print("total price for extra ${extraIngredientsPrice}");
+    // print(
+    //     "price for ${widget.dishModel.ingredients![0].name} \n ${widget.dishModel.ingredients![0].price}");
     price =
         (int.parse(widget.dishModel.price!) + extraIngredientsPrice) * amount;
   }
@@ -124,6 +127,8 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                   children: addedToppings
                       .where((element) => element.added == true)
                       .map<ExpansionPanel>((DishIngredientsModel item) {
+                    //TODO: Fix color intensity
+                    // print("data " + (item.percentage * 10).toString());
                     int colourCode = item.percentage * 10;
                     return ExpansionPanel(
                       backgroundColor: item.avoid

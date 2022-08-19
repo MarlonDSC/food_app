@@ -34,6 +34,7 @@ class _FoodPreferencesState extends State<FoodPreferences> {
     0,
     cuisineChipList[0].label,
   );
+  // List<UserIngredientModel> userProvider.userModel.userIngredient! = [];
   @override
   void initState() {
     super.initState();
@@ -55,10 +56,11 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                 Text(
                   filterTypes.filterType![index].label!,
                   style: TextStyle(
-                      color: filterTypes.filterType![index].label! ==
-                              filterTypes.current
-                          ? Colors.white
-                          : Colors.black),
+                    color: filterTypes.filterType![index].label! ==
+                            filterTypes.current
+                        ? Colors.white
+                        : Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -214,166 +216,198 @@ class _FoodPreferencesState extends State<FoodPreferences> {
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = context.read<UserProvider>();
+    // convertClasses(userProvider.userModel.userIngredient!, userProvider.userModel.userIngredient!);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nutrition Preferences'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const MediumText('Special nutrition'),
-            SizedBox(
-              height: 50,
-              child: buildWrapFilterChips(specialNutrition, userProvider),
-            ),
-            const MediumText('Religious restrictions'),
-            SizedBox(
-              height: 100,
-              child: buildWrapChoiceChips(religious, userProvider),
-            ),
-            const MediumText('Diet restrictions'),
-            SizedBox(
-              height: 100,
-              child: buildWrapChoiceChips(diet, userProvider),
-            ),
-            const MediumText('Favourite cuisine'),
-            SizedBox(
-              height: 200,
-              child: buildWrapFilterChips(cuisine, userProvider),
-            ),
-            Text('${userProvider.userModel.userIngredient!.length}'),
-            Flexible(
-              fit: FlexFit.loose,
-              child: ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {
-                  // addedToppings[index].isExpanded = !isExpanded;
-                  List<UserIngredientModel> addedToppingsTemp = userProvider
-                      .userModel.userIngredient!
-                      .where(((element) => element.avoid == false))
-                      .toList();
-                  for (int i = 0; i < addedToppings.length; i++) {
-                    if (addedToppings[i].name ==
-                        addedToppingsTemp[index].name) {
-                      addedToppings[i].isExpanded = !isExpanded;
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const MediumText('Special nutrition'),
+              SizedBox(
+                height: 50,
+                child: buildWrapFilterChips(specialNutrition, userProvider),
+              ),
+              const MediumText('Religious restrictions'),
+              SizedBox(
+                height: 100,
+                child: buildWrapChoiceChips(religious, userProvider),
+              ),
+              const MediumText('Diet restrictions'),
+              SizedBox(
+                height: 100,
+                child: buildWrapChoiceChips(diet, userProvider),
+              ),
+              const MediumText('Favourite cuisine'),
+              SizedBox(
+                height: 200,
+                child: buildWrapFilterChips(cuisine, userProvider),
+              ),
+              Text('${userProvider.userModel.userIngredient!.length}'),
+              const Text(
+                'Liked',
+                style: TextStyle(fontSize: 30),
+              ),
+              Flexible(
+                fit: FlexFit.loose,
+                child: ExpansionPanelList(
+                  expansionCallback: (int index, bool isExpanded) {
+                    // userProvider.userModel.userIngredient![index].isExpanded = !isExpanded;
+                    List<UserIngredientModel> userIngredientTemp = userProvider
+                        .userModel.userIngredient!
+                        .where(((element) => element.avoid == false))
+                        .toList();
+                    print(
+                        'size of userIngredientModel ${userIngredientTemp.length}');
+                    for (int i = 0; i < userIngredientTemp.length; i++) {
+                      if (userIngredientTemp[i].name ==
+                          userIngredientTemp[index].name) {
+                        userIngredientTemp[i].isExpanded = !isExpanded;
+                      }
                     }
-                  }
-                  setState(() {});
-                },
-                children: addedToppings
-                    .where((element) => element.added == true)
-                    .map<ExpansionPanel>((UserIngredientModel item) {
-                  int colourCode = item.percentage! * 10;
-                  return ExpansionPanel(
-                    backgroundColor: item.avoid!
-                        ? Colors.primaries.first
-                        : Colors.red[colourCode],
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return ListTile(
-                        // tileColor:
-                        leading: item.primary!
-                            ? const SizedBox()
-                            : IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () {
-                                  for (int i = 0;
-                                      i < addedToppings.length;
-                                      i++) {
-                                    if (addedToppings[i].name == item.name) {
-                                      addedToppings[i].added = false;
-                                      addedToppings[i].addedExtra = false;
-                                      addedToppings[i].isExpanded = false;
-                                    }
-                                  }
-                                  setState(() {});
-                                },
-                              ),
-                        title: Text(
-                          "${item.emoji!} ${item.name!}",
-                          style: TextStyle(
-                            color: item.percentage > 70
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                        ),
-                      );
-                    },
-                    body: item.extra!
-                        ? CheckboxListTile(
-                            title: Text('Add extra ${item.name}'),
-                            subtitle: Text('\$${item.price}'),
-                            onChanged: (bool? value) {
-                              item.addedExtra = value!;
-                              for (int i = 0; i < addedToppings.length; i++) {
-                                if (addedToppings[i].name == item.name) {
-                                  addedToppings[i].addedExtra = value;
+                    setState(() {});
+                  },
+                  children: userProvider.userModel.userIngredient!
+                      .where((element) => element.avoid == false)
+                      .map<ExpansionPanel>((UserIngredientModel item) {
+                    int colourCode = item.percentage! * 10;
+                    return ExpansionPanel(
+                      // backgroundColor: item.avoid!
+                      //     ? Colors.primaries.first
+                      //     : Colors.red[colourCode],
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return ListTile(
+                          // tileColor:
+                          leading: IconButton(
+                            icon: const Icon(Icons.remove),
+                            onPressed: () {
+                              for (int i = 0;
+                                  i <
+                                      userProvider
+                                          .userModel.userIngredient!.length;
+                                  i++) {
+                                if (userProvider
+                                        .userModel.userIngredient![i].name ==
+                                    item.name) {
+                                  // userProvider.userModel.userIngredient![i].added = false;
+                                  // userProvider.userModel.userIngredient![i].addedExtra = false;
+                                  userProvider.userModel.userIngredient![i]
+                                      .avoid = true;
                                 }
                               }
                               setState(() {});
                             },
-                            value: item.addedExtra,
-                          )
-                        : const ListTile(
-                            title: Text(
-                              'Cannot add more ingredients',
+                          ),
+                          title: Text(
+                            // "${item.emoji!} ${item.name!}",
+                            "${item.name!}",
+                            style: TextStyle(
+                              color: item.percentage! > 70
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
-                    isExpanded: item.isExpanded,
-                  );
-                }).toList(),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              'Removed',
-              style: TextStyle(fontSize: 30),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {},
-                children: addedToppings
-                    .where((element) => element.added == false)
-                    .where((element) => element.topping == false)
-                    .map<ExpansionPanel>((DishIngredientsModel item) {
-                  return ExpansionPanel(
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return ListTile(
-                        leading: IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () {
-                            for (int i = 0; i < addedToppings.length; i++) {
-                              if (addedToppings[i].name == item.name) {
-                                addedToppings[i].added = true;
-                              }
-                            }
-                            setState(() {});
-                          },
-                        ),
-                        title: Text("${item.emoji!} ${item.name!}"),
-                      );
-                    },
-                    body: const ListTile(
-                      title: Center(
-                        child: Text(
-                          'This item has been removed',
+                        );
+                      },
+                      //TODO: replace container with another widget
+                      body: const ListTile(
+                        title: Center(
+                          child: Text(
+                            'This item has been added',
+                          ),
                         ),
                       ),
-                    ),
-                    // isExpanded: item.isExpanded,
-                    isExpanded: false,
-                  );
-                }).toList(),
+                      // body: CheckboxListTile(
+                      //   title: Text('Add extra ${item.name}'),
+                      //   subtitle: Text('\$${item.price}'),
+                      //   onChanged: (bool? value) {
+                      //     item.addedExtra = value!;
+                      //     for (int i = 0; i < userProvider.userModel.userIngredient!.length; i++) {
+                      //       if (userProvider.userModel.userIngredient![i].name == item.name) {
+                      //         userProvider.userModel.userIngredient![i].addedExtra = value;
+                      //       }
+                      //     }
+                      //     setState(() {});
+                      //   },
+                      //   value: item.avoid,
+                      // ),
+                      isExpanded: item.isExpanded,
+                    );
+                  }).toList(),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            // Text(specialNutrition.current!),
-          ],
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Not Liked',
+                style: TextStyle(fontSize: 30),
+              ),
+              Flexible(
+                fit: FlexFit.loose,
+                child: ExpansionPanelList(
+                  expansionCallback: (int index, bool isExpanded) {
+                    List<UserIngredientModel> userIngredientTemp = userProvider
+                        .userModel.userIngredient!
+                        .where(((element) => element.avoid == true))
+                        .toList();
+                    print(
+                        'size of userIngredientModel ${userIngredientTemp.length}');
+                    for (int i = 0; i < userIngredientTemp.length; i++) {
+                      if (userIngredientTemp[i].name ==
+                          userIngredientTemp[index].name) {
+                        userIngredientTemp[i].isExpanded = !isExpanded;
+                      }
+                    }
+                    setState(() {});
+                  },
+                  children: userProvider.userModel.userIngredient!
+                      .where((element) => element.avoid == true)
+                      .map<ExpansionPanel>((UserIngredientModel item) {
+                    return ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return ListTile(
+                          leading: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {
+                              for (int i = 0;
+                                  i <
+                                      userProvider
+                                          .userModel.userIngredient!.length;
+                                  i++) {
+                                if (userProvider
+                                        .userModel.userIngredient![i].name ==
+                                    item.name) {
+                                  userProvider.userModel.userIngredient![i]
+                                      .avoid = false;
+                                }
+                              }
+                              setState(() {});
+                            },
+                          ),
+                          title: Text("${item.name!}"),
+                        );
+                      },
+                      body: const ListTile(
+                        title: Center(
+                          child: Text(
+                            'This item has been removed',
+                          ),
+                        ),
+                      ),
+                      // isExpanded: item.isExpanded,
+                      isExpanded: item.isExpanded,
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
