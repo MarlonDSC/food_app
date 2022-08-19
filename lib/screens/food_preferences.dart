@@ -257,7 +257,6 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                 fit: FlexFit.loose,
                 child: ExpansionPanelList(
                   expansionCallback: (int index, bool isExpanded) {
-                    // userProvider.userModel.userIngredient![index].isExpanded = !isExpanded;
                     List<UserIngredientModel> userIngredientTemp = userProvider
                         .userModel.userIngredient!
                         .where(((element) => element.avoid == false))
@@ -275,14 +274,9 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                   children: userProvider.userModel.userIngredient!
                       .where((element) => element.avoid == false)
                       .map<ExpansionPanel>((UserIngredientModel item) {
-                    int colourCode = item.percentage! * 10;
                     return ExpansionPanel(
-                      // backgroundColor: item.avoid!
-                      //     ? Colors.primaries.first
-                      //     : Colors.red[colourCode],
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          // tileColor:
                           leading: IconButton(
                             icon: const Icon(Icons.remove),
                             onPressed: () {
@@ -294,8 +288,6 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                                 if (userProvider
                                         .userModel.userIngredient![i].name ==
                                     item.name) {
-                                  // userProvider.userModel.userIngredient![i].added = false;
-                                  // userProvider.userModel.userIngredient![i].addedExtra = false;
                                   userProvider.userModel.userIngredient![i]
                                       .avoid = true;
                                 }
@@ -303,39 +295,17 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                               setState(() {});
                             },
                           ),
-                          title: Text(
-                            // "${item.emoji!} ${item.name!}",
-                            "${item.name!}",
-                            style: TextStyle(
-                              color: item.percentage! > 70
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
+                          title: Text("${item.name!}"),
                         );
                       },
-                      //TODO: replace container with another widget
                       body: const ListTile(
                         title: Center(
                           child: Text(
-                            'This item has been added',
+                            'This item has been removed',
                           ),
                         ),
                       ),
-                      // body: CheckboxListTile(
-                      //   title: Text('Add extra ${item.name}'),
-                      //   subtitle: Text('\$${item.price}'),
-                      //   onChanged: (bool? value) {
-                      //     item.addedExtra = value!;
-                      //     for (int i = 0; i < userProvider.userModel.userIngredient!.length; i++) {
-                      //       if (userProvider.userModel.userIngredient![i].name == item.name) {
-                      //         userProvider.userModel.userIngredient![i].addedExtra = value;
-                      //       }
-                      //     }
-                      //     setState(() {});
-                      //   },
-                      //   value: item.avoid,
-                      // ),
+                      // isExpanded: item.isExpanded,
                       isExpanded: item.isExpanded,
                     );
                   }).toList(),
