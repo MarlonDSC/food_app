@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/screens/profile_screen.dart';
+import 'package:food_app/screens/shopping_cart.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import '../services/firebase_auth_methods.dart';
@@ -61,10 +62,17 @@ class _MobileNavBarState extends State<MobileNavBar> {
       ),
       floatingActionButton: cartProvider.cartModel.dish!.isEmpty
           ? const SizedBox()
-          : FloatingActionButton(
+          : FloatingActionButton.extended(
               onPressed: () {
-                print('{total price ${cartProvider.cartModel.total}}');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ShoppingCart(),
+                  ),
+                );
               },
+              icon: const Icon(Icons.shopping_cart),
+              label: Text('${cartProvider.cartModel.dish!.length} product'),
             ),
       bottomNavigationBar: BottomNavigationBar(
         // backgroundColor: Colors.black,

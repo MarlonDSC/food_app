@@ -7,6 +7,7 @@ class CartProvider extends ChangeNotifier {
     dish: [],
     total: 0,
   );
+
   CartProvider({required this.cartModel});
   void readFromFirestore(CartModel cartModel) {
     cartModel = cartModel;
@@ -18,7 +19,7 @@ class CartProvider extends ChangeNotifier {
   ) {
     cartModel.dish!.add(dish);
     cartModel.total = cartModel.total! + dish.totalPrice;
-    // notifyListeners();
+    notifyListeners();
   }
 
   void updateLikedFood(String foodId, String uid, List liked) {

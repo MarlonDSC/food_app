@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:food_app/models/dish_ingredients.dart';
 import 'package:food_app/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
-
-import '../models/cart_model.dart';
 import '../models/dish_model.dart';
 import '../providers/user_provider.dart';
 
@@ -87,7 +85,8 @@ class _ModalFoodState extends State<FoodDetailScreen> {
   Widget build(BuildContext context) {
     // UserProvider userProvider = context.read<UserProvider>();
     // addedToppings = widget.dishModel.ingredients!;
-    // CartModel cartModel = Provider.of<CartModel>(context);
+    CartProvider cartModel = Provider.of<CartProvider>(context);
+    print(' products on cart ${cartModel.cartModel.total}');
     calculatePrice();
     return Scaffold(
       appBar: AppBar(
@@ -345,9 +344,8 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                 onPressed: () {
                   print(
                       'total amount due for this ${widget.dishModel.totalPrice}');
-                  Provider.of(context)<CartProvider>(context, listen: false)
+                  Provider.of<CartProvider>(context, listen: false)
                       .updateCart(widget.dishModel);
-                  // Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

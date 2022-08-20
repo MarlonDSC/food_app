@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         Provider<FirebaseAuthMethods>(
           create: (_) => FirebaseAuthMethods(FirebaseAuth.instance),
         ),
-        ListenableProvider<CartProvider>(
+        ChangeNotifierProvider<CartProvider>(
           create: (_) => CartProvider(
             cartModel: CartModel(
               dish: [],
