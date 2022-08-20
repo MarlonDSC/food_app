@@ -1,6 +1,6 @@
 class UserIngredientModel {
   final String? name;
-  final int? percentage;
+  int? percentage;
   bool? avoid;
   bool isExpanded;
 

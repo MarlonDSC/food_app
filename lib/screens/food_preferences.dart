@@ -320,15 +320,23 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                               setState(() {});
                             },
                           ),
-                          title: Text("${item.name!}"),
+                          title: Text("${item.name!} ${item.percentage}%"),
                         );
                       },
-                      body: const ListTile(
+                      body: ListTile(
                         title: Center(
-                          child: Text(
-                            'This item has been removed',
-                          ),
-                        ),
+                            child: Slider(
+                          min: 10.0,
+                          max: 100.0,
+                          divisions: 9,
+                          label: '${item.percentage!}',
+                          value: item.percentage!.toDouble(),
+                          onChanged: (value) {
+                            setState(() {
+                              item.percentage = value.toInt();
+                            });
+                          },
+                        )),
                       ),
                       // isExpanded: item.isExpanded,
                       isExpanded: item.isExpanded,
@@ -385,15 +393,23 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                               setState(() {});
                             },
                           ),
-                          title: Text("${item.name!}"),
+                          title: Text("${item.name!} ${item.percentage}%"),
                         );
                       },
-                      body: const ListTile(
+                      body: ListTile(
                         title: Center(
-                          child: Text(
-                            'This item has been removed',
-                          ),
-                        ),
+                            child: Slider(
+                          min: 10.0,
+                          max: 100.0,
+                          divisions: 9,
+                          label: '${item.percentage!}',
+                          value: item.percentage!.toDouble(),
+                          onChanged: (value) {
+                            setState(() {
+                              item.percentage = value.toInt();
+                            });
+                          },
+                        )),
                       ),
                       // isExpanded: item.isExpanded,
                       isExpanded: item.isExpanded,
