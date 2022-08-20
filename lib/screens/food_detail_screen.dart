@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/models/dish_ingredients.dart';
+import 'package:food_app/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
+import '../models/cart_model.dart';
 import '../models/dish_model.dart';
-import '../models/user_provider.dart';
+import '../providers/user_provider.dart';
 
 class FoodDetailScreen extends StatefulWidget {
   final NetworkImage image;
@@ -20,8 +23,8 @@ class FoodDetailScreen extends StatefulWidget {
 }
 
 class _ModalFoodState extends State<FoodDetailScreen> {
-  int amount = 1;
-  int price = 0;
+  // int amount = 1;
+  // int price = 0;
   List<DishIngredientsModel> addedToppings = [];
 
   @override
@@ -31,8 +34,8 @@ class _ModalFoodState extends State<FoodDetailScreen> {
     filterIngredientsToAvoid(widget.userProvider);
   }
 
-  void calculatePrice(int amount) {
-    price = 0;
+  void calculatePrice() {
+    // price = 0;
     int extraIngredientsPrice = 0;
     for (int i = 0; i < addedToppings.length; i++) {
       if (addedToppings[i].addedExtra) {
@@ -42,8 +45,9 @@ class _ModalFoodState extends State<FoodDetailScreen> {
     // print("total price for extra ${extraIngredientsPrice}");
     // print(
     //     "price for ${widget.dishModel.ingredients![0].name} \n ${widget.dishModel.ingredients![0].price}");
-    price =
-        (int.parse(widget.dishModel.price!) + extraIngredientsPrice) * amount;
+    widget.dishModel.totalPrice =
+        (int.parse(widget.dishModel.price!) + extraIngredientsPrice) *
+            widget.dishModel.amount;
   }
 
   void filterIngredientsToAvoid(UserProvider userProvider) {
@@ -54,7 +58,6 @@ class _ModalFoodState extends State<FoodDetailScreen> {
           //pass percentage value from user to toppings
           addedToppings[i].percentage =
               userProvider.userModel.userIngredient![j].percentage!;
-          print(userProvider.userModel.userIngredient![j].avoid!);
           //pass if ingredient should be avoided
           addedToppings[i].avoid =
               userProvider.userModel.userIngredient![j].avoid!;
@@ -84,7 +87,8 @@ class _ModalFoodState extends State<FoodDetailScreen> {
   Widget build(BuildContext context) {
     // UserProvider userProvider = context.read<UserProvider>();
     // addedToppings = widget.dishModel.ingredients!;
-    calculatePrice(amount);
+    // CartModel cartModel = Provider.of<CartModel>(context);
+    calculatePrice();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -299,8 +303,8 @@ class _ModalFoodState extends State<FoodDetailScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    if (amount > 1) {
-                      amount--;
+                    if (widget.dishModel.amount > 1) {
+                      widget.dishModel.amount--;
                       // calculatePrice(amount);
                       setState(() {});
                     }
@@ -314,11 +318,11 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                Text(amount.toString()),
+                Text(widget.dishModel.amount.toString()),
                 ElevatedButton(
                   onPressed: () {
-                    if (amount < 15) {
-                      amount++;
+                    if (widget.dishModel.amount < 15) {
+                      widget.dishModel.amount++;
                       // calculatePrice(amount);
                       setState(() {});
                     }
@@ -338,13 +342,20 @@ class _ModalFoodState extends State<FoodDetailScreen> {
               height: 50,
               width: 200,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  print(
+                      'total amount due for this ${widget.dishModel.totalPrice}');
+                  Provider.of(context)<CartProvider>(context, listen: false)
+                      .updateCart(widget.dishModel);
+                  // Navigator.pop(context);
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20), // <-- Radius
                   ),
                 ),
-                child: Text('Pagar \$${price.toString()}'),
+                child:
+                    Text('Pagar \$${widget.dishModel.totalPrice.toString()}'),
               ),
             )
           ],

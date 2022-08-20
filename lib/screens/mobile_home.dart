@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../models/filter_type.dart';
 import '../models/dish_model.dart';
-import '../models/user_provider.dart';
+import '../providers/user_provider.dart';
 import '../services/firebase_auth_methods.dart';
 import '../utils/constants.dart';
 

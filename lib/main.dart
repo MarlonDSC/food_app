@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/models/cart_model.dart';
 import 'package:food_app/models/user_model.dart';
-import 'package:food_app/models/user_provider.dart';
+import 'package:food_app/providers/cart_provider.dart';
+import 'package:food_app/providers/user_provider.dart';
 import 'package:food_app/screens/mobile_home.dart';
 import 'package:food_app/screens/mobile_navbar.dart';
 import 'firebase_options.dart';
@@ -35,6 +37,14 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<FirebaseAuthMethods>(
           create: (_) => FirebaseAuthMethods(FirebaseAuth.instance),
+        ),
+        ListenableProvider<CartProvider>(
+          create: (_) => CartProvider(
+            cartModel: CartModel(
+              dish: [],
+              total: 0,
+            ),
+          ),
         ),
         ListenableProvider<UserProvider>(
           create: (_) => UserProvider(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_app/models/user_ingredient_model.dart';
 import 'package:provider/provider.dart';
 import '../models/filter_type.dart';
-import '../models/user_provider.dart';
+import '../providers/user_provider.dart';
 import '../services/firebase_firestore_methods.dart';
 import '../utils/constants.dart';
 import '../widgets/medium_text.dart';

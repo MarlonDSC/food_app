@@ -9,6 +9,8 @@ class DishModel {
   final String? type;
   final String? country;
   final List<DishIngredientsModel>? ingredients;
+  int amount;
+  int totalPrice;
 
   DishModel({
     this.id = '',
@@ -19,6 +21,8 @@ class DishModel {
     required this.type,
     required this.country,
     required this.ingredients,
+    this.amount = 1,
+    this.totalPrice = 0,
   });
 
   factory DishModel.fromFirestore(

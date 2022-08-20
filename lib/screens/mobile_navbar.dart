@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
-
+import '../providers/cart_provider.dart';
 import '../services/firebase_auth_methods.dart';
 import 'mobile_home.dart';
 import 'orders.dart';
@@ -29,6 +29,7 @@ class _MobileNavBarState extends State<MobileNavBar> {
   @override
   Widget build(BuildContext context) {
     uid = context.read<FirebaseAuthMethods>().user.uid;
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -58,6 +59,13 @@ class _MobileNavBarState extends State<MobileNavBar> {
           for (final tabItem in TabNavigationItem.items) tabItem.page,
         ],
       ),
+      floatingActionButton: cartProvider.cartModel.dish!.isEmpty
+          ? const SizedBox()
+          : FloatingActionButton(
+              onPressed: () {
+                print('{total price ${cartProvider.cartModel.total}}');
+              },
+            ),
       bottomNavigationBar: BottomNavigationBar(
         // backgroundColor: Colors.black,
         // unselectedItemColor: Colors.white,
