@@ -14,11 +14,17 @@ class CartProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
-  void updateCart(
+  void addToCart(
     DishModel dish,
   ) {
     cartModel.dish!.add(dish);
     cartModel.total = cartModel.total! + dish.totalPrice;
+    notifyListeners();
+  }
+
+  void removeFromCart(DishModel dish) {
+    cartModel.total = cartModel.total! - dish.totalPrice;
+    cartModel.dish!.remove(dish);
     notifyListeners();
   }
 

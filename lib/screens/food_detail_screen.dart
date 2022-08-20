@@ -21,8 +21,6 @@ class FoodDetailScreen extends StatefulWidget {
 }
 
 class _ModalFoodState extends State<FoodDetailScreen> {
-  // int amount = 1;
-  // int price = 0;
   List<DishIngredientsModel> addedToppings = [];
 
   @override
@@ -345,7 +343,7 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                   print(
                       'total amount due for this ${widget.dishModel.totalPrice}');
                   Provider.of<CartProvider>(context, listen: false)
-                      .updateCart(widget.dishModel);
+                      .addToCart(widget.dishModel);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

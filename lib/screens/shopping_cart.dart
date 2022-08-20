@@ -20,11 +20,12 @@ class _ShoppingCartState extends State<ShoppingCart> {
       ),
       body: Padding(
         padding: EdgeInsets.only(
-            top: 20,
-            left: 20,
-            right: 20,
-            // prevent the soft keyboard from covering text fields
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+          top: 20,
+          left: 20,
+          right: 20,
+          // prevent the soft keyboard from covering text fields
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +34,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
               child: ListView.builder(
                 itemCount: cartProvider.cartModel.dish!.length,
                 itemBuilder: ((context, index) {
-                  return const DishShoppingCartCard();
+                  return DishShoppingCartCard(
+                    dishModel: cartProvider.cartModel.dish![index],
+                  );
                 }),
               ),
             ),
@@ -41,7 +44,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
-                child: const Text('Actualizar'),
+                child: Text('Pagar \$${cartProvider.cartModel.total}'),
                 onPressed: () async {},
               ),
             ),
