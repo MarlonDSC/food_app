@@ -51,26 +51,34 @@ class _ModalFoodState extends State<FoodDetailScreen> {
       for (int j = 0; j < userProvider.userModel.userIngredient!.length; j++) {
         if (addedToppings[i].name ==
             userProvider.userModel.userIngredient![j].name) {
+          //pass percentage value from user to toppings
           addedToppings[i].percentage =
               userProvider.userModel.userIngredient![j].percentage!;
+          print(userProvider.userModel.userIngredient![j].avoid!);
+          //pass if ingredient should be avoided
           addedToppings[i].avoid =
-              userProvider.userModel.userIngredient![i].avoid!;
+              userProvider.userModel.userIngredient![j].avoid!;
           if (!addedToppings[i].primary!) {
-            addedToppings[i].added = false;
+            addedToppings[i].added =
+                !userProvider.userModel.userIngredient![j].avoid!;
           }
         }
       }
     }
   }
 
-  // Widget filterIngredientType(DishIngredientsModel item) {
-  //   if (item.extra!) {
-  //     return const Center(
-  //       child: Text("Cannot add extra ingredients"),
-  //     );
-  //   }
-  //   // else if(item.)
-  // }
+  Color filterColour(DishIngredientsModel item) {
+    int colourCode = item.percentage * 10;
+    item.avoid ? item.percentage : item.percentage = 0;
+    print('${item.name} ${item.avoid} ${item.percentage}');
+    if (item.avoid) {
+      return Colors.red[colourCode]!;
+    } else if (!item.avoid && item.percentage != 0) {
+      return Colors.white;
+    } else {
+      return Colors.white;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,16 +135,10 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                   children: addedToppings
                       .where((element) => element.added == true)
                       .map<ExpansionPanel>((DishIngredientsModel item) {
-                    //TODO: Fix color intensity
-                    // print("data " + (item.percentage * 10).toString());
-                    int colourCode = item.percentage * 10;
                     return ExpansionPanel(
-                      backgroundColor: item.avoid
-                          ? Colors.primaries.first
-                          : Colors.red[colourCode],
+                      backgroundColor: filterColour(item),
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          // tileColor:
                           leading: item.primary!
                               ? const SizedBox()
                               : IconButton(
