@@ -69,7 +69,7 @@ class _ModalFoodState extends State<FoodDetailScreen> {
   Color filterColour(DishIngredientsModel item) {
     int colourCode = item.percentage * 10;
     item.avoid ? item.percentage : item.percentage = 0;
-    print('${item.name} ${item.avoid} ${item.percentage}');
+    // print('${item.name} ${item.avoid} ${item.percentage}');
     if (item.avoid) {
       return Colors.red[colourCode]!;
     } else if (!item.avoid && item.percentage != 0) {
@@ -344,6 +344,9 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                       'total amount due for this ${widget.dishModel.totalPrice}');
                   Provider.of<CartProvider>(context, listen: false)
                       .addToCart(widget.dishModel);
+                  Provider.of<CartProvider>(context, listen: false)
+                      .clearDish(widget.dishModel);
+                  // widget.dishModel.
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
