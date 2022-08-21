@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/models/dish_ingredients.dart';
+import 'package:food_app/models/models.dart';
 import 'package:food_app/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
-import '../models/dish_model.dart';
 import '../providers/user_provider.dart';
 
 class FoodDetailScreen extends StatefulWidget {

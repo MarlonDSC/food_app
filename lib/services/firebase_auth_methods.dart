@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/user_model.dart';
+import 'package:food_app/models/models.dart';
 import '../utils/show_snackbar.dart';
 
 class FirebaseAuthMethods {

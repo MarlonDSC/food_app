@@ -2,12 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_app/providers/user_provider.dart';
-import 'package:food_app/screens/food_preferences.dart';
+import 'package:food_app/screens/screens.dart';
 import 'package:provider/provider.dart';
-import '../models/user_ingredient_model.dart';
-import '../models/user_model.dart';
+import 'package:food_app/models/models.dart';
 import '../services/firebase_auth_methods.dart';
-import 'card_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileScreen extends StatelessWidget {

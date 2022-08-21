@@ -1,4 +1,4 @@
-import 'package:food_app/models/dish_ingredients.dart';
+import 'package:food_app/models/models.dart';
 
 class DishModel {
   String id;

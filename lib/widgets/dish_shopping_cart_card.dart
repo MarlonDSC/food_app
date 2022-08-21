@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/dish_model.dart';
+import 'package:food_app/models/models.dart';
 import '../providers/cart_provider.dart';
 
 class DishShoppingCartCard extends StatefulWidget {

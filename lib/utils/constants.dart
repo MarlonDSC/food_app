@@ -1,6 +1,4 @@
-import 'package:food_app/models/user_ingredient_model.dart';
-
-import '../models/filter_type.dart';
+import 'package:food_app/models/models.dart';
 
 List<FilterType> filterTypeChipList = [
   FilterType('🌐', "All", false, 'filterType'),

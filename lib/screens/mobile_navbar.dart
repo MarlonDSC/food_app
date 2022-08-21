@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/screens/profile_screen.dart';
-import 'package:food_app/screens/shopping_cart.dart';
+import 'package:food_app/screens/screens.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import '../services/firebase_auth_methods.dart';
-import 'mobile_home.dart';
-import 'orders.dart';
 
 class MobileNavBar extends StatefulWidget {
   const MobileNavBar({Key? key}) : super(key: key);

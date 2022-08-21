@@ -1,10 +1,9 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:food_app/models/user_ingredient_model.dart';
+import 'package:food_app/models/models.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../models/user_model.dart';
 import '../services/storage_methods.dart';
 import '../utils/show_snackbar.dart';
 import '../utils/utils.dart';

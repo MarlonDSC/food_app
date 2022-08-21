@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/services/firebase_firestore_methods.dart';
-import 'package:food_app/screens/food_detail_screen.dart';
+import 'package:food_app/screens/screens.dart';
 import 'package:provider/provider.dart';
 
-import '../models/dish_model.dart';
+import 'package:food_app/models/models.dart';
 import '../providers/user_provider.dart';
 
 class FoodCard extends StatefulWidget {

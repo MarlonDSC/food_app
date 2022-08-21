@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/models/user_model.dart';
+import 'package:food_app/models/models.dart';
 import 'package:food_app/widgets/food_card.dart';
 import 'package:provider/provider.dart';
 
-import '../models/filter_type.dart';
-import '../models/dish_model.dart';
 import '../providers/user_provider.dart';
 import '../services/firebase_auth_methods.dart';
 import '../utils/constants.dart';
