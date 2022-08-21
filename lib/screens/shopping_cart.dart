@@ -5,6 +5,8 @@ import 'package:food_app/providers/user_provider.dart';
 import 'package:food_app/widgets/dish_shopping_cart_card.dart';
 import 'package:provider/provider.dart';
 
+import '../services/firebase_firestore_methods.dart';
+
 class ShoppingCart extends StatefulWidget {
   const ShoppingCart({Key? key}) : super(key: key);
 
@@ -97,67 +99,59 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                   percentage: 25,
                                   avoid: false,
                                 );
-                                // userProvider.userModel.userIngredient!
-                                //     .contains(userIngredientModel);
-                                print(
-                                    'this element doesnt exist   ${userProvider.userModel.userIngredient!.where((element) => element.name == cartProvider.cartModel.dish![i].ingredients![j].name).toList()}');
-
-                                var notExists = userProvider
-                                    .userModel.userIngredient!
-                                    .where((element) =>
-                                        element.name !=
-                                        cartProvider.cartModel.dish![i]
-                                            .ingredients![j].name)
-                                    .toList();
-
-                                for (int i = 0; i < notExists.length; i++) {
-                                  print('Doesnt exists ${notExists[i].name}');
+                                if (userProvider.userModel.userIngredient!
+                                    .where(((element) =>
+                                        element.name ==
+                                        userIngredientModel.name))
+                                    .isEmpty) {
+                                  if (cartProvider.cartModel.dish![i]
+                                      .ingredients![j].added) {
+                                    if (cartProvider.cartModel.dish![i]
+                                        .ingredients![j].addedExtra) {
+                                      print(
+                                          'added extra ${cartProvider.cartModel.dish![i].ingredients![j].name}');
+                                      UserIngredientModel userIngredientModel =
+                                          UserIngredientModel(
+                                        name: cartProvider.cartModel.dish![i]
+                                            .ingredients![j].name,
+                                        percentage: 25,
+                                        avoid: false,
+                                      );
+                                      userProvider.userModel.userIngredient!
+                                          .add(userIngredientModel);
+                                    } else {
+                                      print(
+                                          'added ${cartProvider.cartModel.dish![i].ingredients![j].name}');
+                                      UserIngredientModel userIngredientModel =
+                                          UserIngredientModel(
+                                        name: cartProvider.cartModel.dish![i]
+                                            .ingredients![j].name,
+                                        percentage: 15,
+                                        avoid: false,
+                                      );
+                                      userProvider.userModel.userIngredient![k]
+                                          .percentage = userProvider.userModel
+                                              .userIngredient![k].percentage! +
+                                          5;
+                                      userProvider.userModel.userIngredient!
+                                          .add(userIngredientModel);
+                                    }
+                                  } else {
+                                    print(
+                                        'not added ${cartProvider.cartModel.dish![i].ingredients![j].name}');
+                                    UserIngredientModel userIngredientModel =
+                                        UserIngredientModel(
+                                      name: cartProvider.cartModel.dish![i]
+                                          .ingredients![j].name,
+                                      percentage: 15,
+                                      avoid: true,
+                                    );
+                                    userProvider.userModel.userIngredient!
+                                        .add(userIngredientModel);
+                                  }
                                 }
-                                // if (cartProvider
-                                //     .cartModel.dish![i].ingredients![j].added) {
-                                //   if (cartProvider.cartModel.dish![i]
-                                //       .ingredients![j].addedExtra) {
-                                //     print(
-                                //         'added extra ${cartProvider.cartModel.dish![i].ingredients![j].name}');
-                                //     UserIngredientModel userIngredientModel =
-                                //         UserIngredientModel(
-                                //       name: cartProvider.cartModel.dish![i]
-                                //           .ingredients![j].name,
-                                //       percentage: 25,
-                                //       avoid: false,
-                                //     );
-                                //     userProvider.userModel.userIngredient!
-                                //         .add(userIngredientModel);
-                                //   } else {
-                                //     print(
-                                //         'added ${cartProvider.cartModel.dish![i].ingredients![j].name}');
-                                //     UserIngredientModel userIngredientModel =
-                                //         UserIngredientModel(
-                                //       name: cartProvider.cartModel.dish![i]
-                                //           .ingredients![j].name,
-                                //       percentage: 15,
-                                //       avoid: false,
-                                //     );
-                                //     userProvider.userModel.userIngredient![k]
-                                //         .percentage = userProvider.userModel
-                                //             .userIngredient![k].percentage! +
-                                //         5;
-                                //     userProvider.userModel.userIngredient!
-                                //         .add(userIngredientModel);
-                                //   }
-                                // } else {
-                                //   print(
-                                //       'not added ${cartProvider.cartModel.dish![i].ingredients![j].name}');
-                                //   UserIngredientModel userIngredientModel =
-                                //       UserIngredientModel(
-                                //     name: cartProvider.cartModel.dish![i]
-                                //         .ingredients![j].name,
-                                //     percentage: 15,
-                                //     avoid: true,
-                                //   );
-                                //   userProvider.userModel.userIngredient!
-                                //       .add(userIngredientModel);
-                                // }
+                                print(
+                                    'ingredient ${userIngredientModel.name} ${userProvider.userModel.userIngredient!.where(((element) => element.name == userIngredientModel.name)).isEmpty}');
                               }
                             }
                             //   for(int l = 0; l<userProvider.userModel.userIngredient![k].){
@@ -175,6 +169,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         //   print(
                         //       '${userProvider.userModel.userIngredient![k].name}');
                         // }
+                        FireStoreMethods().likeUserIngredient(
+                          userProvider.userModel.userIngredient!,
+                          userProvider.userModel.id,
+                        );
                       }
                     : null,
                 child: cartProvider.cartModel.total! > 0
