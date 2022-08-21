@@ -3,6 +3,7 @@ import 'package:food_app/services/firebase_firestore_methods.dart';
 import 'package:food_app/screens/food_detail_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../models/dish_ingredients.dart';
 import '../models/dish_model.dart';
 import '../providers/user_provider.dart';
 
@@ -19,6 +20,56 @@ class FoodCard extends StatefulWidget {
 }
 
 class _FoodCardState extends State<FoodCard> {
+  List<DishIngredientsModel> addedToppings = [];
+  @override
+  void initState() {
+    super.initState();
+    addedToppings = widget.dishModel.ingredients!;
+    // calculateRating(widget.userProvider);
+  }
+
+  double calculateRating(UserProvider userProvider) {
+    double liked = 0.0;
+    double notLiked = 0.0;
+    double ecuation = 0.0;
+    List<DishIngredientsModel> likedIngredients = [];
+    List<DishIngredientsModel> notLikedIngredients = [];
+    for (int i = 0; i < addedToppings.length; i++) {
+      for (int j = 0; j < userProvider.userModel.userIngredient!.length; j++) {
+        if (addedToppings[i].name ==
+            userProvider.userModel.userIngredient![j].name) {
+          //pass percentage value from user to toppings
+          addedToppings[i].percentage =
+              userProvider.userModel.userIngredient![j].percentage!;
+          //pass if ingredient should be avoided
+          addedToppings[i].avoid =
+              userProvider.userModel.userIngredient![j].avoid!;
+          if (!addedToppings[i].primary!) {
+            addedToppings[i].added =
+                !userProvider.userModel.userIngredient![j].avoid!;
+          }
+        }
+      }
+    }
+
+    for (int i = 0; i < addedToppings.length; i++) {
+      print(
+          '${addedToppings[i].name} ${addedToppings[i].avoid} ${addedToppings[i].percentage}');
+    }
+    likedIngredients = addedToppings.where((element) => element.avoid).toList();
+    for (int i = 0; i < likedIngredients.length; i++) {
+      liked = liked + likedIngredients[i].percentage.toDouble();
+    }
+    for (int i = 0; i < notLikedIngredients.length; i++) {
+      notLiked = notLiked + notLikedIngredients[i].percentage.toDouble();
+    }
+    notLikedIngredients =
+        addedToppings.where(((element) => !element.avoid)).toList();
+    ecuation = liked - notLiked / (addedToppings.length * 100);
+
+    return ecuation.abs();
+  }
+
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = context.read<UserProvider>();
@@ -65,19 +116,36 @@ class _FoodCardState extends State<FoodCard> {
                 "\$${widget.dishModel.price!}",
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
-              trailing: IconButton(
-                onPressed: () {
-                  FireStoreMethods().likeFood(
-                    widget.dishModel.id,
-                    userProvider.userModel.id,
-                    userProvider.userModel.liked,
-                  );
-                  setState(() {});
-                },
-                icon: Icon(
-                  Icons.favorite,
-                  color: liked ? Colors.red : Colors.grey,
-                ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                      '${(calculateRating(userProvider) * 100).toInt().toString()}%'),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                    width: 25,
+                    height: 25,
+                    child: CircularProgressIndicator(
+                      value: calculateRating(userProvider),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      FireStoreMethods().likeFood(
+                        widget.dishModel.id,
+                        userProvider.userModel.id,
+                        userProvider.userModel.liked,
+                      );
+                      setState(() {});
+                    },
+                    icon: Icon(
+                      Icons.favorite,
+                      color: liked ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(

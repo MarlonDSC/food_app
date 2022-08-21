@@ -71,7 +71,8 @@ class _ModalFoodState extends State<FoodDetailScreen> {
     item.avoid ? item.percentage : item.percentage = 0;
     // print('${item.name} ${item.avoid} ${item.percentage}');
     if (item.avoid) {
-      return Colors.red[colourCode]!;
+      // return Colors.red[900]!;
+      return Colors.orange[300]!;
     } else if (!item.avoid && item.percentage != 0) {
       return Colors.white;
     } else {
@@ -159,11 +160,11 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                                 ),
                           title: Text(
                             "${item.emoji!} ${item.name!}",
-                            style: TextStyle(
-                              color: item.percentage > 70
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
+                            style: TextStyle(color: Colors.black
+                                // color: item.percentage > 70
+                                //     ? Colors.white
+                                //     : Colors.black,
+                                ),
                           ),
                         );
                       },

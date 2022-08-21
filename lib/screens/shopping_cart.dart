@@ -173,6 +173,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           userProvider.userModel.userIngredient!,
                           userProvider.userModel.id,
                         );
+                        //Clear cart
+                        Provider.of<CartProvider>(context, listen: false)
+                            .clearCart();
+                        Navigator.pop(context);
                       }
                     : null,
                 child: cartProvider.cartModel.total! > 0

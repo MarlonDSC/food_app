@@ -49,6 +49,12 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearCart() {
+    cartModel.dish!.clear();
+    cartModel.total = 0;
+    notifyListeners();
+  }
+
   void updateLikedFood(String foodId, String uid, List liked) {
     notifyListeners();
   }
