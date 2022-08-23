@@ -100,3 +100,17 @@ Column createUpdateProfile(
     ],
   );
 }
+
+double gramTokCal(double fat, double saturatedFat, double transFat) {
+  return (fat + saturatedFat + transFat) * 4;
+}
+
+bool isLowFat(double kCal, double totalkCal) {
+  if (kCal / totalkCal > 0.30) {
+    //It is not low fat
+    print('it is not low fat');
+    return false;
+  } else {
+    return true;
+  }
+}
