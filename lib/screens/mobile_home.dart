@@ -4,11 +4,13 @@ import 'package:food_app/models/user_model.dart';
 import 'package:food_app/widgets/food_card.dart';
 import 'package:provider/provider.dart';
 
+import '../models/dish_ingredients.dart';
 import '../models/filter_type.dart';
 import '../models/dish_model.dart';
 import '../providers/user_provider.dart';
 import '../services/firebase_auth_methods.dart';
 import '../utils/constants.dart';
+import '../utils/utils.dart';
 
 class MobileHome extends StatefulWidget {
   static const routeName = 'MobileHome';
@@ -125,20 +127,44 @@ class _MobileHomeState extends State<MobileHome> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // snapshot
-                return Expanded(
-                  // Vertical ListView
-                  child: ListView(
-                    children:
-                        snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Map<String, dynamic> data =
-                          document.data()! as Map<String, dynamic>;
-                      DishModel dishModel = DishModel.fromFirestore(data);
-                      return FoodCard(
-                        dishModel: dishModel,
+                return filterType.current == filterType.filterType![1].label
+                    ? Expanded(
+                        // Vertical ListView
+                        child: ListView(
+                          children: snapshot.data!.docs
+                              .map((DocumentSnapshot document) {
+                            Map<String, dynamic> data =
+                                document.data()! as Map<String, dynamic>;
+                            DishModel dishModel = DishModel.fromFirestore(data);
+                            return FoodCard(
+                              dishModel: dishModel,
+                            );
+                          }).toList(),
+                        ),
+                      )
+                    : Expanded(
+                        // Vertical ListView
+                        child: ListView(
+                          children: snapshot.data!.docs
+                              .map((DocumentSnapshot document) {
+                            Map<String, dynamic> data =
+                                document.data()! as Map<String, dynamic>;
+                            DishModel dishModel = DishModel.fromFirestore(data);
+                            List<DishIngredientsModel> addedToppings =
+                                dishModel.ingredients!;
+                            print(calculateRating(userProvider, addedToppings,
+                                dishModel.country!));
+                            dishModel.points = calculateRating(
+                              userProvider,
+                              addedToppings,
+                              dishModel.country!,
+                            );
+                            return FoodCard(
+                              dishModel: dishModel,
+                            );
+                          }).toList(),
+                        ),
                       );
-                    }).toList(),
-                  ),
-                );
                 // return FoodCard();
               } else if (!snapshot.hasData) {
                 return const Center(

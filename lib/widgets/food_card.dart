@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/dish_ingredients.dart';
 import '../models/dish_model.dart';
 import '../providers/user_provider.dart';
+import '../utils/utils.dart';
 
 class FoodCard extends StatefulWidget {
   final DishModel dishModel;
@@ -24,80 +25,14 @@ class _FoodCardState extends State<FoodCard> {
   @override
   void initState() {
     super.initState();
-    addedToppings = widget.dishModel.ingredients!;
     // calculateRating(widget.userProvider);
-  }
-
-  double calculateRating(UserProvider userProvider) {
-    double ecuation = 0.0;
-    for (int i = 0; i < addedToppings.length; i++) {
-      for (int j = 0; j < userProvider.userModel.userIngredient!.length; j++) {
-        if (addedToppings[i].name ==
-            userProvider.userModel.userIngredient![j].name) {
-          //pass percentage value from user to toppings
-          addedToppings[i].percentage =
-              userProvider.userModel.userIngredient![j].percentage!;
-          //pass if ingredient should be avoided
-          addedToppings[i].avoid =
-              userProvider.userModel.userIngredient![j].avoid!;
-          if (!addedToppings[i].primary!) {
-            addedToppings[i].added =
-                !userProvider.userModel.userIngredient![j].avoid!;
-          }
-        }
-      }
-    }
-
-    /*
-    primary are the main ingredients for a dish, for example a burger is not a burger
-    if it doesn't contain a bun and a patty.
-
-    How do I know if an ingredient is primary?
-    Primary ingredients don't have the remove button and are "added ingredients" by
-    default.
-    
-    left section:
-      liked: is the total percentage of liked ingredients on the primary section
-      notLiked: is the total percentage of ingredients food on the primary section
-    right section:
-      liked: is the total percentage of liked ingredients on the secondary section
-      notLiked: is the total percentage of liked ingredients on the secondary section
-
-    size: is the total amount of ingredients, counting primary and secondary ones.
-    cuisine: is the cuisine the dish belongs to, for example a pizza belongs to the
-    italian cuisine 🇮🇹
-
-    
-    (((liked*3-notLiked*5)+(liked-notLiked))/(size*0.75))+cuisine
-    */
-    List<int> primary = [0, 0];
-    List<int> secondary = [0, 0];
-    double cuisine = 0;
-    for (int i = 0; i < addedToppings.length; i++) {
-      if (addedToppings[i].primary! && !addedToppings[i].avoid) {
-        primary[0] = primary[0] + addedToppings[i].percentage;
-      } else if (addedToppings[i].primary! && addedToppings[i].avoid) {
-        primary[1] = primary[1] + addedToppings[i].percentage;
-      } else if (!addedToppings[i].primary! && !addedToppings[i].avoid) {
-        secondary[0] = secondary[0] + addedToppings[i].percentage;
-      } else if (!addedToppings[i].primary! && addedToppings[i].avoid) {
-        secondary[1] = secondary[1] + addedToppings[i].percentage;
-      }
-    }
-    userProvider.userModel.cuisine.contains(widget.dishModel.country!)
-        ? cuisine = 0.15
-        : cuisine = 0;
-    ecuation =
-        (((primary[0] * 3 - primary[1] * 5) + (secondary[0] - secondary[1])) /
-                (addedToppings.length * 0.75)) +
-            cuisine;
-    return ecuation;
   }
 
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = context.read<UserProvider>();
     NetworkImage networkImage = NetworkImage(widget.dishModel.picture!);
+    addedToppings = widget.dishModel.ingredients!;
     bool liked = false;
     if (userProvider.userModel.liked.contains(widget.dishModel.id)) {
       liked = true;
@@ -144,7 +79,14 @@ class _FoodCardState extends State<FoodCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                      '${(calculateRating(userProvider) * 100).toInt().toString()} pts'),
+                    // '${(calculateRating(userProvider, addedToppings, widget.dishModel.country!) * 100).toInt().toString()} pts'),
+                    '${(widget.dishModel.points).toInt().toString()}%',
+                    style: TextStyle(
+                      color: widget.dishModel.points > 0
+                          ? Colors.black
+                          : Colors.red,
+                    ),
+                  ),
                   const SizedBox(
                     width: 10,
                   ),

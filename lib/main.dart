@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: "/",
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Firebase Auth Demo',
+        title: 'Food App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

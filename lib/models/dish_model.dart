@@ -13,6 +13,7 @@ class DishModel {
   final NutritionalFactsModel? nutritionalFacts;
   int amount;
   int totalPrice;
+  double points;
 
   DishModel({
     this.id = '',
@@ -26,6 +27,7 @@ class DishModel {
     required this.nutritionalFacts,
     this.amount = 1,
     this.totalPrice = 0,
+    this.points = 0,
   });
 
   factory DishModel.fromFirestore(
