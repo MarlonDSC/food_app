@@ -114,3 +114,43 @@ bool isLowFat(double kCal, double totalkCal) {
     return true;
   }
 }
+
+bool isLowCarb(double kCal, double totalkCal) {
+  if (kCal / totalkCal > 0.20) {
+    //It is not low fat
+    print('it is not low fat');
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool isHighProtein(double protein) {
+  if (protein > 33) {
+    //It is not low fat
+    print('it is high protein');
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool isHighSodium(double sodium) {
+  if (sodium > 350) {
+    //It is not low fat
+    print('it is high sodium');
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool isLowSodium(double sodium) {
+  if (sodium <= 140) {
+    //It is not low fat
+    print('it is low sodium');
+    return true;
+  } else {
+    return false;
+  }
+}

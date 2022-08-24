@@ -196,26 +196,32 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                 spacing: 8,
                 runSpacing: 5.0,
                 children: [
-                  Chip(
-                    label: isLowFat(
-                            gramTokCal(
-                                nutritionalFactsModel.fat!,
-                                nutritionalFactsModel.saturatedFat!,
-                                nutritionalFactsModel.transFat!),
-                            nutritionalFactsModel.calories!)
-                        ? const Text('Low fat')
-                        : const Text('Not low fat'),
-                  ),
-                  Chip(
-                    label: isLowFat(
-                            gramTokCal(
-                                nutritionalFactsModel.fat!,
-                                nutritionalFactsModel.saturatedFat!,
-                                nutritionalFactsModel.transFat!),
-                            nutritionalFactsModel.calories!)
-                        ? const Text('Low fat')
-                        : const Text('Not low fat'),
-                  ),
+                  isLowFat(
+                          gramTokCal(
+                            nutritionalFactsModel.fat!,
+                            nutritionalFactsModel.saturatedFat!,
+                            nutritionalFactsModel.transFat!,
+                          ),
+                          nutritionalFactsModel.calories!)
+                      ? const Chip(label: Text('Low fat'))
+                      : const SizedBox(),
+                  isLowCarb(
+                          gramTokCal(
+                            nutritionalFactsModel.fat!,
+                            nutritionalFactsModel.saturatedFat!,
+                            nutritionalFactsModel.transFat!,
+                          ),
+                          nutritionalFactsModel.calories!)
+                      ? const Chip(label: Text('Low carb'))
+                      : const SizedBox(),
+                  isHighProtein(
+                    nutritionalFactsModel.proteins!,
+                  )
+                      ? const Chip(label: Text('High protein'))
+                      : const SizedBox(),
+                  isHighSodium(nutritionalFactsModel.sodium!)
+                      ? const Chip(label: Text('High sodium'))
+                      : const SizedBox(),
                 ],
               ),
               Text(
@@ -465,7 +471,7 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                   ),
                 ),
                 child:
-                    Text('Pagar \$${widget.dishModel.totalPrice.toString()}'),
+                    Text('Add for \$${widget.dishModel.totalPrice.toString()}'),
               ),
             )
           ],
