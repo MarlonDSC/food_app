@@ -1,4 +1,5 @@
 import 'package:food_app/models/dish_ingredients.dart';
+import 'package:food_app/models/nutritional_facts_model.dart';
 
 class DishModel {
   String id;
@@ -9,6 +10,7 @@ class DishModel {
   final String? type;
   final String? country;
   final List<DishIngredientsModel>? ingredients;
+  final NutritionalFactsModel? nutritionalFacts;
   int amount;
   int totalPrice;
 
@@ -21,6 +23,7 @@ class DishModel {
     required this.type,
     required this.country,
     required this.ingredients,
+    required this.nutritionalFacts,
     this.amount = 1,
     this.totalPrice = 0,
   });
@@ -45,6 +48,18 @@ class DishModel {
                 (x) => DishIngredientsModel.fromFirestore(x),
               ),
             ),
+      nutritionalFacts: NutritionalFactsModel(
+        calories: snapshot['nutritionalFacts']['calories'],
+        fat: snapshot['nutritionalFacts']['fat'],
+        saturatedFat: snapshot['nutritionalFacts']['saturatedFat'],
+        transFat: snapshot['nutritionalFacts']['transFat'],
+        cholesterol: snapshot['nutritionalFacts']['cholesterol'],
+        sodium: snapshot['nutritionalFacts']['sodium'],
+        carbohydrates: snapshot['nutritionalFacts']['carbohydrates'],
+        fiber: snapshot['nutritionalFacts']['fiber'],
+        sugar: snapshot['nutritionalFacts']['sugar'],
+        proteins: snapshot['nutritionalFacts']['proteins'],
+      ),
     );
   }
 
@@ -58,6 +73,7 @@ class DishModel {
       "type": type,
       "country": country,
       "ingredients": ingredients,
+      "nutritionalFacts": nutritionalFacts,
     };
   }
 }

@@ -396,12 +396,13 @@ class _FoodPreferencesState extends State<FoodPreferences> {
                           title: Text("${item.name!} ${item.percentage}%"),
                         );
                       },
+                      // body: Container(),
                       body: ListTile(
                         title: Center(
                             child: Slider(
-                          min: 10.0,
+                          min: 0.0,
                           max: 100.0,
-                          divisions: 9,
+                          divisions: 10,
                           label: '${item.percentage!}',
                           value: item.percentage!.toDouble(),
                           onChanged: (value) {

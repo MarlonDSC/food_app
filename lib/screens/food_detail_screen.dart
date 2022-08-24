@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/models/dish_ingredients.dart';
+import 'package:food_app/models/nutritional_facts_model.dart';
 import 'package:food_app/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 import '../models/dish_model.dart';
 import '../providers/user_provider.dart';
+import '../utils/utils.dart';
 
 class FoodDetailScreen extends StatefulWidget {
   final NetworkImage image;
@@ -22,11 +24,13 @@ class FoodDetailScreen extends StatefulWidget {
 
 class _ModalFoodState extends State<FoodDetailScreen> {
   List<DishIngredientsModel> addedToppings = [];
+  NutritionalFactsModel nutritionalFactsModel = NutritionalFactsModel();
 
   @override
   void initState() {
     super.initState();
     addedToppings = widget.dishModel.ingredients!;
+    nutritionalFactsModel = widget.dishModel.nutritionalFacts!;
     filterIngredientsToAvoid(widget.userProvider);
   }
 
@@ -98,6 +102,86 @@ class _ModalFoodState extends State<FoodDetailScreen> {
           ),
         ),
         title: Text(widget.dishModel.name!),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: ((context) {
+                    return AlertDialog(
+                      title: const Text('Nutritional Facts'),
+                      content: Column(
+                        children: [
+                          ListTile(
+                            title: const Text('Calories'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.calories} kcal',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Fat'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.fat} g',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Saturated Fat'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.saturatedFat} g',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Trans Fat'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.transFat} g',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Cholesterol'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.cholesterol} mg',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Sodium'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.sodium} mg',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Carbohydrates'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.carbohydrates} g',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Fiber'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.fiber} g',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Sugar'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.sugar} g',
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Proteins'),
+                            trailing: Text(
+                              '${widget.dishModel.nutritionalFacts!.sugar} g',
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }));
+            },
+            icon: const Icon(
+              Icons.info,
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -107,6 +191,32 @@ class _ModalFoodState extends State<FoodDetailScreen> {
             children: [
               Image(
                 image: widget.image,
+              ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 5.0,
+                children: [
+                  Chip(
+                    label: isLowFat(
+                            gramTokCal(
+                                nutritionalFactsModel.fat!,
+                                nutritionalFactsModel.saturatedFat!,
+                                nutritionalFactsModel.transFat!),
+                            nutritionalFactsModel.calories!)
+                        ? const Text('Low fat')
+                        : const Text('Not low fat'),
+                  ),
+                  Chip(
+                    label: isLowFat(
+                            gramTokCal(
+                                nutritionalFactsModel.fat!,
+                                nutritionalFactsModel.saturatedFat!,
+                                nutritionalFactsModel.transFat!),
+                            nutritionalFactsModel.calories!)
+                        ? const Text('Low fat')
+                        : const Text('Not low fat'),
+                  ),
+                ],
               ),
               Text(
                 widget.dishModel.description!,
