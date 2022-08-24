@@ -105,11 +105,52 @@ class _MobileHomeState extends State<MobileHome> {
       return dishesCollection
           .where(FieldPath.documentId, whereIn: userProvider.userModel.liked)
           .snapshots();
-    } else {
+    } else if (filterType.current != filterType.filterType![1].label) {
       return dishesCollection
           .where("type", isEqualTo: filterTypes.current)
           .snapshots();
+    } else {
+      return dishesCollection.snapshots();
     }
+  }
+
+  List<Widget> _createCards(
+    UserProvider userProvider,
+    QuerySnapshot snapshot,
+  ) {
+    List<DishModel> dishModel = [];
+    List<FoodCard> foodCards = [];
+    snapshot.docs.forEach((document) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      dishModel.add(
+        DishModel.fromFirestore(data),
+      );
+      List<DishIngredientsModel> addedToppings = dishModel.last.ingredients!;
+      dishModel.last.points = calculateRating(
+        userProvider,
+        addedToppings,
+        dishModel.last.country!,
+      );
+      foodCards.add(FoodCard(dishModel: dishModel.last));
+    });
+    print("length ${dishModel.length}");
+    if (filterType.current == filterType.filterType![1].label) {
+      print('herexd');
+      foodCards
+          .sort(((a, b) => b.dishModel.points.compareTo(a.dishModel.points)));
+      if (foodCards.isNotEmpty) {
+        return foodCards;
+      } else {
+        return [
+          const Center(
+            child: Text(
+              'We couldn\'t find any recommended products for you 🙁, please reduce your standards XD',
+            ),
+          ),
+        ];
+      }
+    }
+    return foodCards;
   }
 
   @override
@@ -126,49 +167,16 @@ class _MobileHomeState extends State<MobileHome> {
             stream: selectStream(userProvider, filterType),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                // snapshot
-                return filterType.current == filterType.filterType![1].label
-                    ? Expanded(
-                        // Vertical ListView
-                        child: ListView(
-                          children: snapshot.data!.docs
-                              .map((DocumentSnapshot document) {
-                            Map<String, dynamic> data =
-                                document.data()! as Map<String, dynamic>;
-                            DishModel dishModel = DishModel.fromFirestore(data);
-                            return FoodCard(
-                              dishModel: dishModel,
-                            );
-                          }).toList(),
-                        ),
-                      )
-                    : Expanded(
-                        // Vertical ListView
-                        child: ListView(
-                          children: snapshot.data!.docs
-                              .map((DocumentSnapshot document) {
-                            Map<String, dynamic> data =
-                                document.data()! as Map<String, dynamic>;
-                            DishModel dishModel = DishModel.fromFirestore(data);
-                            List<DishIngredientsModel> addedToppings =
-                                dishModel.ingredients!;
-                            print(calculateRating(userProvider, addedToppings,
-                                dishModel.country!));
-                            dishModel.points = calculateRating(
-                              userProvider,
-                              addedToppings,
-                              dishModel.country!,
-                            );
-                            return FoodCard(
-                              dishModel: dishModel,
-                            );
-                          }).toList(),
-                        ),
-                      );
+                return Expanded(
+                  // Vertical ListView
+                  child: ListView(
+                    children: _createCards(userProvider, snapshot.data!),
+                  ),
+                );
                 // return FoodCard();
               } else if (!snapshot.hasData) {
                 return const Center(
-                  child: Text('No encontramos resultados'),
+                  child: Text('We couldn\'t find any results 🙁'),
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -177,7 +185,7 @@ class _MobileHomeState extends State<MobileHome> {
               } else {
                 return const Center(
                   child: Text(
-                    'Ocurrió un error, vuelve a intentarlo',
+                    'An error ocurred, please try again later ⏲️',
                   ),
                 );
               }
