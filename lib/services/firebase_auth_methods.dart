@@ -45,6 +45,7 @@ class FirebaseAuthMethods {
           profilePictureURL: profilePicURL,
           liked: [],
           userIngredient: [],
+          cuisine: [],
         );
         await _firestore
             .collection('users')

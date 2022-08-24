@@ -31,6 +31,7 @@ class ProfileScreen extends StatelessWidget {
     final TextEditingController phoneNumberController = TextEditingController();
     List liked;
     List<UserIngredientModel> userIngredient;
+    List cuisine;
     late DocumentSnapshot documentSnapshot;
     final db = FirebaseFirestore.instance;
     String profilePictureURL = "";
@@ -69,6 +70,7 @@ class ProfileScreen extends StatelessWidget {
               phoneNumberController.text =
                   documentSnapshot['phoneNumber'].toString();
               liked = documentSnapshot['liked'];
+              cuisine = documentSnapshot['cuisine'];
               // userIngredient = documentSnapshot['userIngredient'];
               userIngredient = List<UserIngredientModel>.from(
                 documentSnapshot['userIngredient']?.map(
@@ -86,6 +88,7 @@ class ProfileScreen extends StatelessWidget {
                   profilePictureURL: profilePictureURL,
                   liked: liked,
                   userIngredient: userIngredient,
+                  cuisine: cuisine,
                 ),
               );
               return CardForm(
@@ -97,6 +100,7 @@ class ProfileScreen extends StatelessWidget {
                 phoneNumberController: phoneNumberController,
                 liked: liked,
                 userIngredient: userIngredient,
+                cuisine: cuisine,
                 action: 'Update',
                 db: db,
                 documentSnapshot: documentSnapshot,

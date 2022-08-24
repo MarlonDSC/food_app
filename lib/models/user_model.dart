@@ -9,6 +9,7 @@ class UserModel {
   final String? profilePictureURL;
   List liked;
   List<UserIngredientModel>? userIngredient;
+  List cuisine;
 
   UserModel({
     this.id = '',
@@ -19,6 +20,7 @@ class UserModel {
     required this.profilePictureURL,
     required this.liked,
     required this.userIngredient,
+    required this.cuisine,
   });
 
   factory UserModel.fromFirestore(
@@ -40,6 +42,7 @@ class UserModel {
                 (x) => UserIngredientModel.fromFirestore(x),
               ),
             ),
+      cuisine: snapshot['cuisine'],
     );
   }
 
@@ -53,6 +56,7 @@ class UserModel {
       "profilePictureURL": profilePictureURL,
       "liked": liked,
       "userIngredient": userIngredient,
+      "cuisine": cuisine,
     };
   }
 }

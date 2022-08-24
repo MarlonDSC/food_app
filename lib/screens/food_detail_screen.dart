@@ -115,61 +115,61 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                           ListTile(
                             title: const Text('Calories'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.calories} kcal',
+                              '${nutritionalFactsModel.calories} kcal',
                             ),
                           ),
                           ListTile(
                             title: const Text('Fat'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.fat} g',
+                              '${nutritionalFactsModel.fat} g',
                             ),
                           ),
                           ListTile(
                             title: const Text('Saturated Fat'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.saturatedFat} g',
+                              '${nutritionalFactsModel.saturatedFat} g',
                             ),
                           ),
                           ListTile(
                             title: const Text('Trans Fat'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.transFat} g',
+                              '${nutritionalFactsModel.transFat} g',
                             ),
                           ),
                           ListTile(
                             title: const Text('Cholesterol'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.cholesterol} mg',
+                              '${nutritionalFactsModel.cholesterol} mg',
                             ),
                           ),
                           ListTile(
                             title: const Text('Sodium'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.sodium} mg',
+                              '${nutritionalFactsModel.sodium} mg',
                             ),
                           ),
                           ListTile(
                             title: const Text('Carbohydrates'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.carbohydrates} g',
+                              '${nutritionalFactsModel.carbohydrates} g',
                             ),
                           ),
                           ListTile(
                             title: const Text('Fiber'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.fiber} g',
+                              '${nutritionalFactsModel.fiber} g',
                             ),
                           ),
                           ListTile(
                             title: const Text('Sugar'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.sugar} g',
+                              '${nutritionalFactsModel.sugar} g',
                             ),
                           ),
                           ListTile(
                             title: const Text('Proteins'),
                             trailing: Text(
-                              '${widget.dishModel.nutritionalFacts!.sugar} g',
+                              '${nutritionalFactsModel.sugar} g',
                             ),
                           ),
                         ],
@@ -192,9 +192,28 @@ class _ModalFoodState extends State<FoodDetailScreen> {
               Image(
                 image: widget.image,
               ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 5.0,
+              const Text(
+                'Cuisine',
+                style: TextStyle(fontSize: 30),
+              ),
+              Row(
+                children: [
+                  Chip(
+                    backgroundColor: Colors.blue[100],
+                    label: Text(
+                      '🍽️ ${widget.dishModel.country}',
+                    ),
+                  )
+                ],
+              ),
+              const Text(
+                'Facts',
+                style: TextStyle(fontSize: 30),
+              ),
+              Row(
+                // alignment: WrapAlignment.end,
+                // spacing: 8,
+                // runSpacing: 5.0,
                 children: [
                   isLowFat(
                           gramTokCal(
@@ -203,7 +222,10 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                             nutritionalFactsModel.transFat!,
                           ),
                           nutritionalFactsModel.calories!)
-                      ? const Chip(label: Text('Low fat'))
+                      ? const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Chip(label: Text('Low fat')),
+                        )
                       : const SizedBox(),
                   isLowCarb(
                           gramTokCal(
@@ -212,17 +234,39 @@ class _ModalFoodState extends State<FoodDetailScreen> {
                             nutritionalFactsModel.transFat!,
                           ),
                           nutritionalFactsModel.calories!)
-                      ? const Chip(label: Text('Low carb'))
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Chip(
+                            label: const Text('Low carb'),
+                            backgroundColor: Colors.blue[100],
+                          ),
+                        )
                       : const SizedBox(),
                   isHighProtein(
                     nutritionalFactsModel.proteins!,
                   )
-                      ? const Chip(label: Text('High protein'))
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Chip(
+                            label: const Text('High protein'),
+                            backgroundColor: Colors.blue[100],
+                          ),
+                        )
                       : const SizedBox(),
                   isHighSodium(nutritionalFactsModel.sodium!)
-                      ? const Chip(label: Text('High sodium'))
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Chip(
+                            label: const Text('High sodium'),
+                            backgroundColor: Colors.blue[100],
+                          ),
+                        )
                       : const SizedBox(),
                 ],
+              ),
+              const Text(
+                'Description',
+                style: TextStyle(fontSize: 30),
               ),
               Text(
                 widget.dishModel.description!,

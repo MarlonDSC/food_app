@@ -20,6 +20,7 @@ class CardForm extends StatefulWidget {
     required TextEditingController phoneNumberController,
     required List liked,
     required List<UserIngredientModel> userIngredient,
+    required List cuisine,
     required this.action,
     required this.db,
     required this.documentSnapshot,
@@ -31,6 +32,7 @@ class CardForm extends StatefulWidget {
         _phoneNumberController = phoneNumberController,
         _liked = liked,
         _ingredientsToAvoid = userIngredient,
+        _cuisine = cuisine,
         _enabled = enabled,
         super(key: key);
 
@@ -42,6 +44,7 @@ class CardForm extends StatefulWidget {
   final TextEditingController _phoneNumberController;
   final List _liked;
   final List<UserIngredientModel> _ingredientsToAvoid;
+  final List _cuisine;
   final String action;
   final FirebaseFirestore db;
   final DocumentSnapshot? documentSnapshot;
@@ -157,6 +160,7 @@ class _CardFormState extends State<CardForm> {
                         profilePictureURL: await emptyOrSameImage(),
                         liked: widget._liked,
                         userIngredient: widget._ingredientsToAvoid,
+                        cuisine: widget._cuisine,
                       );
                       if (userModel.fullName != null &&
                           userModel.jobTitle != null) {

@@ -29,11 +29,7 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   double calculateRating(UserProvider userProvider) {
-    double liked = 0.0;
-    double notLiked = 0.0;
     double ecuation = 0.0;
-    List<DishIngredientsModel> likedIngredients = [];
-    List<DishIngredientsModel> notLikedIngredients = [];
     for (int i = 0; i < addedToppings.length; i++) {
       for (int j = 0; j < userProvider.userModel.userIngredient!.length; j++) {
         if (addedToppings[i].name ==
@@ -52,22 +48,50 @@ class _FoodCardState extends State<FoodCard> {
       }
     }
 
-    for (int i = 0; i < addedToppings.length; i++) {
-      print(
-          '${addedToppings[i].name} ${addedToppings[i].avoid} ${addedToppings[i].percentage}');
-    }
-    likedIngredients = addedToppings.where((element) => element.avoid).toList();
-    for (int i = 0; i < likedIngredients.length; i++) {
-      liked = liked + likedIngredients[i].percentage.toDouble();
-    }
-    for (int i = 0; i < notLikedIngredients.length; i++) {
-      notLiked = notLiked + notLikedIngredients[i].percentage.toDouble();
-    }
-    notLikedIngredients =
-        addedToppings.where(((element) => !element.avoid)).toList();
-    ecuation = liked - notLiked / (addedToppings.length * 100);
+    /*
+    primary are the main ingredients for a dish, for example a burger is not a burger
+    if it doesn't contain a bun and a patty.
 
-    return ecuation.abs();
+    How do I know if an ingredient is primary?
+    Primary ingredients don't have the remove button and are "added ingredients" by
+    default.
+    
+    left section:
+      liked: is the total percentage of liked ingredients on the primary section
+      notLiked: is the total percentage of ingredients food on the primary section
+    right section:
+      liked: is the total percentage of liked ingredients on the secondary section
+      notLiked: is the total percentage of liked ingredients on the secondary section
+
+    size: is the total amount of ingredients, counting primary and secondary ones.
+    cuisine: is the cuisine the dish belongs to, for example a pizza belongs to the
+    italian cuisine 🇮🇹
+
+    
+    (((liked*3-notLiked*5)+(liked-notLiked))/(size*0.75))+cuisine
+    */
+    List<int> primary = [0, 0];
+    List<int> secondary = [0, 0];
+    double cuisine = 0;
+    for (int i = 0; i < addedToppings.length; i++) {
+      if (addedToppings[i].primary! && !addedToppings[i].avoid) {
+        primary[0] = primary[0] + addedToppings[i].percentage;
+      } else if (addedToppings[i].primary! && addedToppings[i].avoid) {
+        primary[1] = primary[1] + addedToppings[i].percentage;
+      } else if (!addedToppings[i].primary! && !addedToppings[i].avoid) {
+        secondary[0] = secondary[0] + addedToppings[i].percentage;
+      } else if (!addedToppings[i].primary! && addedToppings[i].avoid) {
+        secondary[1] = secondary[1] + addedToppings[i].percentage;
+      }
+    }
+    userProvider.userModel.cuisine.contains(widget.dishModel.country!)
+        ? cuisine = 0.15
+        : cuisine = 0;
+    ecuation =
+        (((primary[0] * 3 - primary[1] * 5) + (secondary[0] - secondary[1])) /
+                (addedToppings.length * 0.75)) +
+            cuisine;
+    return ecuation;
   }
 
   @override
@@ -120,17 +144,17 @@ class _FoodCardState extends State<FoodCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                      '${(calculateRating(userProvider) * 100).toInt().toString()}%'),
+                      '${(calculateRating(userProvider) * 100).toInt().toString()} pts'),
                   const SizedBox(
                     width: 10,
                   ),
-                  SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: CircularProgressIndicator(
-                      value: calculateRating(userProvider),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: 25,
+                  //   height: 25,
+                  //   child: CircularProgressIndicator(
+                  //     value: calculateRating(userProvider),
+                  //   ),
+                  // ),
                   IconButton(
                     onPressed: () {
                       FireStoreMethods().likeFood(

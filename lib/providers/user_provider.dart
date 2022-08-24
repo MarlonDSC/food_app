@@ -11,6 +11,7 @@ class UserProvider extends ChangeNotifier {
     profilePictureURL: "",
     liked: [],
     userIngredient: [],
+    cuisine: [],
   );
   UserProvider({required this.userModel});
   void readFromFirestore(UserModel userModel) {
