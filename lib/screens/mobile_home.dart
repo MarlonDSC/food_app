@@ -133,18 +133,21 @@ class _MobileHomeState extends State<MobileHome> {
       );
       foodCards.add(FoodCard(dishModel: dishModel.last));
     });
-    print("length ${dishModel.length}");
     if (filterType.current == filterType.filterType![1].label) {
-      print('herexd');
       foodCards
+          // .where((element) => element.dishModel.points > 0)
+          // .toList()
           .sort(((a, b) => b.dishModel.points.compareTo(a.dishModel.points)));
       if (foodCards.isNotEmpty) {
         return foodCards;
       } else {
         return [
-          const Center(
-            child: Text(
-              'We couldn\'t find any recommended products for you 🙁, please reduce your standards XD',
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                'We couldn\'t find any recommended dishes for you 🙁, please reduce your standards XD',
+              ),
             ),
           ),
         ];
