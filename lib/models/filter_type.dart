@@ -14,8 +14,8 @@ class FilterType {
     this.label,
     this.isSelected,
     this.filterName, {
-    List<UserIngredientModel>? userIngredient,
-  }) : userIngredient = userIngredient;
+    this.userIngredient,
+  });
 }
 
 class FilterTypes {

@@ -120,7 +120,7 @@ class _MobileHomeState extends State<MobileHome> {
   ) {
     List<DishModel> dishModel = [];
     List<FoodCard> foodCards = [];
-    snapshot.docs.forEach((document) {
+    for (var document in snapshot.docs) {
       Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
       dishModel.add(
         DishModel.fromFirestore(data),
@@ -132,7 +132,7 @@ class _MobileHomeState extends State<MobileHome> {
         dishModel.last.country!,
       );
       foodCards.add(FoodCard(dishModel: dishModel.last));
-    });
+    }
     if (filterType.current == filterType.filterType![1].label) {
       foodCards
           // .where((element) => element.dishModel.points > 0)

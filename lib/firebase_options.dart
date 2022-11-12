@@ -45,17 +45,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBC76VInc7eLTJM3XmB-xN5keiRIaiFT-I',
-    appId: '1:111118284603:web:90b3c56c17fb6f1019691e',
+    appId: '1:111118284603:web:14f0569e39c6f61e19691e',
     messagingSenderId: '111118284603',
     projectId: 'food-app-be2c3',
     authDomain: 'food-app-be2c3.firebaseapp.com',
     storageBucket: 'food-app-be2c3.appspot.com',
-    measurementId: 'G-80V0QCPYPP',
+    measurementId: 'G-CP7NMB2RFT',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC0yUa7A_cBo2yQVzjBWFYVOKATrQ7Y5iQ',
-    appId: '1:111118284603:android:f03a91ecdc1534b719691e',
+    appId: '1:111118284603:android:6cb1478b8be6cb2319691e',
     messagingSenderId: '111118284603',
     projectId: 'food-app-be2c3',
     storageBucket: 'food-app-be2c3.appspot.com',
@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBxO7OliNvR2rde4UFKoJR4rimuzddwtzA',
-    appId: '1:111118284603:ios:47c1a4556e46dc9519691e',
+    appId: '1:111118284603:ios:b4e523a77f6095f919691e',
     messagingSenderId: '111118284603',
     projectId: 'food-app-be2c3',
     storageBucket: 'food-app-be2c3.appspot.com',
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyBxO7OliNvR2rde4UFKoJR4rimuzddwtzA',
-    appId: '1:111118284603:ios:47c1a4556e46dc9519691e',
+    appId: '1:111118284603:ios:b4e523a77f6095f919691e',
     messagingSenderId: '111118284603',
     projectId: 'food-app-be2c3',
     storageBucket: 'food-app-be2c3.appspot.com',

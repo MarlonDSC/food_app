@@ -10,7 +10,7 @@ import 'orders.dart';
 class MobileNavBar extends StatefulWidget {
   const MobileNavBar({Key? key}) : super(key: key);
   @override
-  _MobileNavBarState createState() => _MobileNavBarState();
+  State<MobileNavBar> createState() => _MobileNavBarState();
 }
 
 class _MobileNavBarState extends State<MobileNavBar> {

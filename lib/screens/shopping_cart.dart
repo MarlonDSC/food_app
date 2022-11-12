@@ -71,20 +71,23 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                 if (cartProvider
                                     .cartModel.dish![i].ingredients![j].added) {
                                   if (cartProvider.cartModel.dish![i]
-                                      .ingredients![j].addedExtra) {
+                                      .ingredients![j].addedExtra && userProvider.userModel.userIngredient![k]
+                                        .percentage! <= 90) {
                                     //add 10 points
                                     userProvider.userModel.userIngredient![k]
                                         .percentage = userProvider.userModel
                                             .userIngredient![k].percentage! +
                                         10;
-                                  } else {
+                                  } else if(userProvider.userModel.userIngredient![k]
+                                        .percentage! <= 95) {
                                     //add 5 points
                                     userProvider.userModel.userIngredient![k]
                                         .percentage = userProvider.userModel
                                             .userIngredient![k].percentage! +
                                         5;
                                   }
-                                } else {
+                                } else if(userProvider.userModel.userIngredient![k]
+                                        .percentage! > 5) {
                                   //reduce 5 ponts
                                   userProvider.userModel.userIngredient![k]
                                       .percentage = userProvider.userModel

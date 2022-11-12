@@ -71,7 +71,6 @@ class _ModalFoodState extends State<FoodDetailScreen> {
   }
 
   Color filterColour(DishIngredientsModel item) {
-    int colourCode = item.percentage * 10;
     item.avoid ? item.percentage : item.percentage = 0;
     // print('${item.name} ${item.avoid} ${item.percentage}');
     if (item.avoid) {

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../models/dish_ingredients.dart';
 import '../models/dish_model.dart';
 import '../providers/user_provider.dart';
-import '../utils/utils.dart';
 
 class FoodCard extends StatefulWidget {
   final DishModel dishModel;

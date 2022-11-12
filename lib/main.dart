@@ -8,10 +8,8 @@ import 'package:food_app/screens/mobile_navbar.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'screens/profile_screen.dart';
 import 'screens/login_email_password_screen.dart';
 import 'screens/signup_email_password_screen.dart';
-import 'screens/website/read_profile.dart';
 import 'services/firebase_auth_methods.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -81,26 +79,6 @@ class MyApp extends StatelessWidget {
           // ReadProfile.routeName: (context) => ReadProfile(),
           MobileHome.routeName: (context) => const MobileHome(),
           // PhoneScreen.routeName: (context) => const PhoneScreen(),
-        },
-        onGenerateRoute: (settings) {
-          List<String> pathComponents = settings.name!.split('/');
-          switch (settings.name) {
-            case '/':
-              return MaterialPageRoute(
-                builder: (context) => ReadProfile(),
-              );
-            // break;
-            default:
-              return MaterialPageRoute(
-                // builder: (context) => ReadProfile(
-                //   args: pathComponents.last,
-                // ),
-                builder: (context) => ProfileScreen(
-                  argument: pathComponents.last,
-                  enabled: false,
-                ),
-              );
-          }
         },
       ),
     );

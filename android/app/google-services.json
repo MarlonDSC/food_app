@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:111118284603:android:f03a91ecdc1534b719691e",
+        "mobilesdk_app_id": "1:111118284603:android:6cb1478b8be6cb2319691e",
         "android_client_info": {
-          "package_name": "com.example.slack_cards"
+          "package_name": "com.marlonDSC.food_app"
         }
       },
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "111118284603-ov7e7ufit0q57r8lbf76ssd5cnfvslp3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "111118284603-pb37ked3afmcu160f2s8ptve01ehv7n3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.slackCards"
+              }
             }
           ]
         }

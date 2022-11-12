@@ -16,7 +16,6 @@ class _DishShoppingCartCardState extends State<DishShoppingCartCard> {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    CartProvider cartProvider = Provider.of<CartProvider>(context);
     controller.text = widget.dishModel.amount.toString();
     return Card(
       clipBehavior: Clip.antiAlias,
