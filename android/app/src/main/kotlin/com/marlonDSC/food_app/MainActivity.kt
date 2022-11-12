@@ -1,4 +1,4 @@
-package com.example.slack_cards
+package com.marlonDSC.food_app
 
 import io.flutter.embedding.android.FlutterActivity
 
